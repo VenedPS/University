@@ -11,6 +11,10 @@ public class Lesson {
     private Classroom classroom;
     private Teacher teacher;
 
+    public Lesson() {
+        
+    }
+    
     public Lesson(Integer id, LocalDate date, Integer lessonNumber, Group group, Course course, Classroom classroom,
             Teacher teacher) {
         this.id = id;

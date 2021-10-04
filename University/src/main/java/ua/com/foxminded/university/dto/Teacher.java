@@ -3,6 +3,10 @@ package ua.com.foxminded.university.dto;
 public class Teacher extends Person {
     private Integer id;
 
+    public Teacher() {
+        
+    }
+    
     public Teacher(Integer id, String firstName, String secondName) {
         this.id = id;
         this.firstName = firstName;

@@ -4,12 +4,16 @@ public class Student extends Person {
     private Integer id;
     private Integer groupId;
 
+    public Student() {
+
+    }
+
     public Student(Integer id, String firstName, String secondName) {
         this.id = id;
         this.firstName = firstName;
         this.secondName = secondName;
     }
-    
+
     public Student(Student student) {
         this.id = student.getId();
         this.groupId = student.getGroupId();
