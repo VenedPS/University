@@ -1,19 +1,24 @@
 package ua.com.foxminded.university.dto;
 
-public class Teacher {
+public class Teacher extends Person {
     private Integer id;
-    private Person person;
 
-    public Teacher(Integer id, Person person) {
+    public Teacher(Integer id, String firstName, String secondName) {
         this.id = id;
-        this.person = person;
+        this.firstName = firstName;
+        this.secondName = secondName;
     }
     
     public Teacher(Teacher teacher) {
         this.id = teacher.getId();
-        this.person = teacher.getPerson();
+        this.firstName = teacher.getFirstName();
+        this.secondName = teacher.getSecondName();
+        this.birthDate = teacher.getBirthDate();
+        this.address = teacher.getAddress();
+        this.phone = teacher.getPhone();
+        this.email = teacher.getEmail();
     }
-
+    
     public Integer getId() {
         return id;
     }
@@ -22,20 +27,11 @@ public class Teacher {
         this.id = id;
     }
 
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
-    }
-
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((person == null) ? 0 : person.hashCode());
         return result;
     }
 
@@ -53,16 +49,13 @@ public class Teacher {
                 return false;
         } else if (!id.equals(other.id))
             return false;
-        if (person == null) {
-            if (other.person != null)
-                return false;
-        } else if (!person.equals(other.person))
-            return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "Teacher [id=" + id + ", person=" + person + "]";
+        return "Teacher [id=" + id + ", firstName=" + firstName + ", secondName=" + secondName + ", birthDate="
+                + birthDate + ", address=" + address + ", phone=" + phone + ", email=" + email + "]";
     }
+
 }

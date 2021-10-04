@@ -1,19 +1,24 @@
 package ua.com.foxminded.university.dto;
 
-public class Student {
+public class Student extends Person {
     private Integer id;
     private Integer groupId;
-    private Person person;
 
-    public Student(Integer id, Person person) {
+    public Student(Integer id, String firstName, String secondName) {
         this.id = id;
-        this.person = person;
+        this.firstName = firstName;
+        this.secondName = secondName;
     }
     
     public Student(Student student) {
         this.id = student.getId();
         this.groupId = student.getGroupId();
-        this.person = student.getPerson();
+        this.firstName = student.getFirstName();
+        this.secondName = student.getSecondName();
+        this.birthDate = student.getBirthDate();
+        this.address = student.getAddress();
+        this.phone = student.getPhone();
+        this.email = student.getEmail();
     }
 
     public Integer getId() {
@@ -22,14 +27,6 @@ public class Student {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
     }
 
     public Integer getGroupId() {
@@ -46,7 +43,6 @@ public class Student {
         int result = 1;
         result = prime * result + ((groupId == null) ? 0 : groupId.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((person == null) ? 0 : person.hashCode());
         return result;
     }
 
@@ -69,16 +65,13 @@ public class Student {
                 return false;
         } else if (!id.equals(other.id))
             return false;
-        if (person == null) {
-            if (other.person != null)
-                return false;
-        } else if (!person.equals(other.person))
-            return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "Student [id=" + id + ", groupId=" + groupId + ", person=" + person + "]";
+        return "Student [id=" + id + ", groupId=" + groupId + ", firstName=" + firstName + ", secondName=" + secondName
+                + ", birthDate=" + birthDate + ", address=" + address + ", phone=" + phone + ", email=" + email + "]";
     }
+
 }
