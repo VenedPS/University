@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import ua.com.foxminded.university.dao.TeacherDao;
 import ua.com.foxminded.university.dto.Teacher;
 
-@Component
+@Repository
 public class TeacherDaoSql implements TeacherDao {
 
     private final JdbcTemplate jdbcTemplate;
