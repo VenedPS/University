@@ -1,0 +1,10 @@
+INSERT INTO groups VALUES (1, 'name');
+INSERT INTO students VALUES (1, 1, 'first_name', 'second_name', '2021-10-06', 'address', 'phone', 'email');
+INSERT INTO students VALUES (2, 1, 'first_name', 'second_name', '2021-10-06', 'address', 'phone', 'email');
+INSERT INTO teachers VALUES (1, 'first_name', 'second_name', '2021-10-06', 'address', 'phone', 'email');
+INSERT INTO teachers VALUES (2, 'first_name', 'second_name', '2021-10-06', 'address', 'phone', 'email');
+INSERT INTO timetables VALUES (1, 2021, 1);
+INSERT INTO courses VALUES (1, 'Test', 1);
+INSERT INTO classrooms VALUES (1, 'Test', 15);
+INSERT INTO lessons VALUES (1, 1, '2021-10-06', 1, 1, 1, 1, 1);   
+INSERT INTO lessons VALUES (2, 1, '2021-10-7', 2, 1, 1, 1, 1);   

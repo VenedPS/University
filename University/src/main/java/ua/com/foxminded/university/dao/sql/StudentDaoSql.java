@@ -21,7 +21,7 @@ public class StudentDaoSql implements StudentDao {
     private final String SQL_READ_ALL = "SELECT * FROM students";
     private final String SQL_READ_BY_ID = "SELECT * FROM students WHERE id=?";
     private final String SQL_CREATE = "INSERT INTO students VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
-    private final String SQL_UPDATE = "UPDATE students SET group_id=?, first_name=?, last_name=?, birth_date=?, address=?, phone=?, email=? WHERE id=?";
+    private final String SQL_UPDATE = "UPDATE students SET group_id=?, first_name=?, second_name=?, birth_date=?, address=?, phone=?, email=? WHERE id=?";
     private final String SQL_DELETE = "DELETE FROM students WHERE id=?";
 
     @Autowired
@@ -46,6 +46,10 @@ public class StudentDaoSql implements StudentDao {
 
     @Override
     public void create(Student student) {
+        if (student == null) {
+            throw new IllegalArgumentException("Student can not be null!");
+        }
+        
         jdbcTemplate.update(SQL_CREATE, student.getId(), student.getGroupId(), student.getFirstName(),
                 student.getSecondName(), student.getBirthDate(), student.getAddress(), student.getPhone(),
                 student.getEmail());
@@ -53,6 +57,10 @@ public class StudentDaoSql implements StudentDao {
 
     @Override
     public void update(Student student) {
+        if (student == null) {
+            throw new IllegalArgumentException("Student can not be null!");
+        }
+        
         jdbcTemplate.update(SQL_UPDATE, student.getGroupId(), student.getFirstName(), student.getSecondName(),
                 student.getBirthDate(), student.getAddress(), student.getPhone(), student.getEmail(), student.getId());
     }

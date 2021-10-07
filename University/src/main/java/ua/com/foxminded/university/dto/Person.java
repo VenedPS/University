@@ -1,11 +1,11 @@
 package ua.com.foxminded.university.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public abstract class Person {
     protected String firstName;
     protected String secondName;
-    protected LocalDateTime birthDate;
+    protected LocalDate birthDate;
     protected String address;
     protected String phone;
     protected String email;
@@ -26,11 +26,11 @@ public abstract class Person {
         this.secondName = secondName;
     }
 
-    public LocalDateTime getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(LocalDateTime birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 

@@ -3,7 +3,7 @@ package ua.com.foxminded.university.dto;
 public class Student extends Person {
     private Integer id;
     private Integer groupId;
-
+    
     public Student() {
 
     }
@@ -45,8 +45,10 @@ public class Student extends Person {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
         result = prime * result + ((groupId == null) ? 0 : groupId.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((secondName == null) ? 0 : secondName.hashCode());
         return result;
     }
 
@@ -59,6 +61,11 @@ public class Student extends Person {
         if (getClass() != obj.getClass())
             return false;
         Student other = (Student) obj;
+        if (firstName == null) {
+            if (other.firstName != null)
+                return false;
+        } else if (!firstName.equals(other.firstName))
+            return false;
         if (groupId == null) {
             if (other.groupId != null)
                 return false;
@@ -68,6 +75,11 @@ public class Student extends Person {
             if (other.id != null)
                 return false;
         } else if (!id.equals(other.id))
+            return false;
+        if (secondName == null) {
+            if (other.secondName != null)
+                return false;
+        } else if (!secondName.equals(other.secondName))
             return false;
         return true;
     }
