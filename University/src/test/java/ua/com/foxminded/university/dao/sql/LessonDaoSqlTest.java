@@ -7,31 +7,23 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sql.DataSource;
-
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import ua.com.foxminded.university.config.DaoTestConfig;
+import ua.com.foxminded.university.dao.LessonDao;
 import ua.com.foxminded.university.dto.Lesson;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = { DaoTestConfig.class })
 class LessonDaoSqlTest {
 
-    private static LessonDaoSql lessonDaoSql;
+    @Autowired
+    private LessonDao lessonDao;
     
-    @BeforeAll
-    public static void setUp() {
-        DataSource dataSource = new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)
-                .addScript("classpath:/schema.sql")
-                .addScript("classpath:/test-data.sql")
-                .build();
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-
-        lessonDaoSql = new LessonDaoSql(jdbcTemplate);
-    }
-
     @Test
     void readAll_shouldreturnLessonList_whenLessonCreated() {
         Lesson lesson1 = new Lesson();
@@ -58,7 +50,7 @@ class LessonDaoSqlTest {
         expected.add(lesson1);
         expected.add(lesson2);
         
-        List<Lesson> actual = lessonDaoSql.readAll();
+        List<Lesson> actual = lessonDao.readAll();
         
         assertEquals(expected, actual);
     }
@@ -67,7 +59,7 @@ class LessonDaoSqlTest {
     void readById_shouldreturnNull_whenLessonDoesNotExists() {
         Lesson expected = null;
         
-        Lesson actual = lessonDaoSql.readById(0);
+        Lesson actual = lessonDao.readById(0);
         
         assertEquals(expected, actual);
     }
@@ -84,7 +76,7 @@ class LessonDaoSqlTest {
         expected.setClassroomId(1);
         expected.setTeacherId(1);
         
-        Lesson actual = lessonDaoSql.readById(1);
+        Lesson actual = lessonDao.readById(1);
         
         assertEquals(expected, actual);
     }
@@ -93,7 +85,7 @@ class LessonDaoSqlTest {
     void getStudentLessons_shouldreturnEmptyList_whenLessonDoesNotExists() {
         List<Lesson> expected = new ArrayList<>();
         
-        List<Lesson> actual = lessonDaoSql.getStudentLessons(1, 2021, LocalDate.of(2021, Month.OCTOBER, 1), LocalDate.of(2021, Month.OCTOBER, 5));
+        List<Lesson> actual = lessonDao.getStudentLessons(1, LocalDate.of(2021, Month.OCTOBER, 1), LocalDate.of(2021, Month.OCTOBER, 5));
         
         assertEquals(expected, actual);
     }
@@ -113,7 +105,7 @@ class LessonDaoSqlTest {
         List<Lesson> expected = new ArrayList<>();
         expected.add(lesson1);
         
-        List<Lesson> actual = lessonDaoSql.getStudentLessons(1, 2021, LocalDate.of(2021, Month.OCTOBER, 6), LocalDate.of(2021, Month.OCTOBER, 6));
+        List<Lesson> actual = lessonDao.getStudentLessons(1, LocalDate.of(2021, Month.OCTOBER, 6), LocalDate.of(2021, Month.OCTOBER, 6));
         
         assertEquals(expected, actual);
     }
@@ -144,7 +136,7 @@ class LessonDaoSqlTest {
         expected.add(lesson1);
         expected.add(lesson2);
         
-        List<Lesson> actual = lessonDaoSql.getStudentLessons(1, 2021, LocalDate.of(2021, Month.OCTOBER, 6), LocalDate.of(2021, Month.OCTOBER, 7));
+        List<Lesson> actual = lessonDao.getStudentLessons(1, LocalDate.of(2021, Month.OCTOBER, 6), LocalDate.of(2021, Month.OCTOBER, 7));
         
         assertEquals(expected, actual);
     }
@@ -153,7 +145,7 @@ class LessonDaoSqlTest {
     void getTeacherLessons_shouldreturnEmptyList_whenLessonDoesNotExists() {
         List<Lesson> expected = new ArrayList<>();
         
-        List<Lesson> actual = lessonDaoSql.getTeacherLessons(1, 2021, LocalDate.of(2021, Month.OCTOBER, 1), LocalDate.of(2021, Month.OCTOBER, 5));
+        List<Lesson> actual = lessonDao.getTeacherLessons(1, LocalDate.of(2021, Month.OCTOBER, 1), LocalDate.of(2021, Month.OCTOBER, 5));
         
         assertEquals(expected, actual);
     }
@@ -173,7 +165,7 @@ class LessonDaoSqlTest {
         List<Lesson> expected = new ArrayList<>();
         expected.add(lesson1);
         
-        List<Lesson> actual = lessonDaoSql.getTeacherLessons(1, 2021, LocalDate.of(2021, Month.OCTOBER, 6), LocalDate.of(2021, Month.OCTOBER, 6));
+        List<Lesson> actual = lessonDao.getTeacherLessons(1, LocalDate.of(2021, Month.OCTOBER, 6), LocalDate.of(2021, Month.OCTOBER, 6));
         
         assertEquals(expected, actual);
     }
@@ -204,7 +196,7 @@ class LessonDaoSqlTest {
         expected.add(lesson1);
         expected.add(lesson2);
         
-        List<Lesson> actual = lessonDaoSql.getTeacherLessons(1, 2021, LocalDate.of(2021, Month.OCTOBER, 6), LocalDate.of(2021, Month.OCTOBER, 7));
+        List<Lesson> actual = lessonDao.getTeacherLessons(1, LocalDate.of(2021, Month.OCTOBER, 6), LocalDate.of(2021, Month.OCTOBER, 7));
         
         assertEquals(expected, actual);
     }

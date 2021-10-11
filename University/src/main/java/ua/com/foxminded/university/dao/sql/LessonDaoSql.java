@@ -55,12 +55,12 @@ public class LessonDaoSql implements LessonDao {
     }
 
     @Override
-    public List<Lesson> getStudentLessons(int studentId, int year, LocalDate startDate, LocalDate endDate) {
+    public List<Lesson> getStudentLessons(int studentId, LocalDate startDate, LocalDate endDate) {
         return jdbcTemplate.query(SQL_STUDENT_LESSONS_FOR_MONTH, new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
                 ps.setInt(1, studentId);
-                ps.setInt(2, year);
+                ps.setInt(2, startDate.getYear());
                 ps.setDate(3, Date.valueOf(startDate));
                 ps.setDate(4, Date.valueOf(endDate));
             }
@@ -68,12 +68,12 @@ public class LessonDaoSql implements LessonDao {
     }
 
     @Override
-    public List<Lesson> getTeacherLessons(int teacherId, int year, LocalDate startDate, LocalDate endDate) {
+    public List<Lesson> getTeacherLessons(int teacherId, LocalDate startDate, LocalDate endDate) {
         return jdbcTemplate.query(SQL_TEACHER_LESSONS_FOR_MONTH, new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
                 ps.setInt(1, teacherId);
-                ps.setInt(2, year);
+                ps.setInt(2, startDate.getYear());
                 ps.setDate(3, Date.valueOf(startDate));
                 ps.setDate(4, Date.valueOf(endDate));
             }

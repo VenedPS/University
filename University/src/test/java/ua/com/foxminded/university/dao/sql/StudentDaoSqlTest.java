@@ -7,35 +7,27 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sql.DataSource;
-
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import ua.com.foxminded.university.config.DaoTestConfig;
+import ua.com.foxminded.university.dao.StudentDao;
 import ua.com.foxminded.university.dto.Student;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = { DaoTestConfig.class })
 class StudentDaoSqlTest {
     
-    private static StudentDaoSql studentDaoSql;
-    
-    @BeforeAll
-    public static void setUp() {
-        DataSource dataSource = new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)
-                .addScript("classpath:/schema.sql")
-                .addScript("classpath:/test-data.sql")
-                .build();
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-
-        studentDaoSql = new StudentDaoSql(jdbcTemplate);
-    }
+    @Autowired
+    private StudentDao studentDao;
     
     @Test
     void readAll_shouldreturnStudentList_whenStudentCreated() {
-        studentDaoSql.delete(3);
-        studentDaoSql.delete(4);
+        studentDao.delete(3);
+        studentDao.delete(4);
         
         Student student1 = new Student();
         student1.setId(1);
@@ -61,7 +53,7 @@ class StudentDaoSqlTest {
         expected.add(student1);
         expected.add(student2);
         
-        List<Student> actual = studentDaoSql.readAll();
+        List<Student> actual = studentDao.readAll();
         
         assertEquals(expected, actual);
     }
@@ -70,7 +62,7 @@ class StudentDaoSqlTest {
     void readById_shouldreturnNull_whenStudentDoesNotExists() {
         Student expected = null;
         
-       Student actual = studentDaoSql.readById(0);
+       Student actual = studentDao.readById(0);
         
         assertEquals(expected, actual);
     }
@@ -87,7 +79,7 @@ class StudentDaoSqlTest {
         expected.setPhone("phone");
         expected.setEmail("email");
         
-        Student actual = studentDaoSql.readById(1);
+        Student actual = studentDao.readById(1);
         
         assertEquals(expected, actual);
     }
@@ -95,7 +87,7 @@ class StudentDaoSqlTest {
     @Test
     void create_shouldThrowIllegalArgumentException_whenStudentIsNull() {
         assertThrows(IllegalArgumentException.class, () -> {
-            studentDaoSql.create(null);
+            studentDao.create(null);
         });
     }
     
@@ -111,9 +103,9 @@ class StudentDaoSqlTest {
         expected.setPhone("phone");
         expected.setEmail("email");
         
-        studentDaoSql.create(expected);
+        studentDao.create(expected);
         
-        Student actual = studentDaoSql.readById(3);
+        Student actual = studentDao.readById(3);
         
         assertEquals(expected, actual);
     }
@@ -121,7 +113,7 @@ class StudentDaoSqlTest {
     @Test
     void update_shouldThrowIllegalArgumentException_whenStudentIsNull() {
         assertThrows(IllegalArgumentException.class, () -> {
-            studentDaoSql.update(null);
+            studentDao.update(null);
         });
     }
     
@@ -137,14 +129,14 @@ class StudentDaoSqlTest {
         expected.setAddress("address");
         expected.setPhone("phone");
         expected.setEmail("email");
-        studentDaoSql.create(expected);
+        studentDao.create(expected);
         
         expected.setFirstName("Test");
         expected.setSecondName("Test");        
         
-        studentDaoSql.update(expected);
+        studentDao.update(expected);
         
-        Student actual = studentDaoSql.readById(4);
+        Student actual = studentDao.readById(4);
         
         assertEquals(expected, actual);
     }
@@ -160,13 +152,13 @@ class StudentDaoSqlTest {
         input.setAddress("address");
         input.setPhone("phone");
         input.setEmail("email");
-        studentDaoSql.create(input);
+        studentDao.create(input);
         
         Student expected = null;
         
-        studentDaoSql.delete(5);
+        studentDao.delete(5);
         
-        Student actual = studentDaoSql.readById(5);
+        Student actual = studentDao.readById(5);
         
         assertEquals(expected, actual);
     }

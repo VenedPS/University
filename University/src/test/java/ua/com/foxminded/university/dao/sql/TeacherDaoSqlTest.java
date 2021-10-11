@@ -7,35 +7,27 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sql.DataSource;
-
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import ua.com.foxminded.university.config.DaoTestConfig;
+import ua.com.foxminded.university.dao.TeacherDao;
 import ua.com.foxminded.university.dto.Teacher;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = { DaoTestConfig.class })
 class TeacherDaoSqlTest {
 
-private static TeacherDaoSql teacherDaoSql;
+    @Autowired
+    private TeacherDao teacherDao;
     
-    @BeforeAll
-    public static void setUp() {
-        DataSource dataSource = new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)
-                .addScript("classpath:/schema.sql")
-                .addScript("classpath:/test-data.sql")
-                .build();
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-
-        teacherDaoSql = new TeacherDaoSql(jdbcTemplate);
-    }
-
     @Test
     void readAll_shouldreturnTeacherList_whenTeacherCreated() {
-        teacherDaoSql.delete(3);
-        teacherDaoSql.delete(4);
+        teacherDao.delete(3);
+        teacherDao.delete(4);
         
         Teacher teacher1 = new Teacher();
         teacher1.setId(1);
@@ -59,7 +51,7 @@ private static TeacherDaoSql teacherDaoSql;
         expected.add(teacher1);
         expected.add(teacher2);
         
-        List<Teacher> actual = teacherDaoSql.readAll();
+        List<Teacher> actual = teacherDao.readAll();
         
         assertEquals(expected, actual);
     }
@@ -68,7 +60,7 @@ private static TeacherDaoSql teacherDaoSql;
     void readById_shouldreturnNull_whenTeacherDoesNotExists() {
         Teacher expected = null;
         
-        Teacher actual = teacherDaoSql.readById(0);
+        Teacher actual = teacherDao.readById(0);
         
         assertEquals(expected, actual);
     }
@@ -84,7 +76,7 @@ private static TeacherDaoSql teacherDaoSql;
         expected.setPhone("phone");
         expected.setEmail("email");
         
-        Teacher actual = teacherDaoSql.readById(1);
+        Teacher actual = teacherDao.readById(1);
         
         assertEquals(expected, actual);
     }
@@ -92,7 +84,7 @@ private static TeacherDaoSql teacherDaoSql;
     @Test
     void create_shouldThrowIllegalArgumentException_whenTeacherIsNull() {
         assertThrows(IllegalArgumentException.class, () -> {
-            teacherDaoSql.create(null);
+            teacherDao.create(null);
         });
     }
     
@@ -107,9 +99,9 @@ private static TeacherDaoSql teacherDaoSql;
         expected.setPhone("phone");
         expected.setEmail("email");
         
-        teacherDaoSql.create(expected);
+        teacherDao.create(expected);
         
-        Teacher actual = teacherDaoSql.readById(3);
+        Teacher actual = teacherDao.readById(3);
         
         assertEquals(expected, actual);
     }
@@ -117,7 +109,7 @@ private static TeacherDaoSql teacherDaoSql;
     @Test
     void update_shouldThrowIllegalArgumentException_whenTeacherIsNull() {
         assertThrows(IllegalArgumentException.class, () -> {
-            teacherDaoSql.update(null);
+            teacherDao.update(null);
         });
     }
     
@@ -132,14 +124,14 @@ private static TeacherDaoSql teacherDaoSql;
         expected.setAddress("address");
         expected.setPhone("phone");
         expected.setEmail("email");
-        teacherDaoSql.create(expected);
+        teacherDao.create(expected);
         
         expected.setFirstName("Test");
         expected.setSecondName("Test");
         
-        teacherDaoSql.update(expected);
+        teacherDao.update(expected);
         
-        Teacher actual = teacherDaoSql.readById(4);
+        Teacher actual = teacherDao.readById(4);
         
         assertEquals(expected, actual);
     }
@@ -154,13 +146,13 @@ private static TeacherDaoSql teacherDaoSql;
         input.setAddress("address");
         input.setPhone("phone");
         input.setEmail("email");
-        teacherDaoSql.create(input);
+        teacherDao.create(input);
         
         Teacher expected = null;
         
-        teacherDaoSql.delete(5);
+        teacherDao.delete(5);
         
-        Teacher actual = teacherDaoSql.readById(5);
+        Teacher actual = teacherDao.readById(5);
         
         assertEquals(expected, actual);
     }
