@@ -1,6 +1,6 @@
-package ua.com.foxminded.university.dto;
+package ua.com.foxminded.university.entity;
 
-public class Teacher extends Person {
+public class Teacher extends PersonEntity {
     private Integer id;
 
     public Teacher() {

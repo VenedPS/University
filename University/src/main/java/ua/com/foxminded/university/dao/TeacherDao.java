@@ -2,7 +2,7 @@ package ua.com.foxminded.university.dao;
 
 import java.util.List;
 
-import ua.com.foxminded.university.dto.Teacher;
+import ua.com.foxminded.university.entity.Teacher;
 
 public interface TeacherDao {
     public List<Teacher> readAll();

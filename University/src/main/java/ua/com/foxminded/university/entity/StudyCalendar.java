@@ -1,26 +1,26 @@
-package ua.com.foxminded.university.dto;
+package ua.com.foxminded.university.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TimeFrame {
+public class StudyCalendar {
     private Integer id;
     private Integer year;
     private Integer semester;
-    private List<TimeFrameLine> lessons;
+    private List<StudyCalendarDays> days;
 
-    public TimeFrame(Integer id, Integer year, Integer semester, List<TimeFrameLine> lessons) {
+    public StudyCalendar(Integer id, Integer year, Integer semester, List<StudyCalendarDays> days) {
         this.id = id;
         this.year = year;
         this.semester = semester;
-        this.lessons = lessons;
+        this.days = days;
     }
     
-    public TimeFrame(TimeFrame timeFrame) {
-        this.id = timeFrame.getId();
-        this.year = timeFrame.getYear();
-        this.semester = timeFrame.getSemester();
-        this.lessons = new ArrayList<TimeFrameLine>(timeFrame.getLessons());
+    public StudyCalendar(StudyCalendar studyCalendar) {
+        this.id = studyCalendar.getId();
+        this.year = studyCalendar.getYear();
+        this.semester = studyCalendar.getSemester();
+        this.days = new ArrayList<StudyCalendarDays>(studyCalendar.getDays());
     }
 
     public Integer getId() {
@@ -47,20 +47,20 @@ public class TimeFrame {
         this.semester = semester;
     }
 
-    public List<TimeFrameLine> getLessons() {
-        return lessons;
+    public List<StudyCalendarDays> getDays() {
+        return days;
     }
 
-    public void setLessons(List<TimeFrameLine> lessons) {
-        this.lessons = lessons;
+    public void setDays(List<StudyCalendarDays> days) {
+        this.days = days;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((days == null) ? 0 : days.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((lessons == null) ? 0 : lessons.hashCode());
         result = prime * result + ((semester == null) ? 0 : semester.hashCode());
         result = prime * result + ((year == null) ? 0 : year.hashCode());
         return result;
@@ -74,16 +74,16 @@ public class TimeFrame {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        TimeFrame other = (TimeFrame) obj;
+        StudyCalendar other = (StudyCalendar) obj;
+        if (days == null) {
+            if (other.days != null)
+                return false;
+        } else if (!days.equals(other.days))
+            return false;
         if (id == null) {
             if (other.id != null)
                 return false;
         } else if (!id.equals(other.id))
-            return false;
-        if (lessons == null) {
-            if (other.lessons != null)
-                return false;
-        } else if (!lessons.equals(other.lessons))
             return false;
         if (semester == null) {
             if (other.semester != null)
@@ -100,6 +100,6 @@ public class TimeFrame {
 
     @Override
     public String toString() {
-        return "TimeFrame [id=" + id + ", year=" + year + ", semester=" + semester + ", lessons=" + lessons + "]";
+        return "StudyCalendar [id=" + id + ", year=" + year + ", semester=" + semester + ", days=" + days + "]";
     }
 }

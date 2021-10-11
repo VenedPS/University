@@ -15,7 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import ua.com.foxminded.university.config.DaoTestConfig;
 import ua.com.foxminded.university.dao.TeacherDao;
-import ua.com.foxminded.university.dto.Teacher;
+import ua.com.foxminded.university.entity.Teacher;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { DaoTestConfig.class })

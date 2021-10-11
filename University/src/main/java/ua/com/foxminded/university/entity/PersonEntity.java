@@ -1,8 +1,8 @@
-package ua.com.foxminded.university.dto;
+package ua.com.foxminded.university.entity;
 
 import java.time.LocalDate;
 
-public abstract class Person {
+public abstract class PersonEntity {
     protected String firstName;
     protected String secondName;
     protected LocalDate birthDate;

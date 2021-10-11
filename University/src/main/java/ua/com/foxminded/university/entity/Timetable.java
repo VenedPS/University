@@ -1,4 +1,4 @@
-package ua.com.foxminded.university.dto;
+package ua.com.foxminded.university.entity;
 
 import java.util.ArrayList;
 import java.util.List;

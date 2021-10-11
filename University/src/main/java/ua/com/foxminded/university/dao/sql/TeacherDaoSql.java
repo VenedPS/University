@@ -11,7 +11,7 @@ import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Repository;
 
 import ua.com.foxminded.university.dao.TeacherDao;
-import ua.com.foxminded.university.dto.Teacher;
+import ua.com.foxminded.university.entity.Teacher;
 
 @Repository
 public class TeacherDaoSql implements TeacherDao {

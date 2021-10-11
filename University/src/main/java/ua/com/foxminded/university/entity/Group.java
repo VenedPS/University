@@ -1,4 +1,4 @@
-package ua.com.foxminded.university.dto;
+package ua.com.foxminded.university.entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,9 +7,9 @@ public class Group {
     private Integer id;
     private String name;
     private List<Course> courses;
-    private List<Student> students;
+    private List<StudentEntity> students;
 
-    public Group(Integer id, String name, List<Course> courses, List<Student> students) {
+    public Group(Integer id, String name, List<Course> courses, List<StudentEntity> students) {
         this.id = id;
         this.name = name;
         this.courses = courses;
@@ -20,7 +20,7 @@ public class Group {
         this.id = group.getId();
         this.name = group.getName();
         this.courses = new ArrayList<Course>(group.getCourses());
-        this.students = new ArrayList<Student>(group.getStudents());
+        this.students = new ArrayList<StudentEntity>(group.getStudents());
     }
 
     public Integer getId() {
@@ -47,11 +47,11 @@ public class Group {
         this.courses = courses;
     }
 
-    public List<Student> getStudents() {
+    public List<StudentEntity> getStudents() {
         return students;
     }
 
-    public void setStudents(List<Student> students) {
+    public void setStudents(List<StudentEntity> students) {
         this.students = students;
     }
 

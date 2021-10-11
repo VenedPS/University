@@ -13,7 +13,7 @@ import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Repository;
 
 import ua.com.foxminded.university.dao.LessonDao;
-import ua.com.foxminded.university.dto.Lesson;
+import ua.com.foxminded.university.entity.Lesson;
 
 @Repository
 public class LessonDaoSql implements LessonDao {

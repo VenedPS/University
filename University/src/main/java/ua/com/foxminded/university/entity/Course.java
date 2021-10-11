@@ -1,20 +1,20 @@
-package ua.com.foxminded.university.dto;
+package ua.com.foxminded.university.entity;
 
-public class Classroom {
+public class Course {
     private Integer id;
     private String name;
-    private Integer places;
-    
-    public Classroom(Integer id, String name, Integer places) {
+    private Teacher teacher;
+
+    public Course(Integer id, String name, Teacher teacher) {
         this.id = id;
         this.name = name;
-        this.places = places;
+        this.teacher = teacher;
     }
     
-    public Classroom(Classroom classroom) {
-        this.id = classroom.getId();
-        this.name = classroom.getName();
-        this.places = classroom.getPlaces();
+    public Course(Course course) {
+        this.id = course.getId();
+        this.name = course.getName();
+        this.teacher = course.getTeacher();
     }
 
     public Integer getId() {
@@ -33,12 +33,12 @@ public class Classroom {
         this.name = name;
     }
 
-    public Integer getPlaces() {
-        return places;
+    public Teacher getTeacher() {
+        return teacher;
     }
 
-    public void setPlaces(Integer places) {
-        this.places = places;
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class Classroom {
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((places == null) ? 0 : places.hashCode());
+        result = prime * result + ((teacher == null) ? 0 : teacher.hashCode());
         return result;
     }
 
@@ -59,7 +59,7 @@ public class Classroom {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Classroom other = (Classroom) obj;
+        Course other = (Course) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
@@ -70,16 +70,17 @@ public class Classroom {
                 return false;
         } else if (!name.equals(other.name))
             return false;
-        if (places == null) {
-            if (other.places != null)
+        if (teacher == null) {
+            if (other.teacher != null)
                 return false;
-        } else if (!places.equals(other.places))
+        } else if (!teacher.equals(other.teacher))
             return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "Classroom [id=" + id + ", name=" + name + ", places=" + places + "]";
+        return "Course [id=" + id + ", name=" + name + ", teacher=" + teacher + "]";
     }
+
 }

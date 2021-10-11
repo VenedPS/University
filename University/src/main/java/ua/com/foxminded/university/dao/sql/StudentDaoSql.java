@@ -11,7 +11,7 @@ import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Repository;
 
 import ua.com.foxminded.university.dao.StudentDao;
-import ua.com.foxminded.university.dto.Student;
+import ua.com.foxminded.university.entity.StudentEntity;
 
 @Repository
 public class StudentDaoSql implements StudentDao {
@@ -30,22 +30,22 @@ public class StudentDaoSql implements StudentDao {
     }
 
     @Override
-    public List<Student> readAll() {
-        return jdbcTemplate.query(SQL_READ_ALL, new BeanPropertyRowMapper<>(Student.class));
+    public List<StudentEntity> readAll() {
+        return jdbcTemplate.query(SQL_READ_ALL, new BeanPropertyRowMapper<>(StudentEntity.class));
     }
 
     @Override
-    public Student readById(int id) {
+    public StudentEntity readById(int id) {
         return jdbcTemplate.query(SQL_READ_BY_ID, new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
                 ps.setInt(1, id);
             }
-        }, new BeanPropertyRowMapper<>(Student.class)).stream().findAny().orElse(null);
+        }, new BeanPropertyRowMapper<>(StudentEntity.class)).stream().findAny().orElse(null);
     }
 
     @Override
-    public void create(Student student) {
+    public void create(StudentEntity student) {
         if (student == null) {
             throw new IllegalArgumentException("Student can not be null!");
         }
@@ -56,7 +56,7 @@ public class StudentDaoSql implements StudentDao {
     }
 
     @Override
-    public void update(Student student) {
+    public void update(StudentEntity student) {
         if (student == null) {
             throw new IllegalArgumentException("Student can not be null!");
         }
