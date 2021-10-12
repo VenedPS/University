@@ -3,9 +3,9 @@ package ua.com.foxminded.university.entity;
 public class Course {
     private Integer id;
     private String name;
-    private Teacher teacher;
+    private TeacherEntity teacher;
 
-    public Course(Integer id, String name, Teacher teacher) {
+    public Course(Integer id, String name, TeacherEntity teacher) {
         this.id = id;
         this.name = name;
         this.teacher = teacher;
@@ -33,11 +33,11 @@ public class Course {
         this.name = name;
     }
 
-    public Teacher getTeacher() {
+    public TeacherEntity getTeacher() {
         return teacher;
     }
 
-    public void setTeacher(Teacher teacher) {
+    public void setTeacher(TeacherEntity teacher) {
         this.teacher = teacher;
     }
 

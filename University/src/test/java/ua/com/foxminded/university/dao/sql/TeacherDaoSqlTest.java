@@ -15,7 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import ua.com.foxminded.university.config.DaoTestConfig;
 import ua.com.foxminded.university.dao.TeacherDao;
-import ua.com.foxminded.university.entity.Teacher;
+import ua.com.foxminded.university.entity.TeacherEntity;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { DaoTestConfig.class })
@@ -29,7 +29,7 @@ class TeacherDaoSqlTest {
         teacherDao.delete(3);
         teacherDao.delete(4);
         
-        Teacher teacher1 = new Teacher();
+        TeacherEntity teacher1 = new TeacherEntity();
         teacher1.setId(1);
         teacher1.setFirstName("first_name");
         teacher1.setSecondName("second_name");
@@ -38,7 +38,7 @@ class TeacherDaoSqlTest {
         teacher1.setPhone("phone");
         teacher1.setEmail("email");
         
-        Teacher teacher2 = new Teacher();
+        TeacherEntity teacher2 = new TeacherEntity();
         teacher2.setId(2);
         teacher2.setFirstName("first_name");
         teacher2.setSecondName("second_name");
@@ -47,27 +47,27 @@ class TeacherDaoSqlTest {
         teacher2.setPhone("phone");
         teacher2.setEmail("email");
         
-        List<Teacher> expected = new ArrayList<>();
+        List<TeacherEntity> expected = new ArrayList<>();
         expected.add(teacher1);
         expected.add(teacher2);
         
-        List<Teacher> actual = teacherDao.readAll();
+        List<TeacherEntity> actual = teacherDao.readAll();
         
         assertEquals(expected, actual);
     }
     
     @Test
     void readById_shouldreturnNull_whenTeacherDoesNotExists() {
-        Teacher expected = null;
+        TeacherEntity expected = null;
         
-        Teacher actual = teacherDao.readById(0);
+        TeacherEntity actual = teacherDao.readById(0);
         
         assertEquals(expected, actual);
     }
     
     @Test
     void readById_shouldreturnTeacher_whenTeacherExists() {
-        Teacher expected = new Teacher();
+        TeacherEntity expected = new TeacherEntity();
         expected.setId(1);
         expected.setFirstName("first_name");
         expected.setSecondName("second_name");
@@ -76,7 +76,7 @@ class TeacherDaoSqlTest {
         expected.setPhone("phone");
         expected.setEmail("email");
         
-        Teacher actual = teacherDao.readById(1);
+        TeacherEntity actual = teacherDao.readById(1);
         
         assertEquals(expected, actual);
     }
@@ -90,7 +90,7 @@ class TeacherDaoSqlTest {
     
     @Test
     void create_readById_shoulReturnTeacherFromDb_whenTeacherCreated() {
-        Teacher expected = new Teacher();
+        TeacherEntity expected = new TeacherEntity();
         expected.setId(3);
         expected.setFirstName("first_name");
         expected.setSecondName("second_name");
@@ -101,7 +101,7 @@ class TeacherDaoSqlTest {
         
         teacherDao.create(expected);
         
-        Teacher actual = teacherDao.readById(3);
+        TeacherEntity actual = teacherDao.readById(3);
         
         assertEquals(expected, actual);
     }
@@ -116,7 +116,7 @@ class TeacherDaoSqlTest {
     
     @Test
     void update_readById_shoulReturnTeacherFromDb_whenTeacherCreated() {
-        Teacher expected = new Teacher();
+        TeacherEntity expected = new TeacherEntity();
         expected.setId(4);
         expected.setFirstName("first_name");
         expected.setSecondName("second_name");
@@ -131,14 +131,14 @@ class TeacherDaoSqlTest {
         
         teacherDao.update(expected);
         
-        Teacher actual = teacherDao.readById(4);
+        TeacherEntity actual = teacherDao.readById(4);
         
         assertEquals(expected, actual);
     }
     
     @Test
     void delete_readById_shoulReturnNull_whenTeacherWasDeleted() {
-        Teacher input = new Teacher();
+        TeacherEntity input = new TeacherEntity();
         input.setId(5);
         input.setFirstName("first_name");
         input.setSecondName("second_name");
@@ -148,11 +148,11 @@ class TeacherDaoSqlTest {
         input.setEmail("email");
         teacherDao.create(input);
         
-        Teacher expected = null;
+        TeacherEntity expected = null;
         
         teacherDao.delete(5);
         
-        Teacher actual = teacherDao.readById(5);
+        TeacherEntity actual = teacherDao.readById(5);
         
         assertEquals(expected, actual);
     }

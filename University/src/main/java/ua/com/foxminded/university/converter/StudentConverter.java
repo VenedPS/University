@@ -11,6 +11,10 @@ import ua.com.foxminded.university.entity.StudentEntity;
 @Service
 public class StudentConverter {
     public StudentEntity toEntity(StudentDto studentDto) {
+        if (studentDto == null) {
+            throw new IllegalArgumentException("Cannot convert null!");
+        }
+
         StudentEntity studentEntity = new StudentEntity();
         studentEntity.setId(studentDto.getId());
         studentEntity.setGroupId(studentDto.getGroupId());
@@ -22,16 +26,24 @@ public class StudentConverter {
         studentEntity.setEmail(studentDto.getEmail());
         return studentEntity;
     }
-    
-    public List<StudentEntity> toEntityList (List<StudentDto> studentDtoList) {
+
+    public List<StudentEntity> toEntityList(List<StudentDto> studentDtoList) {
+        if (studentDtoList == null) {
+            throw new IllegalArgumentException("Cannot convert null!");
+        }
+
         List<StudentEntity> studentEntityList = new ArrayList<>();
         for (StudentDto studentDto : studentDtoList) {
-            studentEntityList.add(toEntity(studentDto));        
+            studentEntityList.add(toEntity(studentDto));
         }
         return studentEntityList;
     }
 
     public StudentDto toDto(StudentEntity studentEntity) {
+        if (studentEntity == null) {
+            throw new IllegalArgumentException("Cannot convert null!");
+        }
+
         StudentDto studentDto = new StudentDto();
         studentDto.setId(studentEntity.getId());
         studentDto.setGroupId(studentEntity.getGroupId());
@@ -43,11 +55,15 @@ public class StudentConverter {
         studentDto.setEmail(studentEntity.getEmail());
         return studentDto;
     }
-    
-    public List<StudentDto> toDto (List<StudentEntity> studentEntityList) {
+
+    public List<StudentDto> toDtoList(List<StudentEntity> studentEntityList) {
+        if (studentEntityList == null) {
+            throw new IllegalArgumentException("Cannot convert null!");
+        }
+
         List<StudentDto> studentDtoList = new ArrayList<>();
         for (StudentEntity studentEntity : studentEntityList) {
-            studentDtoList.add(toDto(studentEntity));        
+            studentDtoList.add(toDto(studentEntity));
         }
         return studentDtoList;
     }

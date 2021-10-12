@@ -1,8 +1,8 @@
-package ua.com.foxminded.university.entity;
+package ua.com.foxminded.university.dto;
 
 import java.time.LocalDate;
 
-public class Lesson {
+public class LessonDto {
     private int id;
     private int timetableId;
     private LocalDate date;
@@ -12,11 +12,11 @@ public class Lesson {
     private int classroomId;
     private int teacherId;
 
-    public Lesson() {
+    public LessonDto() {
 
     }
 
-    public Lesson(int id, int timetableId, LocalDate date, int lessonNumber, int groupId, int courseId, int classroomId,
+    public LessonDto(int id, int timetableId, LocalDate date, int lessonNumber, int groupId, int courseId, int classroomId,
             int teacherId) {
         this.id = id;
         this.timetableId = timetableId;
@@ -28,7 +28,7 @@ public class Lesson {
         this.teacherId = teacherId;
     }
 
-    public Lesson(Lesson lesson) {
+    public LessonDto(LessonDto lesson) {
         this.id = lesson.getId();
         this.timetableId = lesson.getTimetableId();
         this.date = lesson.getDate();
@@ -126,7 +126,7 @@ public class Lesson {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Lesson other = (Lesson) obj;
+        LessonDto other = (LessonDto) obj;
         if (classroomId != other.classroomId)
             return false;
         if (courseId != other.courseId)

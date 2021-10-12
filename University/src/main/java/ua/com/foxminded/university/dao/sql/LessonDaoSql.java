@@ -13,7 +13,7 @@ import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Repository;
 
 import ua.com.foxminded.university.dao.LessonDao;
-import ua.com.foxminded.university.entity.Lesson;
+import ua.com.foxminded.university.entity.LessonEntity;
 
 @Repository
 public class LessonDaoSql implements LessonDao {
@@ -40,22 +40,22 @@ public class LessonDaoSql implements LessonDao {
     }
 
     @Override
-    public List<Lesson> readAll() {
-        return jdbcTemplate.query(SQL_READ_ALL, new BeanPropertyRowMapper<>(Lesson.class));
+    public List<LessonEntity> readAll() {
+        return jdbcTemplate.query(SQL_READ_ALL, new BeanPropertyRowMapper<>(LessonEntity.class));
     }
 
     @Override
-    public Lesson readById(int id) {
+    public LessonEntity readById(int id) {
         return jdbcTemplate.query(SQL_READ_BY_ID, new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
                 ps.setInt(1, id);
             }
-        }, new BeanPropertyRowMapper<>(Lesson.class)).stream().findAny().orElse(null);
+        }, new BeanPropertyRowMapper<>(LessonEntity.class)).stream().findAny().orElse(null);
     }
 
     @Override
-    public List<Lesson> getStudentLessons(int studentId, LocalDate startDate, LocalDate endDate) {
+    public List<LessonEntity> getStudentLessons(int studentId, LocalDate startDate, LocalDate endDate) {
         return jdbcTemplate.query(SQL_STUDENT_LESSONS_FOR_MONTH, new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
@@ -64,11 +64,11 @@ public class LessonDaoSql implements LessonDao {
                 ps.setDate(3, Date.valueOf(startDate));
                 ps.setDate(4, Date.valueOf(endDate));
             }
-        }, new BeanPropertyRowMapper<>(Lesson.class));
+        }, new BeanPropertyRowMapper<>(LessonEntity.class));
     }
 
     @Override
-    public List<Lesson> getTeacherLessons(int teacherId, LocalDate startDate, LocalDate endDate) {
+    public List<LessonEntity> getTeacherLessons(int teacherId, LocalDate startDate, LocalDate endDate) {
         return jdbcTemplate.query(SQL_TEACHER_LESSONS_FOR_MONTH, new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
@@ -77,7 +77,7 @@ public class LessonDaoSql implements LessonDao {
                 ps.setDate(3, Date.valueOf(startDate));
                 ps.setDate(4, Date.valueOf(endDate));
             }
-        }, new BeanPropertyRowMapper<>(Lesson.class));
+        }, new BeanPropertyRowMapper<>(LessonEntity.class));
     }
 
 }

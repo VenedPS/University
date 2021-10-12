@@ -7,9 +7,9 @@ public class Timetable {
     private Integer id;
     private Integer year;
     private Integer semester;
-    private List<Lesson> lessons;
+    private List<LessonEntity> lessons;
 
-    public Timetable(Integer id, Integer year, Integer semester, List<Lesson> lessons) {
+    public Timetable(Integer id, Integer year, Integer semester, List<LessonEntity> lessons) {
         this.id = id;
         this.year = year;
         this.semester = semester;
@@ -20,7 +20,7 @@ public class Timetable {
         this.id = timetable.getId();
         this.year = timetable.getYear();
         this.semester = timetable.getSemester();
-        this.lessons = new ArrayList<Lesson>(timetable.getLessons());
+        this.lessons = new ArrayList<LessonEntity>(timetable.getLessons());
     }
 
     public Integer getId() {
@@ -47,11 +47,11 @@ public class Timetable {
         this.semester = semester;
     }
 
-    public List<Lesson> getLessons() {
+    public List<LessonEntity> getLessons() {
         return lessons;
     }
 
-    public void setLessons(List<Lesson> lessons) {
+    public void setLessons(List<LessonEntity> lessons) {
         this.lessons = lessons;
     }
 

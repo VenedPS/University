@@ -20,15 +20,15 @@ import ua.com.foxminded.university.entity.StudentEntity;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { DaoTestConfig.class })
 class StudentDaoSqlTest {
-    
+
     @Autowired
     private StudentDao studentDao;
-    
+
     @Test
     void readAll_shouldreturnStudentList_whenStudentCreated() {
         studentDao.delete(3);
         studentDao.delete(4);
-        
+
         StudentEntity student1 = new StudentEntity();
         student1.setId(1);
         student1.setGroupId(1);
@@ -38,7 +38,7 @@ class StudentDaoSqlTest {
         student1.setAddress("address");
         student1.setPhone("phone");
         student1.setEmail("email");
-        
+
         StudentEntity student2 = new StudentEntity();
         student2.setId(2);
         student2.setGroupId(1);
@@ -48,25 +48,25 @@ class StudentDaoSqlTest {
         student2.setAddress("address");
         student2.setPhone("phone");
         student2.setEmail("email");
-        
+
         List<StudentEntity> expected = new ArrayList<>();
         expected.add(student1);
         expected.add(student2);
-        
+
         List<StudentEntity> actual = studentDao.readAll();
-        
+
         assertEquals(expected, actual);
     }
-    
+
     @Test
     void readById_shouldreturnNull_whenStudentDoesNotExists() {
         StudentEntity expected = null;
-        
-       StudentEntity actual = studentDao.readById(0);
-        
+
+        StudentEntity actual = studentDao.readById(0);
+
         assertEquals(expected, actual);
     }
-    
+
     @Test
     void readById_shouldreturnStudent_whenStudentExists() {
         StudentEntity expected = new StudentEntity();
@@ -78,9 +78,9 @@ class StudentDaoSqlTest {
         expected.setAddress("address");
         expected.setPhone("phone");
         expected.setEmail("email");
-        
+
         StudentEntity actual = studentDao.readById(1);
-        
+
         assertEquals(expected, actual);
     }
 
@@ -90,7 +90,7 @@ class StudentDaoSqlTest {
             studentDao.create(null);
         });
     }
-    
+
     @Test
     void create_readById_shoulReturnStudentFromDb_whenStudentCreated() {
         StudentEntity expected = new StudentEntity();
@@ -102,22 +102,21 @@ class StudentDaoSqlTest {
         expected.setAddress("address");
         expected.setPhone("phone");
         expected.setEmail("email");
-        
+
         studentDao.create(expected);
-        
+
         StudentEntity actual = studentDao.readById(3);
-        
+
         assertEquals(expected, actual);
     }
-    
+
     @Test
     void update_shouldThrowIllegalArgumentException_whenStudentIsNull() {
         assertThrows(IllegalArgumentException.class, () -> {
             studentDao.update(null);
         });
     }
-    
-    
+
     @Test
     void update_readById_shoulReturnStudentFromDb_whenStudentCreated() {
         StudentEntity expected = new StudentEntity();
@@ -130,17 +129,17 @@ class StudentDaoSqlTest {
         expected.setPhone("phone");
         expected.setEmail("email");
         studentDao.create(expected);
-        
+
         expected.setFirstName("Test");
-        expected.setSecondName("Test");        
-        
+        expected.setSecondName("Test");
+
         studentDao.update(expected);
-        
+
         StudentEntity actual = studentDao.readById(4);
-        
+
         assertEquals(expected, actual);
     }
-    
+
     @Test
     void delete_readById_shoulReturnNull_whenStudentWasDeleted() {
         StudentEntity input = new StudentEntity();
@@ -153,13 +152,13 @@ class StudentDaoSqlTest {
         input.setPhone("phone");
         input.setEmail("email");
         studentDao.create(input);
-        
+
         StudentEntity expected = null;
-        
+
         studentDao.delete(5);
-        
+
         StudentEntity actual = studentDao.readById(5);
-        
+
         assertEquals(expected, actual);
     }
 

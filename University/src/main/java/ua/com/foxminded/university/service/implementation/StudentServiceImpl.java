@@ -8,19 +8,26 @@ import org.springframework.stereotype.Service;
 import ua.com.foxminded.university.converter.StudentConverter;
 import ua.com.foxminded.university.dao.StudentDao;
 import ua.com.foxminded.university.dto.StudentDto;
+import ua.com.foxminded.university.entity.StudentEntity;
 import ua.com.foxminded.university.service.StudentService;
 
 @Service
 public class StudentServiceImpl implements StudentService {
     @Autowired
-    private StudentDao studentDao;
-    
-    @Autowired
     private StudentConverter studentConverter;
+    
+    private StudentDao studentDao;
+
+    @Autowired
+    public StudentServiceImpl(StudentDao studentDao) {
+        this.studentDao = studentDao;
+    }
     
     @Override
     public List<StudentDto> readAll() {
-        return studentConverter.toDto(studentDao.readAll());
+        List<StudentEntity> studentsEntity = studentDao.readAll();
+        List<StudentDto> studentsDto = studentConverter.toDtoList(studentsEntity);
+        return studentsDto;
     }
 
     @Override
@@ -41,6 +48,22 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void delete(int id) {
         studentDao.delete(id);
+    }
+
+    public StudentConverter getStudentConverter() {
+        return studentConverter;
+    }
+
+    public void setStudentConverter(StudentConverter studentConverter) {
+        this.studentConverter = studentConverter;
+    }
+
+    public StudentDao getStudentDao() {
+        return studentDao;
+    }
+
+    public void setStudentDao(StudentDao studentDao) {
+        this.studentDao = studentDao;
     }
 
 }

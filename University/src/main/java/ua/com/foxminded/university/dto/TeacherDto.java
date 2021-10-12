@@ -1,19 +1,19 @@
-package ua.com.foxminded.university.entity;
+package ua.com.foxminded.university.dto;
 
-public class Teacher extends PersonEntity {
+public class TeacherDto extends PersonDto {
     private Integer id;
 
-    public Teacher() {
+    public TeacherDto() {
         
     }
     
-    public Teacher(Integer id, String firstName, String secondName) {
+    public TeacherDto(Integer id, String firstName, String secondName) {
         this.id = id;
         this.firstName = firstName;
         this.secondName = secondName;
     }
     
-    public Teacher(Teacher teacher) {
+    public TeacherDto(TeacherDto teacher) {
         this.id = teacher.getId();
         this.firstName = teacher.getFirstName();
         this.secondName = teacher.getSecondName();
@@ -49,7 +49,7 @@ public class Teacher extends PersonEntity {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Teacher other = (Teacher) obj;
+        TeacherDto other = (TeacherDto) obj;
         if (firstName == null) {
             if (other.firstName != null)
                 return false;

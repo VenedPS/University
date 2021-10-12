@@ -2,12 +2,16 @@ package ua.com.foxminded.university.dao;
 
 import java.util.List;
 
-import ua.com.foxminded.university.entity.Teacher;
+import ua.com.foxminded.university.entity.TeacherEntity;
 
 public interface TeacherDao {
-    public List<Teacher> readAll();
-    public Teacher readById(int id);
-    public void create(Teacher teacher);
-    public void update(Teacher teacher);
+    public List<TeacherEntity> readAll();
+
+    public TeacherEntity readById(int id);
+
+    public void create(TeacherEntity teacher);
+
+    public void update(TeacherEntity teacher);
+
     public void delete(int id);
 }
