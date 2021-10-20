@@ -11,6 +11,8 @@ import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Repository;
 
 import ua.com.foxminded.university.dao.StudentDao;
+import ua.com.foxminded.university.dao.exception.EntityNotChangedException;
+import ua.com.foxminded.university.dao.exception.EntityNotFoundException;
 import ua.com.foxminded.university.entity.StudentEntity;
 
 @Repository
@@ -30,7 +32,7 @@ public class StudentDaoSql implements StudentDao {
     }
 
     @Override
-    public List<StudentEntity> readAll() {
+    public List<StudentEntity> readAll() throws EntityNotFoundException {
         return jdbcTemplate.query(SQL_READ_ALL, new BeanPropertyRowMapper<>(StudentEntity.class));
     }
 
@@ -45,28 +47,28 @@ public class StudentDaoSql implements StudentDao {
     }
 
     @Override
-    public void create(StudentEntity student) {
+    public void create(StudentEntity student) throws EntityNotChangedException {
         if (student == null) {
             throw new IllegalArgumentException("Student can not be null!");
         }
-        
+
         jdbcTemplate.update(SQL_CREATE, student.getId(), student.getGroupId(), student.getFirstName(),
                 student.getSecondName(), student.getBirthDate(), student.getAddress(), student.getPhone(),
                 student.getEmail());
     }
 
     @Override
-    public void update(StudentEntity student) {
+    public void update(StudentEntity student) throws EntityNotChangedException {
         if (student == null) {
             throw new IllegalArgumentException("Student can not be null!");
         }
-        
+
         jdbcTemplate.update(SQL_UPDATE, student.getGroupId(), student.getFirstName(), student.getSecondName(),
                 student.getBirthDate(), student.getAddress(), student.getPhone(), student.getEmail(), student.getId());
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int id) throws EntityNotChangedException {
         jdbcTemplate.update(SQL_DELETE, id);
     }
 
