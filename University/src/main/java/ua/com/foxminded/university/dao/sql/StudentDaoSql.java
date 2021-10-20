@@ -2,9 +2,11 @@ package ua.com.foxminded.university.dao.sql;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
@@ -32,44 +34,69 @@ public class StudentDaoSql implements StudentDao {
     }
 
     @Override
-    public List<StudentEntity> readAll() throws EntityNotFoundException {
-        return jdbcTemplate.query(SQL_READ_ALL, new BeanPropertyRowMapper<>(StudentEntity.class));
+    public List<StudentEntity> readAll() throws EntityNotFoundException{
+        List<StudentEntity> students = new ArrayList<>();
+        try {
+            students = jdbcTemplate.query(SQL_READ_ALL, new BeanPropertyRowMapper<>(StudentEntity.class));
+        } catch (DataAccessException e) {
+            throw new EntityNotFoundException(e);
+        }
+        return students;
     }
 
     @Override
-    public StudentEntity readById(int id) {
-        return jdbcTemplate.query(SQL_READ_BY_ID, new PreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps) throws SQLException {
-                ps.setInt(1, id);
-            }
-        }, new BeanPropertyRowMapper<>(StudentEntity.class)).stream().findAny().orElse(null);
+    public StudentEntity readById(int id) throws EntityNotFoundException{
+        StudentEntity studentEntity = null;
+        try {
+            studentEntity = jdbcTemplate.query(SQL_READ_BY_ID, new PreparedStatementSetter() {
+                @Override
+                public void setValues(PreparedStatement ps) throws SQLException {
+                    ps.setInt(1, id);
+                }
+            }, new BeanPropertyRowMapper<>(StudentEntity.class)).stream().findAny().orElse(null);
+        } catch (DataAccessException e) {
+            throw new EntityNotFoundException(String.format("Can't find student by id='%s'",id), e);
+        }
+        return studentEntity;
     }
 
     @Override
-    public void create(StudentEntity student) throws EntityNotChangedException {
+    public void create(StudentEntity student) throws EntityNotChangedException{
         if (student == null) {
             throw new IllegalArgumentException("Student can not be null!");
         }
 
-        jdbcTemplate.update(SQL_CREATE, student.getId(), student.getGroupId(), student.getFirstName(),
-                student.getSecondName(), student.getBirthDate(), student.getAddress(), student.getPhone(),
-                student.getEmail());
+        try {
+            jdbcTemplate.update(SQL_CREATE, student.getId(), student.getGroupId(), student.getFirstName(),
+                    student.getSecondName(), student.getBirthDate(), student.getAddress(), student.getPhone(),
+                    student.getEmail());
+        } catch (DataAccessException e) {
+            throw new EntityNotChangedException(String.format("Can't find student by id='%s'"), e);
+        }
     }
 
     @Override
-    public void update(StudentEntity student) throws EntityNotChangedException {
+    public void update(StudentEntity student) throws EntityNotChangedException{
         if (student == null) {
             throw new IllegalArgumentException("Student can not be null!");
         }
 
-        jdbcTemplate.update(SQL_UPDATE, student.getGroupId(), student.getFirstName(), student.getSecondName(),
-                student.getBirthDate(), student.getAddress(), student.getPhone(), student.getEmail(), student.getId());
+        try {
+            jdbcTemplate.update(SQL_UPDATE, student.getGroupId(), student.getFirstName(), student.getSecondName(),
+                    student.getBirthDate(), student.getAddress(), student.getPhone(), student.getEmail(),
+                    student.getId());
+        } catch (DataAccessException e) {
+            throw new EntityNotChangedException(String.format("Can't find student by id='%s'"), e);
+        }
     }
 
     @Override
-    public void delete(int id) throws EntityNotChangedException {
-        jdbcTemplate.update(SQL_DELETE, id);
+    public void delete(int id) throws EntityNotChangedException{
+        try {
+            jdbcTemplate.update(SQL_DELETE, id);
+        } catch (DataAccessException e) {
+            throw new EntityNotChangedException(String.format("Can't find student by id='%s'"), e);
+        }
     }
 
 }
