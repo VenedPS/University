@@ -13,6 +13,8 @@ import ua.com.foxminded.university.dao.exception.EntityNotFoundException;
 import ua.com.foxminded.university.dto.StudentDto;
 import ua.com.foxminded.university.entity.StudentEntity;
 import ua.com.foxminded.university.service.StudentService;
+import ua.com.foxminded.university.service.exception.StudentNotChangedException;
+import ua.com.foxminded.university.service.exception.StudentNotFoundException;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -27,57 +29,52 @@ public class StudentServiceImpl implements StudentService {
     }
     
     @Override
-    public List<StudentDto> readAll() {
+    public List<StudentDto> readAll() throws StudentNotFoundException {
         List<StudentEntity> studentsEntity = new ArrayList<>();
         try {
             studentsEntity = studentDao.readAll();
         } catch (EntityNotFoundException e) {
-            // TODO Auto-generated catch block
-            System.out.println("111");
+            throw new StudentNotFoundException(e.getMessage(),e.getCause());
         }
         List<StudentDto> studentsDto = studentConverter.toDtoList(studentsEntity);
         return studentsDto;
     }
 
     @Override
-    public StudentDto readById(int id) {
+    public StudentDto readById(int id) throws StudentNotFoundException {
         StudentDto studentDto = new StudentDto();
         try {
             studentDto = studentConverter.toDto(studentDao.readById(id));
         } catch (EntityNotFoundException e) {
-            // TODO Auto-generated catch block
-            System.out.println(e.getMessage());
+          throw new StudentNotFoundException(e.getMessage(),e.getCause());            
         }
         return studentDto;
     }
 
     @Override
-    public void create(StudentDto studentDto) {
+    public void create(StudentDto studentDto) throws StudentNotChangedException {
         try {
             studentDao.create(studentConverter.toEntity(studentDto));
         } catch (EntityNotChangedException e) {
-            // TODO Auto-generated catch block
-            System.out.println("111");
+          throw new StudentNotChangedException(e.getMessage(),e.getCause());            
         }
     }
 
     @Override
-    public void update(StudentDto studentDto) {
+    public void update(StudentDto studentDto) throws StudentNotChangedException {
         try {
             studentDao.update(studentConverter.toEntity(studentDto));
         } catch (EntityNotChangedException e) {
-            // TODO Auto-generated catch block
-            System.out.println("111");
+          throw new StudentNotChangedException(e.getMessage(),e.getCause());            
         }
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int id) throws StudentNotChangedException {
         try {
             studentDao.delete(id);
         } catch (EntityNotChangedException e) {
-            // TODO Auto-generated catch block
-            System.out.println("111");
+          throw new StudentNotChangedException(e.getMessage(),e.getCause());           
         }
     }
 

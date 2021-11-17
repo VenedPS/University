@@ -21,7 +21,7 @@ import ua.com.foxminded.university.entity.StudentEntity;
 public class StudentDaoSql implements StudentDao {
 
     private final JdbcTemplate jdbcTemplate;
-
+    
     private final String SQL_READ_ALL = "SELECT * FROM students";
     private final String SQL_READ_BY_ID = "SELECT * FROM students WHERE id=?";
     private final String SQL_CREATE = "INSERT INTO students VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
@@ -39,7 +39,7 @@ public class StudentDaoSql implements StudentDao {
         try {
             students = jdbcTemplate.query(SQL_READ_ALL, new BeanPropertyRowMapper<>(StudentEntity.class));
         } catch (DataAccessException e) {
-            throw new EntityNotFoundException(e);
+            throw new EntityNotFoundException("Can't read students list", e);
         }
         return students;
     }
@@ -71,7 +71,7 @@ public class StudentDaoSql implements StudentDao {
                     student.getSecondName(), student.getBirthDate(), student.getAddress(), student.getPhone(),
                     student.getEmail());
         } catch (DataAccessException e) {
-            throw new EntityNotChangedException(String.format("Can't find student by id='%s'"), e);
+            throw new EntityNotChangedException(String.format("Can't create student: '%s'", student.toString()),e);
         }
     }
 
@@ -86,7 +86,7 @@ public class StudentDaoSql implements StudentDao {
                     student.getBirthDate(), student.getAddress(), student.getPhone(), student.getEmail(),
                     student.getId());
         } catch (DataAccessException e) {
-            throw new EntityNotChangedException(String.format("Can't find student by id='%s'"), e);
+            throw new EntityNotChangedException(String.format("Can't update student: '%s'", student.toString()), e);
         }
     }
 
@@ -95,7 +95,7 @@ public class StudentDaoSql implements StudentDao {
         try {
             jdbcTemplate.update(SQL_DELETE, id);
         } catch (DataAccessException e) {
-            throw new EntityNotChangedException(String.format("Can't find student by id='%s'"), e);
+            throw new EntityNotChangedException(String.format("Can't delete student by id='%s'", id), e);
         }
     }
 
