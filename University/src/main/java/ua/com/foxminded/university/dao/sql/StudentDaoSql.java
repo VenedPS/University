@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -27,7 +29,9 @@ public class StudentDaoSql implements StudentDao {
     private final String SQL_CREATE = "INSERT INTO students VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
     private final String SQL_UPDATE = "UPDATE students SET group_id=?, first_name=?, second_name=?, birth_date=?, address=?, phone=?, email=? WHERE id=?";
     private final String SQL_DELETE = "DELETE FROM students WHERE id=?";
-
+    
+    private final Logger logger = LoggerFactory.getLogger(StudentDaoSql.class);
+    
     @Autowired
     public StudentDaoSql(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -38,8 +42,9 @@ public class StudentDaoSql implements StudentDao {
         List<StudentEntity> students = new ArrayList<>();
         try {
             students = jdbcTemplate.query(SQL_READ_ALL, new BeanPropertyRowMapper<>(StudentEntity.class));
+            logger.info("All students from DB was readed!");
         } catch (DataAccessException e) {
-            throw new EntityNotFoundException("Can't read students list", e);
+            throw new EntityNotFoundException("Can't read students list from DB", e);
         }
         return students;
     }
@@ -57,6 +62,11 @@ public class StudentDaoSql implements StudentDao {
         } catch (DataAccessException e) {
             throw new EntityNotFoundException(String.format("Can't find student by id='%s'",id), e);
         }
+        if (studentEntity == null) {
+            throw new EntityNotFoundException(String.format("Can't find student by id='%s'",id));
+        } else {
+            logger.info(String.format("Student with id=%s was readed from the DB!", id));
+        }
         return studentEntity;
     }
 
@@ -70,6 +80,7 @@ public class StudentDaoSql implements StudentDao {
             jdbcTemplate.update(SQL_CREATE, student.getId(), student.getGroupId(), student.getFirstName(),
                     student.getSecondName(), student.getBirthDate(), student.getAddress(), student.getPhone(),
                     student.getEmail());
+            logger.info(String.format("Student with id=%s was created in the DB!", student.getId()));
         } catch (DataAccessException e) {
             throw new EntityNotChangedException(String.format("Can't create student: '%s'", student.toString()),e);
         }
@@ -85,6 +96,7 @@ public class StudentDaoSql implements StudentDao {
             jdbcTemplate.update(SQL_UPDATE, student.getGroupId(), student.getFirstName(), student.getSecondName(),
                     student.getBirthDate(), student.getAddress(), student.getPhone(), student.getEmail(),
                     student.getId());
+            logger.info(String.format("Student with id=%s was updated in the DB!", student.getId()));
         } catch (DataAccessException e) {
             throw new EntityNotChangedException(String.format("Can't update student: '%s'", student.toString()), e);
         }
@@ -94,6 +106,7 @@ public class StudentDaoSql implements StudentDao {
     public void delete(int id) throws EntityNotChangedException{
         try {
             jdbcTemplate.update(SQL_DELETE, id);
+            logger.info(String.format("Student with id=%s was deleted from the DB!", id));
         } catch (DataAccessException e) {
             throw new EntityNotChangedException(String.format("Can't delete student by id='%s'", id), e);
         }
