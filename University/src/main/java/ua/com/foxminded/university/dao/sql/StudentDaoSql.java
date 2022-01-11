@@ -15,8 +15,8 @@ import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Repository;
 
 import ua.com.foxminded.university.dao.StudentDao;
-import ua.com.foxminded.university.dao.exception.EntityNotChangedException;
-import ua.com.foxminded.university.dao.exception.EntityNotFoundException;
+import ua.com.foxminded.university.exception.StudentNotChangedException;
+import ua.com.foxminded.university.exception.StudentNotFoundException;
 import ua.com.foxminded.university.entity.StudentEntity;
 
 @Repository
@@ -38,19 +38,21 @@ public class StudentDaoSql implements StudentDao {
     }
 
     @Override
-    public List<StudentEntity> readAll() throws EntityNotFoundException{
+    public List<StudentEntity> readAll() throws StudentNotFoundException{
+        logger.info("Start reading all students");
         List<StudentEntity> students = new ArrayList<>();
         try {
             students = jdbcTemplate.query(SQL_READ_ALL, new BeanPropertyRowMapper<>(StudentEntity.class));
-            logger.info("All students from DB was readed!");
+            logger.info("All students was readed from the DB!");
         } catch (DataAccessException e) {
-            throw new EntityNotFoundException("Can't read students list from DB", e);
+            throw new StudentNotFoundException(e);
         }
         return students;
     }
 
     @Override
-    public StudentEntity readById(int id) throws EntityNotFoundException{
+    public StudentEntity readById(int id) throws StudentNotFoundException{
+        logger.info(String.format("Start reading student with id=%d",id));
         StudentEntity studentEntity = null;
         try {
             studentEntity = jdbcTemplate.query(SQL_READ_BY_ID, new PreparedStatementSetter() {
@@ -60,55 +62,60 @@ public class StudentDaoSql implements StudentDao {
                 }
             }, new BeanPropertyRowMapper<>(StudentEntity.class)).stream().findAny().orElse(null);
         } catch (DataAccessException e) {
-            throw new EntityNotFoundException(String.format("Can't find student by id='%s'",id), e);
+            throw new StudentNotFoundException(id, e);
         }
         if (studentEntity == null) {
-            throw new EntityNotFoundException(String.format("Can't find student by id='%s'",id));
+            throw new StudentNotFoundException(id);
         } else {
-            logger.info(String.format("Student with id=%s was readed from the DB!", id));
+            logger.info(String.format("Student with id=%d was readed from the DB!", id));
         }
         return studentEntity;
     }
 
     @Override
-    public void create(StudentEntity student) throws EntityNotChangedException{
+    public void create(StudentEntity student) throws StudentNotChangedException{
         if (student == null) {
             throw new IllegalArgumentException("Student can not be null!");
         }
-
+        
+        logger.info(String.format("Start creating student with id=%d",student.getId()));
+        
         try {
             jdbcTemplate.update(SQL_CREATE, student.getId(), student.getGroupId(), student.getFirstName(),
                     student.getSecondName(), student.getBirthDate(), student.getAddress(), student.getPhone(),
                     student.getEmail());
-            logger.info(String.format("Student with id=%s was created in the DB!", student.getId()));
+            logger.info(String.format("Student with id=%d was created in the DB!", student.getId()));
         } catch (DataAccessException e) {
-            throw new EntityNotChangedException(String.format("Can't create student: '%s'", student.toString()),e);
+            throw new StudentNotChangedException(student.getId(),e);
         }
     }
 
     @Override
-    public void update(StudentEntity student) throws EntityNotChangedException{
+    public void update(StudentEntity student) throws StudentNotChangedException{
         if (student == null) {
             throw new IllegalArgumentException("Student can not be null!");
         }
 
+        logger.info(String.format("Start updating student with id=%d",student.getId()));
+        
         try {
             jdbcTemplate.update(SQL_UPDATE, student.getGroupId(), student.getFirstName(), student.getSecondName(),
                     student.getBirthDate(), student.getAddress(), student.getPhone(), student.getEmail(),
                     student.getId());
-            logger.info(String.format("Student with id=%s was updated in the DB!", student.getId()));
+            logger.info(String.format("Student with id=%d was updated in the DB!", student.getId()));
         } catch (DataAccessException e) {
-            throw new EntityNotChangedException(String.format("Can't update student: '%s'", student.toString()), e);
+            throw new StudentNotChangedException(student.getId(), e);
         }
     }
 
     @Override
-    public void delete(int id) throws EntityNotChangedException{
+    public void delete(int id) throws StudentNotChangedException{
+        logger.info(String.format("Start deleting student with id=%d",id));
         try {
             jdbcTemplate.update(SQL_DELETE, id);
-            logger.info(String.format("Student with id=%s was deleted from the DB!", id));
+            logger.info(String.format("Student with id=%d was deleted from the DB!", id));
         } catch (DataAccessException e) {
-            throw new EntityNotChangedException(String.format("Can't delete student by id='%s'", id), e);
+            throw new StudentNotChangedException(id, e);
         }
     }
 

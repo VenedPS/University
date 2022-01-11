@@ -8,13 +8,11 @@ import org.springframework.stereotype.Service;
 
 import ua.com.foxminded.university.converter.StudentConverter;
 import ua.com.foxminded.university.dao.StudentDao;
-import ua.com.foxminded.university.dao.exception.EntityNotChangedException;
-import ua.com.foxminded.university.dao.exception.EntityNotFoundException;
+import ua.com.foxminded.university.exception.StudentNotChangedException;
+import ua.com.foxminded.university.exception.StudentNotFoundException;
 import ua.com.foxminded.university.dto.StudentDto;
 import ua.com.foxminded.university.entity.StudentEntity;
 import ua.com.foxminded.university.service.StudentService;
-import ua.com.foxminded.university.service.exception.StudentNotChangedException;
-import ua.com.foxminded.university.service.exception.StudentNotFoundException;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -31,11 +29,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<StudentDto> readAll() throws StudentNotFoundException {
         List<StudentEntity> studentsEntity = new ArrayList<>();
-        try {
-            studentsEntity = studentDao.readAll();
-        } catch (EntityNotFoundException e) {
-            throw new StudentNotFoundException(e.getMessage(),e.getCause());
-        }
+        studentsEntity = studentDao.readAll();
         List<StudentDto> studentsDto = studentConverter.toDtoList(studentsEntity);
         return studentsDto;
     }
@@ -43,39 +37,23 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentDto readById(int id) throws StudentNotFoundException {
         StudentDto studentDto = new StudentDto();
-        try {
-            studentDto = studentConverter.toDto(studentDao.readById(id));
-        } catch (EntityNotFoundException e) {
-          throw new StudentNotFoundException(e.getMessage(),e.getCause());            
-        }
+        studentDto = studentConverter.toDto(studentDao.readById(id));
         return studentDto;
     }
 
     @Override
     public void create(StudentDto studentDto) throws StudentNotChangedException {
-        try {
-            studentDao.create(studentConverter.toEntity(studentDto));
-        } catch (EntityNotChangedException e) {
-          throw new StudentNotChangedException(e.getMessage(),e.getCause());            
-        }
+        studentDao.create(studentConverter.toEntity(studentDto));
     }
 
     @Override
     public void update(StudentDto studentDto) throws StudentNotChangedException {
-        try {
-            studentDao.update(studentConverter.toEntity(studentDto));
-        } catch (EntityNotChangedException e) {
-          throw new StudentNotChangedException(e.getMessage(),e.getCause());            
-        }
+        studentDao.update(studentConverter.toEntity(studentDto));
     }
 
     @Override
     public void delete(int id) throws StudentNotChangedException {
-        try {
-            studentDao.delete(id);
-        } catch (EntityNotChangedException e) {
-          throw new StudentNotChangedException(e.getMessage(),e.getCause());           
-        }
+        studentDao.delete(id);
     }
 
     public StudentConverter getStudentConverter() {

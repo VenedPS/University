@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ua.com.foxminded.university.converter.LessonConverter;
 import ua.com.foxminded.university.dao.LessonDao;
 import ua.com.foxminded.university.dto.LessonDto;
+import ua.com.foxminded.university.exception.LessonNotFoundException;
 import ua.com.foxminded.university.service.LessonService;
 
 public class LessonServiceImpl implements LessonService {
@@ -22,22 +23,22 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public List<LessonDto> readAll() {
+    public List<LessonDto> readAll() throws LessonNotFoundException {
         return lessonConverter.toDtoList(lessonDao.readAll());
     }
 
     @Override
-    public LessonDto readById(int id) {
+    public LessonDto readById(int id) throws LessonNotFoundException {
         return lessonConverter.toDto(lessonDao.readById(id));
     }
 
     @Override
-    public List<LessonDto> getStudentLessons(int studentId, LocalDate startDate, LocalDate endDate) {
+    public List<LessonDto> getStudentLessons(int studentId, LocalDate startDate, LocalDate endDate) throws LessonNotFoundException {
         return lessonConverter.toDtoList(lessonDao.getStudentLessons(studentId, startDate, endDate));
     }
 
     @Override
-    public List<LessonDto> getTeacherLessons(int teacherId, LocalDate startDate, LocalDate endDate) {
+    public List<LessonDto> getTeacherLessons(int teacherId, LocalDate startDate, LocalDate endDate) throws LessonNotFoundException {
         return lessonConverter.toDtoList(lessonDao.getTeacherLessons(teacherId, startDate, endDate));
     }
 

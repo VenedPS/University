@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ua.com.foxminded.university.converter.TeacherConverter;
 import ua.com.foxminded.university.dao.TeacherDao;
 import ua.com.foxminded.university.dto.TeacherDto;
+import ua.com.foxminded.university.exception.TeacherNotChangedException;
+import ua.com.foxminded.university.exception.TeacherNotFoundException;
 import ua.com.foxminded.university.service.TeacherService;
 
 public class TeacherServiceImpl implements TeacherService {
@@ -21,27 +23,27 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public List<TeacherDto> readAll() {
+    public List<TeacherDto> readAll() throws TeacherNotFoundException {
         return teacherConverter.toDtoList(teacherDao.readAll());
     }
 
     @Override
-    public TeacherDto readById(int id) {
+    public TeacherDto readById(int id) throws TeacherNotFoundException {
         return teacherConverter.toDto(teacherDao.readById(id));
     }
 
     @Override
-    public void create(TeacherDto teacherDto) {
+    public void create(TeacherDto teacherDto) throws TeacherNotChangedException {
         teacherDao.create(teacherConverter.toEntity(teacherDto));
     }
 
     @Override
-    public void update(TeacherDto teacherDto) {
+    public void update(TeacherDto teacherDto) throws TeacherNotChangedException {
         teacherDao.update(teacherConverter.toEntity(teacherDto));
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int id) throws TeacherNotChangedException {
         teacherDao.delete(id);
     }
 

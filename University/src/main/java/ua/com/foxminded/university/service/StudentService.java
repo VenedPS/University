@@ -3,8 +3,8 @@ package ua.com.foxminded.university.service;
 import java.util.List;
 
 import ua.com.foxminded.university.dto.StudentDto;
-import ua.com.foxminded.university.service.exception.StudentNotChangedException;
-import ua.com.foxminded.university.service.exception.StudentNotFoundException;
+import ua.com.foxminded.university.exception.StudentNotChangedException;
+import ua.com.foxminded.university.exception.StudentNotFoundException;
 
 public interface StudentService {
     public List<StudentDto> readAll() throws StudentNotFoundException;
