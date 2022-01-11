@@ -83,7 +83,7 @@ public class LessonDaoSql implements LessonDao {
 
     @Override
     public List<LessonEntity> getStudentLessons(int studentId, LocalDate startDate, LocalDate endDate) throws LessonNotFoundException {
-        logger.info(String.format("Start getting student lessons with studentId=%d startDate=%t from to endDate=%t",studentId,startDate,endDate));
+        logger.info(String.format("Start getting student lessons with studentId=%d from startDate=%s to endDate=%s",studentId,startDate.toString(),endDate.toString()));
         List<LessonEntity> lessons = new ArrayList<>();
         try {
             lessons = jdbcTemplate.query(SQL_STUDENT_LESSONS_FOR_MONTH, new PreparedStatementSetter() {
@@ -104,7 +104,7 @@ public class LessonDaoSql implements LessonDao {
 
     @Override
     public List<LessonEntity> getTeacherLessons(int teacherId, LocalDate startDate, LocalDate endDate) throws LessonNotFoundException {
-        logger.info(String.format("Start getting teacher lessons with teacherId=%d startDate=%t from to endDate=%t",teacherId,startDate,endDate));
+        logger.info(String.format("Start getting teacher lessons with teacherId=%d from startDate=%s to endDate=%s",teacherId,startDate.toString(),endDate.toString()));
         List<LessonEntity> lessons = new ArrayList<>();
         try {
             lessons = jdbcTemplate.query(SQL_TEACHER_LESSONS_FOR_MONTH, new PreparedStatementSetter() {

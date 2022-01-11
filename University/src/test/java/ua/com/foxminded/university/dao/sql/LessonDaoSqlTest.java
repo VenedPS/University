@@ -16,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ua.com.foxminded.university.config.DaoTestConfig;
 import ua.com.foxminded.university.dao.LessonDao;
 import ua.com.foxminded.university.entity.LessonEntity;
+import ua.com.foxminded.university.exception.LessonNotFoundException;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { DaoTestConfig.class })
@@ -57,11 +58,9 @@ class LessonDaoSqlTest {
     
     @Test
     void readById_shouldreturnNull_whenLessonDoesNotExists() {
-        LessonEntity expected = null;
-        
-        LessonEntity actual = lessonDao.readById(0);
-        
-        assertEquals(expected, actual);
+        assertThrows(LessonNotFoundException.class, () -> {
+            lessonDao.readById(0);
+        });
     }
     
     @Test

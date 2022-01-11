@@ -16,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ua.com.foxminded.university.config.DaoTestConfig;
 import ua.com.foxminded.university.dao.StudentDao;
 import ua.com.foxminded.university.entity.StudentEntity;
+import ua.com.foxminded.university.exception.StudentNotFoundException;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { DaoTestConfig.class })
@@ -60,11 +61,9 @@ class StudentDaoSqlTest {
 
     @Test
     void readById_shouldreturnNull_whenStudentDoesNotExists() {
-        StudentEntity expected = null;
-
-        StudentEntity actual = studentDao.readById(0);
-
-        assertEquals(expected, actual);
+        assertThrows(StudentNotFoundException.class, () -> {
+            studentDao.readById(0);
+        });
     }
 
     @Test
@@ -153,13 +152,11 @@ class StudentDaoSqlTest {
         input.setEmail("email");
         studentDao.create(input);
 
-        StudentEntity expected = null;
-
         studentDao.delete(5);
 
-        StudentEntity actual = studentDao.readById(5);
-
-        assertEquals(expected, actual);
+        assertThrows(StudentNotFoundException.class, () -> {
+            studentDao.readById(5);
+        });
     }
 
 }
