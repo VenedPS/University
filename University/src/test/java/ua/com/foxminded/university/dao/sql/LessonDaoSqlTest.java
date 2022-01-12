@@ -82,11 +82,9 @@ class LessonDaoSqlTest {
     
     @Test
     void getStudentLessons_shouldreturnEmptyList_whenLessonDoesNotExists() {
-        List<LessonEntity> expected = new ArrayList<>();
-        
-        List<LessonEntity> actual = lessonDao.getStudentLessons(1, LocalDate.of(2021, Month.OCTOBER, 1), LocalDate.of(2021, Month.OCTOBER, 5));
-        
-        assertEquals(expected, actual);
+        assertThrows(LessonNotFoundException.class, () -> {
+            lessonDao.getStudentLessons(1, LocalDate.of(2021, Month.OCTOBER, 1), LocalDate.of(2021, Month.OCTOBER, 5));
+        });
     }
     
     @Test
@@ -142,11 +140,9 @@ class LessonDaoSqlTest {
     
     @Test
     void getTeacherLessons_shouldreturnEmptyList_whenLessonDoesNotExists() {
-        List<LessonEntity> expected = new ArrayList<>();
-        
-        List<LessonEntity> actual = lessonDao.getTeacherLessons(1, LocalDate.of(2021, Month.OCTOBER, 1), LocalDate.of(2021, Month.OCTOBER, 5));
-        
-        assertEquals(expected, actual);
+        assertThrows(LessonNotFoundException.class, () -> {
+            lessonDao.getTeacherLessons(1, LocalDate.of(2021, Month.OCTOBER, 1), LocalDate.of(2021, Month.OCTOBER, 5));
+        });
     }
     
     @Test

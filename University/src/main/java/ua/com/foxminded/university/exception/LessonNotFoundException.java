@@ -7,6 +7,10 @@ public class LessonNotFoundException extends RuntimeException{
         super("Lessons not found!");
     }
     
+    public LessonNotFoundException(String message) {
+        super(message);
+    }
+    
     public LessonNotFoundException(Throwable cause) {
         super("Lessons not found!", cause);
     }

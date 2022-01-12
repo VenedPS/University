@@ -43,10 +43,13 @@ public class TeacherDaoSql implements TeacherDao {
         List<TeacherEntity> teachers = new ArrayList<>();
         try {
             teachers = jdbcTemplate.query(SQL_READ_ALL, new BeanPropertyRowMapper<>(TeacherEntity.class));
-            logger.info("All teachers was read from the DB!");
         } catch (DataAccessException e) {
-            throw new TeacherNotFoundException(e);
+            logger.error("DB not available! Reason: {}", e.getMessage());
         }
+        if (teachers.isEmpty()) {
+            throw new TeacherNotFoundException();
+        }
+        logger.info("All teachers was read from the DB!");
         return teachers;
     }
 

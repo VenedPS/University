@@ -43,10 +43,13 @@ public class StudentDaoSql implements StudentDao {
         List<StudentEntity> students = new ArrayList<>();
         try {
             students = jdbcTemplate.query(SQL_READ_ALL, new BeanPropertyRowMapper<>(StudentEntity.class));
-            logger.info("All students was read from the DB!");
         } catch (DataAccessException e) {
-            throw new StudentNotFoundException(e);
+            logger.error("DB not available! Reason: {}", e.getMessage());
         }
+        if (students.isEmpty()) {
+            throw new StudentNotFoundException();
+        }
+        logger.info("All students was read from the DB!");
         return students;
     }
 
