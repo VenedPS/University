@@ -52,7 +52,7 @@ public class LessonDaoSql implements LessonDao {
         List<LessonEntity> lessons = new ArrayList<>();
         try {
             lessons = jdbcTemplate.query(SQL_READ_ALL, new BeanPropertyRowMapper<>(LessonEntity.class));
-            logger.info("All lessons was readed from the DB!");
+            logger.info("All lessons was read from the DB!");
         } catch (DataAccessException e) {
             throw new LessonNotFoundException(e);
         }
@@ -61,7 +61,7 @@ public class LessonDaoSql implements LessonDao {
 
     @Override
     public LessonEntity readById(int id) throws LessonNotFoundException {
-        logger.info(String.format("Start reading lesson with id=%d",id));
+        logger.info("Start reading lesson with id={}",id);
         LessonEntity lessonEntity = new LessonEntity();
         try {
             lessonEntity = jdbcTemplate.query(SQL_READ_BY_ID, new PreparedStatementSetter() {
@@ -71,19 +71,18 @@ public class LessonDaoSql implements LessonDao {
                 }
             }, new BeanPropertyRowMapper<>(LessonEntity.class)).stream().findAny().orElse(null);
         } catch (DataAccessException e) {
-            throw new LessonNotFoundException(id, e);
+            logger.error("DB not available! Reason: {}", e.getMessage());
         }
         if (lessonEntity == null) {
             throw new LessonNotFoundException(id);
-        } else {
-            logger.info(String.format("Lesson with id=%d was readed from the DB!", id));
         }
+        logger.info("Lesson with id={} was read from the DB!", id);
         return lessonEntity;
     }
 
     @Override
     public List<LessonEntity> getStudentLessons(int studentId, LocalDate startDate, LocalDate endDate) throws LessonNotFoundException {
-        logger.info(String.format("Start getting student lessons with studentId=%d from startDate=%s to endDate=%s",studentId,startDate.toString(),endDate.toString()));
+        logger.info("Start getting student lessons with studentId={} from startDate={} to endDate={}",studentId,startDate.toString(),endDate.toString());
         List<LessonEntity> lessons = new ArrayList<>();
         try {
             lessons = jdbcTemplate.query(SQL_STUDENT_LESSONS_FOR_MONTH, new PreparedStatementSetter() {
@@ -95,7 +94,7 @@ public class LessonDaoSql implements LessonDao {
                 ps.setDate(4, Date.valueOf(endDate));
             }
         }, new BeanPropertyRowMapper<>(LessonEntity.class));
-            logger.info("All student lessons from DB was readed!");
+            logger.info("All student lessons from DB was read!");
         } catch (DataAccessException e) {
             throw new LessonNotFoundException(e);
         }
@@ -104,7 +103,7 @@ public class LessonDaoSql implements LessonDao {
 
     @Override
     public List<LessonEntity> getTeacherLessons(int teacherId, LocalDate startDate, LocalDate endDate) throws LessonNotFoundException {
-        logger.info(String.format("Start getting teacher lessons with teacherId=%d from startDate=%s to endDate=%s",teacherId,startDate.toString(),endDate.toString()));
+        logger.info("Start getting teacher lessons with teacherId={} from startDate={} to endDate={}",teacherId,startDate.toString(),endDate.toString());
         List<LessonEntity> lessons = new ArrayList<>();
         try {
             lessons = jdbcTemplate.query(SQL_TEACHER_LESSONS_FOR_MONTH, new PreparedStatementSetter() {
@@ -116,7 +115,7 @@ public class LessonDaoSql implements LessonDao {
                     ps.setDate(4, Date.valueOf(endDate));
                 }
             }, new BeanPropertyRowMapper<>(LessonEntity.class));
-            logger.info("All teacher lessons from DB was readed!");
+            logger.info("All teacher lessons from DB was read!");
         } catch (DataAccessException e) {
             throw new LessonNotFoundException(e);
         }

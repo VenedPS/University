@@ -43,7 +43,7 @@ public class TeacherDaoSql implements TeacherDao {
         List<TeacherEntity> teachers = new ArrayList<>();
         try {
             teachers = jdbcTemplate.query(SQL_READ_ALL, new BeanPropertyRowMapper<>(TeacherEntity.class));
-            logger.info("All teachers was readed from the DB!");
+            logger.info("All teachers was read from the DB!");
         } catch (DataAccessException e) {
             throw new TeacherNotFoundException(e);
         }
@@ -52,7 +52,7 @@ public class TeacherDaoSql implements TeacherDao {
 
     @Override
     public TeacherEntity readById(int id) throws TeacherNotFoundException {
-        logger.info(String.format("Start reading teacher with id=%d", id));
+        logger.info("Start reading teacher with id={}", id);
         TeacherEntity teacherEntity = new TeacherEntity();
         try {
             teacherEntity = jdbcTemplate.query(SQL_READ_BY_ID, new PreparedStatementSetter() {
@@ -62,13 +62,12 @@ public class TeacherDaoSql implements TeacherDao {
                 }
             }, new BeanPropertyRowMapper<>(TeacherEntity.class)).stream().findAny().orElse(null);
         } catch (DataAccessException e) {
-            throw new TeacherNotFoundException(id, e);
+            logger.error("DB not available! Reason: {}", e.getMessage());
         }
         if (teacherEntity == null) {
             throw new TeacherNotFoundException(id);
-        } else {
-            logger.info(String.format("Teacher with id=%d was readed from the DB!", id));
         }
+        logger.info("Teacher with id={} was read from the DB!", id);
         return teacherEntity;
     }
 
@@ -78,12 +77,12 @@ public class TeacherDaoSql implements TeacherDao {
             throw new IllegalArgumentException("Teacher can not be null!");
         }
 
-        logger.info(String.format("Start creating teacher with id=%d", teacher.getId()));
+        logger.info("Start creating teacher with id={}", teacher.getId());
 
         try {
             jdbcTemplate.update(SQL_CREATE, teacher.getId(), teacher.getFirstName(), teacher.getSecondName(),
                     teacher.getBirthDate(), teacher.getAddress(), teacher.getPhone(), teacher.getEmail());
-            logger.info(String.format("Teacher with id=%d was created in the DB!", teacher.getId()));
+            logger.info("Teacher with id={} was created in the DB!", teacher.getId());
         } catch (DataAccessException e) {
             throw new TeacherNotChangedException(teacher.getId(), e);
         }
@@ -96,12 +95,12 @@ public class TeacherDaoSql implements TeacherDao {
             throw new IllegalArgumentException("Teacher can not be null!");
         }
 
-        logger.info(String.format("Start updating teacher with id=%d", teacher.getId()));
+        logger.info("Start updating teacher with id={}", teacher.getId());
 
         try {
             jdbcTemplate.update(SQL_UPDATE, teacher.getFirstName(), teacher.getSecondName(), teacher.getBirthDate(),
                     teacher.getAddress(), teacher.getPhone(), teacher.getEmail(), teacher.getId());
-            logger.info(String.format("Teacher with id=%d was updated in the DB!", teacher.getId()));
+            logger.info("Teacher with id={} was updated in the DB!", teacher.getId());
         } catch (DataAccessException e) {
             throw new TeacherNotChangedException(teacher.getId(), e);
         }
@@ -109,10 +108,10 @@ public class TeacherDaoSql implements TeacherDao {
 
     @Override
     public void delete(int id) throws TeacherNotChangedException {
-        logger.info(String.format("Start deleting teacher with id=%d", id));
+        logger.info("Start deleting teacher with id={}", id);
         try {
             jdbcTemplate.update(SQL_DELETE, id);
-            logger.info(String.format("Teacher with id=%d was deleted from the DB!", id));
+            logger.info("Teacher with id={} was deleted from the DB!", id);
         } catch (DataAccessException e) {
             throw new TeacherNotChangedException(id, e);
         }
