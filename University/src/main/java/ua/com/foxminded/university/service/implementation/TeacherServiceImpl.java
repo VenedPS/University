@@ -3,6 +3,7 @@ package ua.com.foxminded.university.service.implementation;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import ua.com.foxminded.university.converter.TeacherConverter;
 import ua.com.foxminded.university.dao.TeacherDao;
@@ -11,6 +12,7 @@ import ua.com.foxminded.university.exception.TeacherNotChangedException;
 import ua.com.foxminded.university.exception.TeacherNotFoundException;
 import ua.com.foxminded.university.service.TeacherService;
 
+@Service
 public class TeacherServiceImpl implements TeacherService {
     @Autowired
     private TeacherConverter teacherConverter;

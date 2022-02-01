@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import ua.com.foxminded.university.converter.LessonConverter;
 import ua.com.foxminded.university.dao.LessonDao;
@@ -11,6 +12,7 @@ import ua.com.foxminded.university.dto.LessonDto;
 import ua.com.foxminded.university.exception.LessonNotFoundException;
 import ua.com.foxminded.university.service.LessonService;
 
+@Service
 public class LessonServiceImpl implements LessonService {
     @Autowired
     private LessonConverter lessonConverter;

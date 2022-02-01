@@ -2,9 +2,12 @@ package ua.com.foxminded.university.dto;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public abstract class PersonDto {
     protected String firstName;
     protected String secondName;
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     protected LocalDate birthDate;
     protected String address;
     protected String phone;

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show</title>
+</head>
+<body>
+	<p th:text="${teacher.getFirstName()}"></p>
+	<p th:text="${teacher.getSecondName()}"></p>
+	<p th:text="${teacher.getBirthDate()}"></p>
+	<p th:text="${teacher.getAddress()}"></p>
+	<p th:text="${teacher.getPhone()}"></p>
+	<p th:text="${teacher.getEmail()}"></p>
+	<br/>
+	<hr/>
+	<form th:method="GET" th:action="@{/teachers/{id}/edit(id=${teacher.getId()})}">
+    	<input type="submit" value="Edit"/>
+    </form>
+    <br>
+	<form th:method="DELETE" th:action="@{/teachers/{id}(id=${teacher.getId()})}">
+    	<input type="submit" value="Delete"/>
+	</form>
+	<br>
+	<form th:method="GET" th:action="@{/teachers}">
+    	<input type="submit" value="Back"/>
+	</form>
+	
+	<br>
+	<hr/>
+	<p> Timetable</p>
+	<hr/>
+	<table>
+		<tr>
+			<th>Date</th>
+			<th>Lesson number</th>
+			<th>Course Id</th>
+			<th>Classroom Id</th>
+			<th>Teacher Id</th>
+		</tr>
+		<tr th:each="lesson : ${lessons}">
+		    <td th:text="${lesson.getDate()}">
+		    <td th:text="${lesson.getLessonNumber()}">
+		    <td th:text="${lesson.getCourseId()}">
+		    <td th:text="${lesson.getClassroomId()}">
+		    <td th:text="${lesson.getTeacherId()}">
+		</tr>
+	</table>
+</body>
+</html>

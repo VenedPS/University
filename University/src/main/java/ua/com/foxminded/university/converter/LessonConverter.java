@@ -3,9 +3,12 @@ package ua.com.foxminded.university.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import ua.com.foxminded.university.dto.LessonDto;
 import ua.com.foxminded.university.entity.LessonEntity;
 
+@Service
 public class LessonConverter {
     public LessonEntity toEntity(LessonDto lessonDto) {
         if (lessonDto == null) {
