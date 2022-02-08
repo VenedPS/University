@@ -1,6 +1,16 @@
 package ua.com.foxminded.university.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table (name = "teachers")
 public class TeacherEntity extends PersonEntity {
+    
+    @Id
+    @GeneratedValue
     private Integer id;
 
     public TeacherEntity() {

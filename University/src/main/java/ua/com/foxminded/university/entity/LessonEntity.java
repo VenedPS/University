@@ -2,14 +2,39 @@ package ua.com.foxminded.university.entity;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table (name = "lessons")
 public class LessonEntity {
+    
+    @Id
+    @GeneratedValue
     private int id;
+    
+    @Column(name = "timetable_id")
     private int timetableId;
+
+    @Column(name = "date")
     private LocalDate date;
+
+    @Column(name = "lessonNumber")
     private int lessonNumber;
+
+    @Column(name = "group_id")
     private int groupId;
+
+    @Column(name = "course_id")
     private int courseId;
+
+    @Column(name = "classroom_id")
     private int classroomId;
+
+    @Column(name = "teacher_id")
     private int teacherId;
 
     public LessonEntity() {

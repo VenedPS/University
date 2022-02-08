@@ -2,12 +2,28 @@ package ua.com.foxminded.university.entity;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
+
+@MappedSuperclass
 public abstract class PersonEntity {
+    
+    @Column(name = "first_name")
     protected String firstName;
+
+    @Column(name = "second_name")
     protected String secondName;
+
+    @Column(name = "birth_date")
     protected LocalDate birthDate;
+
+    @Column(name = "address")
     protected String address;
+
+    @Column(name = "phone")
     protected String phone;
+
+    @Column(name = "email")
     protected String email;
 
     public String getFirstName() {

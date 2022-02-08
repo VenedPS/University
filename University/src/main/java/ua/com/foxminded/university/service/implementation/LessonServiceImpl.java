@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import ua.com.foxminded.university.converter.LessonConverter;
@@ -20,7 +21,7 @@ public class LessonServiceImpl implements LessonService {
     private LessonDao lessonDao;
     
     @Autowired
-    public LessonServiceImpl(LessonDao lessonDao) {
+    public LessonServiceImpl(@Qualifier("lessonDaoSqlHibernate") LessonDao lessonDao) {
         this.lessonDao = lessonDao;
     }
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import ua.com.foxminded.university.converter.StudentConverter;
@@ -22,7 +23,7 @@ public class StudentServiceImpl implements StudentService {
     private StudentDao studentDao;
 
     @Autowired
-    public StudentServiceImpl(StudentDao studentDao) {
+    public StudentServiceImpl(@Qualifier("studentDaoSqlHibernate") StudentDao studentDao) {
         this.studentDao = studentDao;
     }
     

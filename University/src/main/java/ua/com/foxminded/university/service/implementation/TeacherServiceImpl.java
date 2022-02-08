@@ -3,6 +3,7 @@ package ua.com.foxminded.university.service.implementation;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import ua.com.foxminded.university.converter.TeacherConverter;
@@ -20,7 +21,7 @@ public class TeacherServiceImpl implements TeacherService {
     private TeacherDao teacherDao;
     
     @Autowired
-    public TeacherServiceImpl(TeacherDao teacherDao) {
+    public TeacherServiceImpl(@Qualifier("teacherDaoSqlHibernate") TeacherDao teacherDao) {
         this.teacherDao = teacherDao;
     }
 
