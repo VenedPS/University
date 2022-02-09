@@ -21,7 +21,6 @@ import ua.com.foxminded.university.dao.sql.LessonDaoSql;
 import ua.com.foxminded.university.dto.LessonDto;
 import ua.com.foxminded.university.dto.StudentDto;
 import ua.com.foxminded.university.exception.LessonNotFoundException;
-import ua.com.foxminded.university.service.LessonService;
 import ua.com.foxminded.university.service.StudentService;
 
 @Controller
@@ -29,13 +28,11 @@ import ua.com.foxminded.university.service.StudentService;
 public class StudentController {
 
     private final StudentService studentService;
-    private final LessonService lessonService;
     private final Logger logger = LoggerFactory.getLogger(LessonDaoSql.class);
 
     @Autowired
-    public StudentController(StudentService studentService, LessonService lessonService) {
+    public StudentController(StudentService studentService) {
         this.studentService = studentService;
-        this.lessonService = lessonService;
     }
 
     @GetMapping()
@@ -48,11 +45,11 @@ public class StudentController {
     public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("student", studentService.readById(id));
         
-        LocalDate startDate = LocalDate.now().withDayOfMonth(1);
+        LocalDate startDate = LocalDate.now().plusMonths(-2).withDayOfMonth(1);
         LocalDate endDate = LocalDate.now().plusMonths(1).withDayOfMonth(1).minusDays(1);        
         List<LessonDto> lessons = new ArrayList<LessonDto>();
         try {
-            lessons = lessonService.getStudentLessons(id, startDate, endDate);
+            lessons = studentService.getStudentLessons(id, startDate, endDate);
         } catch (LessonNotFoundException e) {
             logger.error(e.getMessage());
         }

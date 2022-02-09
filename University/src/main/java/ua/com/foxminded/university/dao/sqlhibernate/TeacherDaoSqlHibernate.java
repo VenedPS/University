@@ -1,7 +1,9 @@
 package ua.com.foxminded.university.dao.sqlhibernate;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.TypedQuery;
 
@@ -13,9 +15,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import ua.com.foxminded.university.dao.TeacherDao;
+import ua.com.foxminded.university.entity.LessonEntity;
 import ua.com.foxminded.university.entity.TeacherEntity;
 import ua.com.foxminded.university.exception.TeacherNotFoundException;
 import ua.com.foxminded.university.util.HibernateSessionFactory;
+import ua.com.foxminded.university.exception.LessonNotFoundException;
 import ua.com.foxminded.university.exception.TeacherNotChangedException;
 
 @Repository
@@ -112,6 +116,31 @@ public class TeacherDaoSqlHibernate implements TeacherDao {
         } catch (DataAccessException e) {
             throw new TeacherNotChangedException(id, e);
         }
+    }
+    
+    @Override
+    public List<LessonEntity> getTeacherLessons(int teacherId, LocalDate startDate, LocalDate endDate)
+            throws LessonNotFoundException {
+        
+        logger.info("Start getting teacher lessons with teacherId={} from startDate={} to endDate={}", teacherId,
+                startDate.toString(), endDate.toString());
+        
+        List<LessonEntity> lessons = new ArrayList<>();
+        try {
+            lessons = readById(teacherId).getLessons().stream()
+                    .filter(lesson -> lesson.getDate().isAfter(startDate))
+                    .filter(lesson -> lesson.getDate().isBefore(endDate))
+                    .collect(Collectors.toList());
+        } catch (DataAccessException e) {
+            logger.error("DB not available! Reason: {}", e.getMessage());
+        }
+        if (lessons.isEmpty()) {
+            throw new LessonNotFoundException(
+                    String.format("Empty lessons list for teacherId=%d from startDate=%s to endDate=%s", teacherId,
+                            startDate.toString(), endDate.toString()));
+        }
+        logger.info("All teacher lessons from DB was read!");
+        return lessons;
     }
 
 }

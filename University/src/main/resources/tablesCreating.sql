@@ -114,3 +114,5 @@ CREATE TABLE lessons
     CONSTRAINT lessons_teacher_id_fkey FOREIGN KEY (teacher_id)
         REFERENCES teachers (id)
         ON UPDATE CASCADE);
+        
+CREATE SEQUENCE HIBERNATE_SEQUENCE START WITH 1 INCREMENT BY 1 NO CYCLE;

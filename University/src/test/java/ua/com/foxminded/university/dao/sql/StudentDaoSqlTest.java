@@ -15,7 +15,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import ua.com.foxminded.university.config.DaoTestConfig;
 import ua.com.foxminded.university.dao.StudentDao;
+import ua.com.foxminded.university.entity.LessonEntity;
 import ua.com.foxminded.university.entity.StudentEntity;
+import ua.com.foxminded.university.exception.LessonNotFoundException;
 import ua.com.foxminded.university.exception.StudentNotFoundException;
 
 @ExtendWith(SpringExtension.class)
@@ -158,5 +160,63 @@ class StudentDaoSqlTest {
             studentDao.readById(5);
         });
     }
+    
+  @Test
+  void getStudentLessons_shouldreturnEmptyList_whenLessonDoesNotExists() {
+      assertThrows(LessonNotFoundException.class, () -> {
+          studentDao.getStudentLessons(1, LocalDate.of(2021, Month.OCTOBER, 1), LocalDate.of(2021, Month.OCTOBER, 5));
+      });
+  }
+  
+  @Test
+  void getStudentLessons_shouldreturnLessonList_whenOneLessonExists() {
+      LessonEntity lesson1 = new LessonEntity();
+      lesson1.setId(1);
+      lesson1.setTimetableId(1);
+      lesson1.setDate(LocalDate.of(2021, Month.OCTOBER, 6));
+      lesson1.setLessonNumber(1);
+      lesson1.setGroupId(1);
+      lesson1.setCourseId(1);
+      lesson1.setClassroomId(1);
+      lesson1.setTeacherId(1);
+      
+      List<LessonEntity> expected = new ArrayList<>();
+      expected.add(lesson1);
+      
+      List<LessonEntity> actual = studentDao.getStudentLessons(1, LocalDate.of(2021, Month.OCTOBER, 6), LocalDate.of(2021, Month.OCTOBER, 6));
+      
+      assertEquals(expected, actual);
+  }
+  
+  @Test
+  void getStudentLessons_shouldreturnLessonList_whenFewLessonExists() {
+      LessonEntity lesson1 = new LessonEntity();
+      lesson1.setId(1);
+      lesson1.setTimetableId(1);
+      lesson1.setDate(LocalDate.of(2021, Month.OCTOBER, 6));
+      lesson1.setLessonNumber(1);
+      lesson1.setGroupId(1);
+      lesson1.setCourseId(1);
+      lesson1.setClassroomId(1);
+      lesson1.setTeacherId(1);
+      
+      LessonEntity lesson2 = new LessonEntity();
+      lesson2.setId(2);
+      lesson2.setTimetableId(1);
+      lesson2.setDate(LocalDate.of(2021, Month.OCTOBER, 7));
+      lesson2.setLessonNumber(2);
+      lesson2.setGroupId(1);
+      lesson2.setCourseId(1);
+      lesson2.setClassroomId(1);
+      lesson2.setTeacherId(1);
+      
+      List<LessonEntity> expected = new ArrayList<>();
+      expected.add(lesson1);
+      expected.add(lesson2);
+      
+      List<LessonEntity> actual = studentDao.getStudentLessons(1, LocalDate.of(2021, Month.OCTOBER, 6), LocalDate.of(2021, Month.OCTOBER, 7));
+      
+      assertEquals(expected, actual);
+  }
 
 }

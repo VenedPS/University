@@ -1,29 +1,35 @@
 package ua.com.foxminded.university.dao.sqlhibernate;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
+import ua.com.foxminded.university.dao.GroupDao;
 import ua.com.foxminded.university.dao.StudentDao;
+import ua.com.foxminded.university.exception.LessonNotFoundException;
 import ua.com.foxminded.university.exception.StudentNotChangedException;
 import ua.com.foxminded.university.exception.StudentNotFoundException;
 import ua.com.foxminded.university.util.HibernateSessionFactory;
+import ua.com.foxminded.university.entity.LessonEntity;
 import ua.com.foxminded.university.entity.StudentEntity;
 
 @Repository
 public class StudentDaoSqlHibernate implements StudentDao {
 
+    @Autowired
+    private GroupDao groupDao;
+    
     private final Logger logger = LoggerFactory.getLogger(StudentDaoSqlHibernate.class);
 
     @Override
@@ -33,12 +39,8 @@ public class StudentDaoSqlHibernate implements StudentDao {
 
         try {
             Session session = HibernateSessionFactory.getSessionFactory().openSession();
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<StudentEntity> criteriaQuery = criteriaBuilder.createQuery(StudentEntity.class);
-            Root<StudentEntity> rootEntry = criteriaQuery.from(StudentEntity.class);
-            CriteriaQuery<StudentEntity> all = criteriaQuery.select(rootEntry);
-            TypedQuery<StudentEntity> allQuery = session.createQuery(all);
-            students = allQuery.getResultList();
+            TypedQuery<StudentEntity> query = session.createQuery("FROM StudentEntity", StudentEntity.class);
+            students = query.getResultList();
         } catch (DataAccessException e) {
             logger.error("DB not available! Reason: {}", e.getMessage());
         }
@@ -118,6 +120,30 @@ public class StudentDaoSqlHibernate implements StudentDao {
         } catch (DataAccessException e) {
             throw new StudentNotChangedException(id, e);
         }
+    }
+    
+    @Override
+    public List<LessonEntity> getStudentLessons(int studentId, LocalDate startDate, LocalDate endDate)
+            throws LessonNotFoundException {
+        logger.info("Start getting student lessons with studentId={} from startDate={} to endDate={}", studentId,
+                startDate.toString(), endDate.toString());
+        List<LessonEntity> lessons = new ArrayList<>();
+        try {
+            lessons = groupDao.readById(readById(studentId).getGroupId())
+                    .getLessons().stream()
+                    .filter(lesson -> lesson.getDate().isAfter(startDate))
+                    .filter(lesson -> lesson.getDate().isBefore(endDate))
+                    .collect(Collectors.toList());
+        } catch (DataAccessException e) {
+            logger.error("DB not available! Reason: {}", e.getMessage());
+        }
+        if (lessons.isEmpty()) {
+            throw new LessonNotFoundException(
+                    String.format("Empty lessons list for studentId=%d from startDate=%s to endDate=%s", studentId,
+                            startDate.toString(), endDate.toString()));
+        }
+        logger.info("All student lessons from DB was read!");
+        return lessons;
     }
 
 }

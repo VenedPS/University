@@ -13,7 +13,6 @@ import ua.com.foxminded.university.controller.TeacherController;
 import ua.com.foxminded.university.dto.LessonDto;
 import ua.com.foxminded.university.dto.StudentDto;
 import ua.com.foxminded.university.dto.TeacherDto;
-import ua.com.foxminded.university.service.LessonService;
 import ua.com.foxminded.university.service.StudentService;
 import ua.com.foxminded.university.service.TeacherService;
 
@@ -25,18 +24,17 @@ public class ControllerTestConfig {
         StudentService studentService = Mockito.mock(StudentService.class);
         List<StudentDto> students = new ArrayList<>();
         Mockito.when(studentService.readAll()).thenReturn(students);
-        StudentDto studentDto = new StudentDto(0, "firstName", "secondName");
+        StudentDto studentDto = new StudentDto("firstName", "secondName");
         Mockito.when(studentService.readById(0)).thenReturn(studentDto);
         Mockito.doNothing().when(studentService).create(studentDto);
         Mockito.doNothing().when(studentService).update(studentDto);
         Mockito.doNothing().when(studentService).delete(0);
         
-        LessonService lessonService = Mockito.mock(LessonService.class);
         LocalDate testDate = LocalDate.of(1, 1, 1);
         List<LessonDto> lessons = new ArrayList<LessonDto>();
-        Mockito.when(lessonService.getStudentLessons(0, testDate, testDate)).thenReturn(lessons);
+        Mockito.when(studentService.getStudentLessons(0, testDate, testDate)).thenReturn(lessons);
 
-        return new StudentController(studentService, lessonService);
+        return new StudentController(studentService);
     }
 
     @Bean
@@ -50,12 +48,11 @@ public class ControllerTestConfig {
         Mockito.doNothing().when(teacherService).update(teacherDto);
         Mockito.doNothing().when(teacherService).delete(0);
         
-        LessonService lessonService = Mockito.mock(LessonService.class);
         LocalDate testDate = LocalDate.of(1, 1, 1);
         List<LessonDto> lessons = new ArrayList<LessonDto>();
-        Mockito.when(lessonService.getTeacherLessons(0, testDate, testDate)).thenReturn(lessons);
+        Mockito.when(teacherService.getTeacherLessons(0, testDate, testDate)).thenReturn(lessons);
         
-        return new TeacherController(teacherService, lessonService);
+        return new TeacherController(teacherService);
 
     }
 }

@@ -1,18 +1,38 @@
 package ua.com.foxminded.university.entity;
 
-public class Course {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table (name = "courses")
+public class CourseEntity {
+
+    @Id
+    @GeneratedValue
     private Integer id;
+
+    @Column(name = "name")
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "teacher_id")
     private TeacherEntity teacher;
 
-    public Course(Integer id, String name, TeacherEntity teacher) {
-        this.id = id;
+    public CourseEntity() {
+
+    }
+    
+    public CourseEntity(String name, TeacherEntity teacher) {
         this.name = name;
         this.teacher = teacher;
     }
     
-    public Course(Course course) {
-        this.id = course.getId();
+    public CourseEntity(CourseEntity course) {
         this.name = course.getName();
         this.teacher = course.getTeacher();
     }
@@ -59,7 +79,7 @@ public class Course {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Course other = (Course) obj;
+        CourseEntity other = (CourseEntity) obj;
         if (id == null) {
             if (other.id != null)
                 return false;

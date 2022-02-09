@@ -1,6 +1,5 @@
 package ua.com.foxminded.university.service.implementation;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,16 +32,6 @@ public class LessonServiceImpl implements LessonService {
     @Override
     public LessonDto readById(int id) throws LessonNotFoundException {
         return lessonConverter.toDto(lessonDao.readById(id));
-    }
-
-    @Override
-    public List<LessonDto> getStudentLessons(int studentId, LocalDate startDate, LocalDate endDate) throws LessonNotFoundException {
-        return lessonConverter.toDtoList(lessonDao.getStudentLessons(studentId, startDate, endDate));
-    }
-
-    @Override
-    public List<LessonDto> getTeacherLessons(int teacherId, LocalDate startDate, LocalDate endDate) throws LessonNotFoundException {
-        return lessonConverter.toDtoList(lessonDao.getTeacherLessons(teacherId, startDate, endDate));
     }
 
     public LessonConverter getLessonConverter() {

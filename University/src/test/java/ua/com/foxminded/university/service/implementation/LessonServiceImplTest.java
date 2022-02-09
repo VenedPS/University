@@ -70,44 +70,4 @@ class LessonServiceImplTest {
         assertEquals(expected, actual);
     }
 
-    @Test
-    void getStudentLessons_shouldReturnLessonList_whenLessonsExists() {
-        LessonDto input = new LessonDto();
-        input.setId(1);
-        input.setTimetableId(1);
-        input.setDate(TEST_DATE);
-        input.setLessonNumber(1);
-        input.setGroupId(1);
-        input.setCourseId(1);
-        input.setClassroomId(1);
-        input.setTeacherId(1);
-
-        List<LessonDto> expected = new ArrayList<>();
-        expected.add(input);
-
-        List<LessonDto> actual = lessonServiceImpl.getTeacherLessons(0,TEST_DATE,TEST_DATE);
-
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void getTeacherLessons_shouldReturnLessonList_whenLessonsExists() {
-        LessonDto input = new LessonDto();
-        input.setId(1);
-        input.setTimetableId(1);
-        input.setDate(TEST_DATE);
-        input.setLessonNumber(1);
-        input.setGroupId(1);
-        input.setCourseId(1);
-        input.setClassroomId(1);
-        input.setTeacherId(1);
-        
-        List<LessonDto> expected = new ArrayList<>();
-        expected.add(input);
-        
-        List<LessonDto> actual = lessonServiceImpl.getTeacherLessons(0,TEST_DATE,TEST_DATE);
-        
-        assertEquals(expected, actual);
-    }
-
 }

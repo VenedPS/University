@@ -8,14 +8,12 @@ public class StudentDto extends PersonDto {
 
     }
     
-    public StudentDto(Integer id, String firstName, String secondName) {
-        this.id = id;
+    public StudentDto(String firstName, String secondName) {
         this.firstName = firstName;
         this.secondName = secondName;
     }
     
     public StudentDto(StudentDto student) {
-        this.id = student.getId();
         this.groupId = student.getGroupId();
         this.firstName = student.getFirstName();
         this.secondName = student.getSecondName();

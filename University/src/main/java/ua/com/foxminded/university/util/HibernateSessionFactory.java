@@ -6,6 +6,8 @@ import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ua.com.foxminded.university.entity.CourseEntity;
+import ua.com.foxminded.university.entity.GroupEntity;
 import ua.com.foxminded.university.entity.LessonEntity;
 import ua.com.foxminded.university.entity.StudentEntity;
 import ua.com.foxminded.university.entity.TeacherEntity;
@@ -26,6 +28,8 @@ public class HibernateSessionFactory {
                 configuration.addAnnotatedClass(StudentEntity.class);
                 configuration.addAnnotatedClass(TeacherEntity.class);
                 configuration.addAnnotatedClass(LessonEntity.class);
+                configuration.addAnnotatedClass(CourseEntity.class);
+                configuration.addAnnotatedClass(GroupEntity.class);
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties());
                 sessionFactory = configuration.buildSessionFactory(builder.build());

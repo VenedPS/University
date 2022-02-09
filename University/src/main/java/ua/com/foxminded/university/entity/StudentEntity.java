@@ -21,14 +21,12 @@ public class StudentEntity extends PersonEntity {
 
     }
 
-    public StudentEntity(Integer id, String firstName, String secondName) {
-        this.id = id;
+    public StudentEntity(String firstName, String secondName) {
         this.firstName = firstName;
         this.secondName = secondName;
     }
 
     public StudentEntity(StudentEntity student) {
-        this.id = student.getId();
         this.groupId = student.getGroupId();
         this.firstName = student.getFirstName();
         this.secondName = student.getSecondName();

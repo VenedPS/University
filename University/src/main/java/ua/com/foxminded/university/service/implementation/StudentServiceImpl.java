@@ -1,5 +1,6 @@
 package ua.com.foxminded.university.service.implementation;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,10 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import ua.com.foxminded.university.converter.LessonConverter;
 import ua.com.foxminded.university.converter.StudentConverter;
 import ua.com.foxminded.university.dao.StudentDao;
+import ua.com.foxminded.university.exception.LessonNotFoundException;
 import ua.com.foxminded.university.exception.StudentNotChangedException;
 import ua.com.foxminded.university.exception.StudentNotFoundException;
+import ua.com.foxminded.university.dto.LessonDto;
 import ua.com.foxminded.university.dto.StudentDto;
 import ua.com.foxminded.university.entity.StudentEntity;
 import ua.com.foxminded.university.service.StudentService;
@@ -19,6 +23,9 @@ import ua.com.foxminded.university.service.StudentService;
 public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentConverter studentConverter;
+    
+    @Autowired
+    private LessonConverter lessonConverter;
     
     private StudentDao studentDao;
 
@@ -57,6 +64,11 @@ public class StudentServiceImpl implements StudentService {
         studentDao.delete(id);
     }
 
+    @Override
+    public List<LessonDto> getStudentLessons(int studentId, LocalDate startDate, LocalDate endDate) throws LessonNotFoundException {
+        return lessonConverter.toDtoList(studentDao.getStudentLessons(studentId, startDate, endDate));
+    }
+    
     public StudentConverter getStudentConverter() {
         return studentConverter;
     }

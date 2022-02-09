@@ -42,8 +42,6 @@ public class ServiceImplTestConfig {
         LessonDao lessonDao = Mockito.mock(LessonDao.class);
         Mockito.when(lessonDao.readAll()).thenReturn(outputList);
         Mockito.when(lessonDao.readById(0)).thenReturn(output);
-        Mockito.when(lessonDao.getStudentLessons(0,TEST_DATE,TEST_DATE)).thenReturn(outputList);
-        Mockito.when(lessonDao.getTeacherLessons(0,TEST_DATE,TEST_DATE)).thenReturn(outputList);
         
         return new LessonServiceImpl(lessonDao);
     }

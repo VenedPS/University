@@ -16,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import ua.com.foxminded.university.config.ConverterTestConfig;
 import ua.com.foxminded.university.config.ServiceImplTestConfig;
+import ua.com.foxminded.university.dto.LessonDto;
 import ua.com.foxminded.university.dto.TeacherDto;
 import ua.com.foxminded.university.entity.TeacherEntity;
 
@@ -138,5 +139,24 @@ class TeacherServiceImplTest {
         Mockito.verify(teacherServiceImpl.getTeacherDao(), Mockito.times(1)).delete(0);
     }
 
+  @Test
+  void getTeacherLessons_shouldReturnLessonList_whenLessonsExists() {
+      LessonDto input = new LessonDto();
+      input.setId(1);
+      input.setTimetableId(1);
+      input.setDate(TEST_DATE);
+      input.setLessonNumber(1);
+      input.setGroupId(1);
+      input.setCourseId(1);
+      input.setClassroomId(1);
+      input.setTeacherId(1);
+      
+      List<LessonDto> expected = new ArrayList<>();
+      expected.add(input);
+      
+      List<LessonDto> actual = teacherServiceImpl.getTeacherLessons(0,TEST_DATE,TEST_DATE);
+      
+      assertEquals(expected, actual);
+  }
 
 }

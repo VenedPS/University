@@ -1,7 +1,9 @@
 package ua.com.foxminded.university.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import ua.com.foxminded.university.dto.LessonDto;
 import ua.com.foxminded.university.dto.StudentDto;
 import ua.com.foxminded.university.exception.StudentNotChangedException;
 import ua.com.foxminded.university.exception.StudentNotFoundException;
@@ -12,4 +14,5 @@ public interface StudentService {
     public void create(StudentDto studentDto)throws StudentNotChangedException;
     public void update(StudentDto studentDto)throws StudentNotChangedException;
     public void delete(int id)throws StudentNotChangedException;
+    public List<LessonDto> getStudentLessons(int studentId, LocalDate startDate, LocalDate endDate);
 }

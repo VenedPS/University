@@ -2,9 +2,26 @@ package ua.com.foxminded.university.entity;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table (name = "study_calendar_days")
 public class StudyCalendarDays {
+    
+    @Id
+    @GeneratedValue
     private Integer id;
+
+    @Column(name = "date")
     private LocalDate date;
+
+    @Enumerated(EnumType.ORDINAL)
     private DayType dayType;
 
     public StudyCalendarDays(Integer id, LocalDate date, DayType dayType) {

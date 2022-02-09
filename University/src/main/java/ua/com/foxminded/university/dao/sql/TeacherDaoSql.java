@@ -1,7 +1,9 @@
 package ua.com.foxminded.university.dao.sql;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +17,10 @@ import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Repository;
 
 import ua.com.foxminded.university.dao.TeacherDao;
+import ua.com.foxminded.university.entity.LessonEntity;
 import ua.com.foxminded.university.entity.TeacherEntity;
 import ua.com.foxminded.university.exception.TeacherNotFoundException;
+import ua.com.foxminded.university.exception.LessonNotFoundException;
 import ua.com.foxminded.university.exception.TeacherNotChangedException;
 
 @Repository
@@ -29,7 +33,10 @@ public class TeacherDaoSql implements TeacherDao {
     private final String SQL_CREATE = "INSERT INTO teachers VALUES(?, ?, ?, ?, ?, ?, ?)";
     private final String SQL_UPDATE = "UPDATE teachers SET first_name=?, second_name=?, birth_date=?, address=?, phone=?, email=? WHERE id=?";
     private final String SQL_DELETE = "DELETE FROM teachers WHERE id=?";
-
+    private final String SQL_TEACHER_LESSONS_FOR_MONTH = "SELECT lessons.* " + "FROM lessons "
+            + "INNER JOIN timetables ON timetables.id = lessons.timetable_id "
+            + "WHERE lessons.teacher_id = ? AND timetables.year = ? AND lessons.date >= ? AND lessons.date <= ?";
+    
     private final Logger logger = LoggerFactory.getLogger(TeacherDaoSql.class);
 
     @Autowired
@@ -118,6 +125,34 @@ public class TeacherDaoSql implements TeacherDao {
         } catch (DataAccessException e) {
             throw new TeacherNotChangedException(id, e);
         }
+    }
+
+    @Override
+    public List<LessonEntity> getTeacherLessons(int teacherId, LocalDate startDate, LocalDate endDate)
+            throws LessonNotFoundException {
+        logger.info("Start getting teacher lessons with teacherId={} from startDate={} to endDate={}", teacherId,
+                startDate.toString(), endDate.toString());
+        List<LessonEntity> lessons = new ArrayList<>();
+        try {
+            lessons = jdbcTemplate.query(SQL_TEACHER_LESSONS_FOR_MONTH, new PreparedStatementSetter() {
+                @Override
+                public void setValues(PreparedStatement ps) throws SQLException {
+                    ps.setInt(1, teacherId);
+                    ps.setInt(2, startDate.getYear());
+                    ps.setDate(3, Date.valueOf(startDate));
+                    ps.setDate(4, Date.valueOf(endDate));
+                }
+            }, new BeanPropertyRowMapper<>(LessonEntity.class));
+        } catch (DataAccessException e) {
+            logger.error("DB not available! Reason: {}", e.getMessage());
+        }
+        if (lessons.isEmpty()) {
+            throw new LessonNotFoundException(
+                    String.format("Empty lessons list for teacherId=%d from startDate=%s to endDate=%s", teacherId,
+                            startDate.toString(), endDate.toString()));
+        }
+        logger.info("All teacher lessons from DB was read!");
+        return lessons;
     }
 
 }

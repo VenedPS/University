@@ -1,14 +1,18 @@
 package ua.com.foxminded.university.service.implementation;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import ua.com.foxminded.university.converter.LessonConverter;
 import ua.com.foxminded.university.converter.TeacherConverter;
 import ua.com.foxminded.university.dao.TeacherDao;
+import ua.com.foxminded.university.dto.LessonDto;
 import ua.com.foxminded.university.dto.TeacherDto;
+import ua.com.foxminded.university.exception.LessonNotFoundException;
 import ua.com.foxminded.university.exception.TeacherNotChangedException;
 import ua.com.foxminded.university.exception.TeacherNotFoundException;
 import ua.com.foxminded.university.service.TeacherService;
@@ -17,6 +21,9 @@ import ua.com.foxminded.university.service.TeacherService;
 public class TeacherServiceImpl implements TeacherService {
     @Autowired
     private TeacherConverter teacherConverter;
+    
+    @Autowired
+    private LessonConverter lessonConverter;
 
     private TeacherDao teacherDao;
     
@@ -49,6 +56,10 @@ public class TeacherServiceImpl implements TeacherService {
     public void delete(int id) throws TeacherNotChangedException {
         teacherDao.delete(id);
     }
+    
+    public List<LessonDto> getTeacherLessons(int teacherId, LocalDate startDate, LocalDate endDate) throws LessonNotFoundException  {
+        return lessonConverter.toDtoList(teacherDao.getTeacherLessons(teacherId, startDate, endDate));
+    }
 
     public TeacherConverter getTeacherConverter() {
         return teacherConverter;
@@ -65,5 +76,5 @@ public class TeacherServiceImpl implements TeacherService {
     public void setTeacherDao(TeacherDao teacherDao) {
         this.teacherDao = teacherDao;
     }
-
+    
 }
