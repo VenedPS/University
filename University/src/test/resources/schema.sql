@@ -80,7 +80,7 @@ CREATE TABLE study_calendar_days
 (id integer NOT NULL,
 	study_calendar_id integer NOT NULL,
     date date,
-    dayType character varying(25),
+    dayType integer NOT NULL,
     CONSTRAINT study_calendar_days_pkey PRIMARY KEY (id, study_calendar_id),
     CONSTRAINT study_calendar_days_study_calendar_id_fkey FOREIGN KEY (study_calendar_id)
         REFERENCES study_calendars (id)

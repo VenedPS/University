@@ -62,12 +62,26 @@ public class ServiceImplTestConfig {
         List<StudentEntity> outputList = new ArrayList<>();
         outputList.add(output);
         
+        LessonEntity outputLesson = new LessonEntity();
+        outputLesson.setId(1);
+        outputLesson.setTimetableId(1);
+        outputLesson.setDate(TEST_DATE);
+        outputLesson.setLessonNumber(1);
+        outputLesson.setGroupId(1);
+        outputLesson.setCourseId(1);
+        outputLesson.setClassroomId(1);
+        outputLesson.setTeacherId(1);
+        
+        List<LessonEntity> outputLessonList = new ArrayList<>();
+        outputLessonList.add(outputLesson);
+        
         StudentDao studentDao = Mockito.mock(StudentDao.class);
         Mockito.when(studentDao.readAll()).thenReturn(outputList);
         Mockito.when(studentDao.readById(0)).thenReturn(output);
         Mockito.doNothing().when(studentDao).create(output);
         Mockito.doNothing().when(studentDao).update(output);
         Mockito.doNothing().when(studentDao).delete(0);
+        Mockito.when(studentDao.getStudentLessons(0,TEST_DATE,TEST_DATE)).thenReturn(outputLessonList);
         
         return new StudentServiceImpl(studentDao);
     }
@@ -86,12 +100,26 @@ public class ServiceImplTestConfig {
         List<TeacherEntity> outputList = new ArrayList<>();
         outputList.add(output);
         
+        LessonEntity outputLesson = new LessonEntity();
+        outputLesson.setId(1);
+        outputLesson.setTimetableId(1);
+        outputLesson.setDate(TEST_DATE);
+        outputLesson.setLessonNumber(1);
+        outputLesson.setGroupId(1);
+        outputLesson.setCourseId(1);
+        outputLesson.setClassroomId(1);
+        outputLesson.setTeacherId(1);
+        
+        List<LessonEntity> outputLessonList = new ArrayList<>();
+        outputLessonList.add(outputLesson);
+        
         TeacherDao teacherDao = Mockito.mock(TeacherDao.class);
         Mockito.when(teacherDao.readAll()).thenReturn(outputList);
         Mockito.when(teacherDao.readById(0)).thenReturn(output);
         Mockito.doNothing().when(teacherDao).create(output);
         Mockito.doNothing().when(teacherDao).update(output);
         Mockito.doNothing().when(teacherDao).delete(0);
+        Mockito.when(teacherDao.getTeacherLessons(0,TEST_DATE,TEST_DATE)).thenReturn(outputLessonList);
         
         return new TeacherServiceImpl(teacherDao);
     }
