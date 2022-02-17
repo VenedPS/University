@@ -64,7 +64,6 @@ public class StudentController {
 
     @PostMapping()
     public String create(@ModelAttribute("student") StudentDto studentDto) {
-        studentDto.setId(0 + (int) (Math.random() * ((1000 - 0) + 1)));
         studentService.create(studentDto);
         return "redirect:/students";
     }

@@ -5,28 +5,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import ua.com.foxminded.university.dao.GroupDao;
 import ua.com.foxminded.university.dao.StudentDao;
 import ua.com.foxminded.university.exception.LessonNotFoundException;
 import ua.com.foxminded.university.exception.StudentNotChangedException;
 import ua.com.foxminded.university.exception.StudentNotFoundException;
-import ua.com.foxminded.university.util.HibernateSessionFactory;
 import ua.com.foxminded.university.entity.LessonEntity;
 import ua.com.foxminded.university.entity.StudentEntity;
 
 @Repository
+@Transactional
 public class StudentDaoSqlHibernate implements StudentDao {
 
+    @PersistenceContext
+    private EntityManager entityManager;
+    
     @Autowired
     private GroupDao groupDao;
     
@@ -38,8 +42,7 @@ public class StudentDaoSqlHibernate implements StudentDao {
         List<StudentEntity> students = new ArrayList<>();
 
         try {
-            Session session = HibernateSessionFactory.getSessionFactory().openSession();
-            TypedQuery<StudentEntity> query = session.createQuery("FROM StudentEntity", StudentEntity.class);
+            TypedQuery<StudentEntity> query = entityManager.createQuery("FROM StudentEntity", StudentEntity.class);
             students = query.getResultList();
         } catch (DataAccessException e) {
             logger.error("DB not available! Reason: {}", e.getMessage());
@@ -57,7 +60,7 @@ public class StudentDaoSqlHibernate implements StudentDao {
         logger.info("Start reading student with id={}", id);
         StudentEntity studentEntity = null;
         try {
-            studentEntity = HibernateSessionFactory.getSessionFactory().openSession().get(StudentEntity.class, id);
+            studentEntity = entityManager.find(StudentEntity.class, id);
         } catch (DataAccessException e) {
             logger.error("DB not available! Reason: {}", e.getMessage());
         }
@@ -77,12 +80,7 @@ public class StudentDaoSqlHibernate implements StudentDao {
         logger.info("Start creating student with id={}", student.getId());
 
         try {
-            Session session = HibernateSessionFactory.getSessionFactory().openSession();
-            Transaction transaction = session.beginTransaction();
-            session.save(student);
-            transaction.commit();
-            session.close();
-            logger.info("Student with id={} was created in the DB!", student.getId());
+            entityManager.persist(student);
         } catch (DataAccessException e) {
             throw new StudentNotChangedException(student.getId(), e);
         }
@@ -97,11 +95,7 @@ public class StudentDaoSqlHibernate implements StudentDao {
         logger.info("Start updating student with id={}", student.getId());
 
         try {
-            Session session = HibernateSessionFactory.getSessionFactory().openSession();
-            Transaction transaction = session.beginTransaction();
-            session.update(student);
-            transaction.commit();
-            session.close();
+            entityManager.merge(student);
         } catch (DataAccessException e) {
             throw new StudentNotChangedException(student.getId(), e);
         }
@@ -112,11 +106,7 @@ public class StudentDaoSqlHibernate implements StudentDao {
         logger.info("Start deleting student with id={}", id);
 
         try {
-            Session session = HibernateSessionFactory.getSessionFactory().openSession();
-            Transaction transaction = session.beginTransaction();
-            session.delete(readById(id));
-            transaction.commit();
-            session.close();
+            entityManager.remove(readById(id));
         } catch (DataAccessException e) {
             throw new StudentNotChangedException(id, e);
         }

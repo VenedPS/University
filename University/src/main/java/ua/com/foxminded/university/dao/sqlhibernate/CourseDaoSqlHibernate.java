@@ -3,14 +3,15 @@ package ua.com.foxminded.university.dao.sqlhibernate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import ua.com.foxminded.university.dao.CourseDao;
 import ua.com.foxminded.university.entity.CourseEntity;
@@ -18,10 +19,13 @@ import ua.com.foxminded.university.exception.CourseNotChangedException;
 import ua.com.foxminded.university.exception.CourseNotFoundException;
 import ua.com.foxminded.university.exception.StudentNotChangedException;
 import ua.com.foxminded.university.exception.StudentNotFoundException;
-import ua.com.foxminded.university.util.HibernateSessionFactory;
 
 @Repository
+@Transactional
 public class CourseDaoSqlHibernate implements CourseDao {
+    
+    @PersistenceContext
+    private EntityManager entityManager;
     
     private final Logger logger = LoggerFactory.getLogger(StudentDaoSqlHibernate.class);
 
@@ -31,8 +35,7 @@ public class CourseDaoSqlHibernate implements CourseDao {
         List<CourseEntity> courses = new ArrayList<>();
 
         try {
-            Session session = HibernateSessionFactory.getSessionFactory().openSession();
-            TypedQuery<CourseEntity> query = session.createQuery("FROM CourseEntity", CourseEntity.class);
+            TypedQuery<CourseEntity> query = entityManager.createQuery("FROM CourseEntity", CourseEntity.class);
             courses = query.getResultList();
         } catch (DataAccessException e) {
             logger.error("DB not available! Reason: {}", e.getMessage());
@@ -50,7 +53,7 @@ public class CourseDaoSqlHibernate implements CourseDao {
         logger.info("Start reading course with id={}", id);
         CourseEntity courseEntity = null;
         try {
-            courseEntity = HibernateSessionFactory.getSessionFactory().openSession().get(CourseEntity.class, id);
+            courseEntity = entityManager.find(CourseEntity.class, id);
         } catch (DataAccessException e) {
             logger.error("DB not available! Reason: {}", e.getMessage());
         }
@@ -70,11 +73,7 @@ public class CourseDaoSqlHibernate implements CourseDao {
         logger.info("Start creating course with id={}", course.getId());
 
         try {
-            Session session = HibernateSessionFactory.getSessionFactory().openSession();
-            Transaction transaction = session.beginTransaction();
-            session.save(course);
-            transaction.commit();
-            session.close();
+            entityManager.persist(course);
             logger.info("Course with id={} was created in the DB!", course.getId());
         } catch (DataAccessException e) {
             throw new StudentNotChangedException(course.getId(), e);

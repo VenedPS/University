@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE xml>
+
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="1.0">
+	<persistence-unit name="EntityManagerFactoryProperty">
+		<class>ua.com.foxminded.university.entity.StudentEntity</class>
+		<class>ua.com.foxminded.university.entity.TeacherEntity</class>
+		<class>ua.com.foxminded.university.entity.LessonEntity</class>
+		<class>ua.com.foxminded.university.entity.CourseEntity</class>
+		<class>ua.com.foxminded.university.entity.GroupEntity</class>
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost/university" />
+			<property name="javax.persistence.jdbc.user" value="postgres" />
+			<property name="javax.persistence.jdbc.password" value="1234" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL95Dialect" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+		</properties>
+	</persistence-unit>
+</persistence>
