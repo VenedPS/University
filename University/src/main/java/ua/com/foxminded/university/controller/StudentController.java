@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import ua.com.foxminded.university.dao.sql.LessonDaoSql;
 import ua.com.foxminded.university.dto.LessonDto;
 import ua.com.foxminded.university.dto.StudentDto;
 import ua.com.foxminded.university.exception.LessonNotFoundException;
@@ -28,7 +27,7 @@ import ua.com.foxminded.university.service.StudentService;
 public class StudentController {
 
     private final StudentService studentService;
-    private final Logger logger = LoggerFactory.getLogger(LessonDaoSql.class);
+    private final Logger logger = LoggerFactory.getLogger(StudentController.class);
 
     @Autowired
     public StudentController(StudentService studentService) {

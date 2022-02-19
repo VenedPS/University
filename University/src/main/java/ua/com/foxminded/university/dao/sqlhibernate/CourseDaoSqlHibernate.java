@@ -27,7 +27,7 @@ public class CourseDaoSqlHibernate implements CourseDao {
     @PersistenceContext
     private EntityManager entityManager;
     
-    private final Logger logger = LoggerFactory.getLogger(StudentDaoSqlHibernate.class);
+    private final Logger logger = LoggerFactory.getLogger(CourseDaoSqlHibernate.class);
 
     @Override
     public List<CourseEntity> readAll() throws CourseNotFoundException {

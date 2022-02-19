@@ -27,7 +27,7 @@ public class GroupDaoSqlHibernate implements GroupDao {
     @PersistenceContext
     private EntityManager entityManager;
     
-    private final Logger logger = LoggerFactory.getLogger(StudentDaoSqlHibernate.class);
+    private final Logger logger = LoggerFactory.getLogger(GroupDaoSqlHibernate.class);
 
     @Override
     public List<GroupEntity> readAll()  throws GroupNotFoundException {
