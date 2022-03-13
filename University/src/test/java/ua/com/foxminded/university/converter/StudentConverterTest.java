@@ -15,7 +15,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import ua.com.foxminded.university.config.ConverterTestConfig;
+import ua.com.foxminded.university.dto.GroupDto;
 import ua.com.foxminded.university.dto.StudentDto;
+import ua.com.foxminded.university.entity.GroupEntity;
 import ua.com.foxminded.university.entity.StudentEntity;
 
 @ExtendWith(SpringExtension.class)
@@ -24,6 +26,9 @@ class StudentConverterTest {
 
     @Autowired
     private StudentConverter studentConverter;
+    
+    private GroupEntity groupEntity = new GroupEntity();
+    private GroupDto groupDto = new GroupDto();
     
     @Test
     void toEntity_shouldThrowIllegalArgumentException_whenInputIsNull() {
@@ -35,9 +40,11 @@ class StudentConverterTest {
     @Test
     void toEntity_shouldreturnEmptyStudentEntity_whenEmptyStudentDto() {
         StudentEntity expected = new StudentEntity();
-
+        expected.setGroup(groupEntity);
+        
         StudentDto input = new StudentDto();
-
+        input.setGroup(groupDto);
+        
         StudentEntity actual = studentConverter.toEntity(input);
 
         assertEquals(expected, actual);
@@ -47,7 +54,7 @@ class StudentConverterTest {
     void toEntity_shouldreturnStudentEntityWithData_whenStudentDtoWithData() {
         StudentEntity expected = new StudentEntity();
         expected.setId(1);
-        expected.setGroupId(1);
+        expected.setGroup(groupEntity);
         expected.setFirstName("first_name");
         expected.setSecondName("second_name");
         expected.setBirthDate(LocalDate.of(2021, Month.OCTOBER, 6));
@@ -57,7 +64,7 @@ class StudentConverterTest {
         
         StudentDto input = new StudentDto();
         input.setId(1);
-        input.setGroupId(1);
+        input.setGroup(groupDto);
         input.setFirstName("first_name");
         input.setSecondName("second_name");
         input.setBirthDate(LocalDate.of(2021, Month.OCTOBER, 6));
@@ -92,7 +99,7 @@ class StudentConverterTest {
     void toEntityList_shouldreturnStudentEntityList_whenStudentDtoListWithData() {
         StudentEntity studentEntity = new StudentEntity();
         studentEntity.setId(1);
-        studentEntity.setGroupId(1);
+        studentEntity.setGroup(groupEntity);
         studentEntity.setFirstName("first_name");
         studentEntity.setSecondName("second_name");
         studentEntity.setBirthDate(LocalDate.of(2021, Month.OCTOBER, 6));
@@ -105,7 +112,7 @@ class StudentConverterTest {
         
         StudentDto studentDto = new StudentDto();
         studentDto.setId(1);
-        studentDto.setGroupId(1);
+        studentDto.setGroup(groupDto);
         studentDto.setFirstName("first_name");
         studentDto.setSecondName("second_name");
         studentDto.setBirthDate(LocalDate.of(2021, Month.OCTOBER, 6));
@@ -131,8 +138,10 @@ class StudentConverterTest {
     @Test
     void toDto_shouldreturnEmptyStudentDto_whenEmptyStudentEntity() {
         StudentDto expected = new StudentDto();
+        expected.setGroup(groupDto);
         
         StudentEntity input = new StudentEntity();
+        input.setGroup(groupEntity);
         
         StudentDto actual = studentConverter.toDto(input);
         
@@ -143,7 +152,7 @@ class StudentConverterTest {
     void toDto_shouldreturnStudentEntityWithData_whenStudentDtoWithData() {
         StudentDto expected = new StudentDto();
         expected.setId(1);
-        expected.setGroupId(1);
+        expected.setGroup(groupDto);
         expected.setFirstName("first_name");
         expected.setSecondName("second_name");
         expected.setBirthDate(LocalDate.of(2021, Month.OCTOBER, 6));
@@ -153,7 +162,7 @@ class StudentConverterTest {
         
         StudentEntity input = new StudentEntity();
         input.setId(1);
-        input.setGroupId(1);
+        input.setGroup(groupEntity);
         input.setFirstName("first_name");
         input.setSecondName("second_name");
         input.setBirthDate(LocalDate.of(2021, Month.OCTOBER, 6));
@@ -188,7 +197,7 @@ class StudentConverterTest {
     void toDtoList_shouldreturnStudentDtoList_whenStudentEntityListWithData() {
         StudentDto studentDto = new StudentDto();
         studentDto.setId(1);
-        studentDto.setGroupId(1);
+        studentDto.setGroup(groupDto);
         studentDto.setFirstName("first_name");
         studentDto.setSecondName("second_name");
         studentDto.setBirthDate(LocalDate.of(2021, Month.OCTOBER, 6));
@@ -201,7 +210,7 @@ class StudentConverterTest {
         
         StudentEntity studentEntity = new StudentEntity();
         studentEntity.setId(1);
-        studentEntity.setGroupId(1);
+        studentEntity.setGroup(groupEntity);
         studentEntity.setFirstName("first_name");
         studentEntity.setSecondName("second_name");
         studentEntity.setBirthDate(LocalDate.of(2021, Month.OCTOBER, 6));

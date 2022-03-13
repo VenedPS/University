@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -25,8 +26,8 @@ public class LessonEntity {
     @Column(name = "lessonNumber")
     private int lessonNumber;
 
-    @Column(name = "group_id")
-    private int groupId;
+    @ManyToOne
+    private GroupEntity group;
 
     @Column(name = "course_id")
     private int courseId;
@@ -34,23 +35,23 @@ public class LessonEntity {
     @Column(name = "classroom_id")
     private int classroomId;
 
-    @Column(name = "teacher_id")
-    private int teacherId;
+    @ManyToOne
+    private TeacherEntity teacher;
 
     public LessonEntity() {
 
     }
 
-    public LessonEntity(int id, int timetableId, LocalDate date, int lessonNumber, int groupId, int courseId, int classroomId,
-            int teacherId) {
+    public LessonEntity(int id, int timetableId, LocalDate date, int lessonNumber, GroupEntity group, int courseId, int classroomId,
+            TeacherEntity teacher) {
         this.id = id;
         this.timetableId = timetableId;
         this.date = date;
         this.lessonNumber = lessonNumber;
-        this.groupId = groupId;
+        this.group = group;
         this.courseId = courseId;
         this.classroomId = classroomId;
-        this.teacherId = teacherId;
+        this.teacher = teacher;
     }
 
     public LessonEntity(LessonEntity lesson) {
@@ -58,10 +59,10 @@ public class LessonEntity {
         this.timetableId = lesson.getTimetableId();
         this.date = lesson.getDate();
         this.lessonNumber = lesson.getLessonNumber();
-        this.groupId = lesson.getGroupId();
+        this.group = lesson.getGroup();
         this.courseId = lesson.getCourseId();
         this.classroomId = lesson.getClassroomId();
-        this.teacherId = lesson.getTeacherId();
+        this.teacher = lesson.getTeacher();
     }
 
     public int getId() {
@@ -96,12 +97,12 @@ public class LessonEntity {
         this.lessonNumber = lessonNumber;
     }
 
-    public int getGroupId() {
-        return groupId;
+    public GroupEntity getGroup() {
+        return group;
     }
 
-    public void setGroupId(int groupId) {
-        this.groupId = groupId;
+    public void setGroup(GroupEntity group) {
+        this.group = group;
     }
 
     public int getCourseId() {
@@ -120,12 +121,12 @@ public class LessonEntity {
         this.classroomId = classroomId;
     }
 
-    public int getTeacherId() {
-        return teacherId;
+    public TeacherEntity getTeacher() {
+        return teacher;
     }
 
-    public void setTeacherId(int teacherId) {
-        this.teacherId = teacherId;
+    public void setTeacher(TeacherEntity teacher) {
+        this.teacher = teacher;
     }
 
     @Override
@@ -135,10 +136,10 @@ public class LessonEntity {
         result = prime * result + classroomId;
         result = prime * result + courseId;
         result = prime * result + ((date == null) ? 0 : date.hashCode());
-        result = prime * result + groupId;
+        result = prime * result + ((group == null) ? 0 : group.hashCode());
         result = prime * result + id;
         result = prime * result + lessonNumber;
-        result = prime * result + teacherId;
+        result = prime * result + ((teacher == null) ? 0 : teacher.hashCode());
         result = prime * result + timetableId;
         return result;
     }
@@ -161,13 +162,19 @@ public class LessonEntity {
                 return false;
         } else if (!date.equals(other.date))
             return false;
-        if (groupId != other.groupId)
+        if (group == null) {
+            if (other.group != null)
+                return false;
+        } else if (!group.equals(other.group))
             return false;
         if (id != other.id)
             return false;
         if (lessonNumber != other.lessonNumber)
             return false;
-        if (teacherId != other.teacherId)
+        if (teacher == null) {
+            if (other.teacher != null)
+                return false;
+        } else if (!teacher.equals(other.teacher))
             return false;
         if (timetableId != other.timetableId)
             return false;
@@ -176,9 +183,9 @@ public class LessonEntity {
 
     @Override
     public String toString() {
-        return "Lesson [id=" + id + ", timetableId=" + timetableId + ", date=" + date + ", lessonNumber=" + lessonNumber
-                + ", groupId=" + groupId + ", courseId=" + courseId + ", classroomId=" + classroomId + ", teacherId="
-                + teacherId + "]";
+        return "LessonEntity [id=" + id + ", timetableId=" + timetableId + ", date=" + date + ", lessonNumber="
+                + lessonNumber + ", group=" + group + ", courseId=" + courseId + ", classroomId=" + classroomId
+                + ", teacher=" + teacher + "]";
     }
 
 }

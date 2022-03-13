@@ -15,8 +15,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import ua.com.foxminded.university.config.ConverterTestConfig;
+import ua.com.foxminded.university.dto.GroupDto;
 import ua.com.foxminded.university.dto.LessonDto;
+import ua.com.foxminded.university.dto.TeacherDto;
+import ua.com.foxminded.university.entity.GroupEntity;
 import ua.com.foxminded.university.entity.LessonEntity;
+import ua.com.foxminded.university.entity.TeacherEntity;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { ConverterTestConfig.class })
@@ -24,6 +28,11 @@ class LessonConverterTest {
 
     @Autowired
     private LessonConverter lessonConverter;
+    
+    private GroupEntity groupEntity = new GroupEntity();
+    private GroupDto groupDto = new GroupDto();
+    private TeacherEntity teacherEntity = new TeacherEntity();
+    private TeacherDto teacherDto = new TeacherDto();
     
     @Test
     void toEntity_shouldThrowIllegalArgumentException_whenInputIsNull() {
@@ -35,8 +44,12 @@ class LessonConverterTest {
     @Test
     void toEntity_shouldreturnEmptyLessonEntity_whenEmptyLessonDto() {
         LessonEntity expected = new LessonEntity();
-
+        expected.setGroup(groupEntity);
+        expected.setTeacher(teacherEntity);
+        
         LessonDto input = new LessonDto();
+        input.setGroup(groupDto);
+        input.setTeacher(teacherDto);
 
         LessonEntity actual = lessonConverter.toEntity(input);
 
@@ -50,20 +63,20 @@ class LessonConverterTest {
         expected.setTimetableId(1);
         expected.setDate(LocalDate.of(2021, Month.OCTOBER, 6));
         expected.setLessonNumber(1);
-        expected.setGroupId(1);
+        expected.setGroup(groupEntity);
         expected.setCourseId(1);
         expected.setClassroomId(1);
-        expected.setTeacherId(1);
+        expected.setTeacher(teacherEntity);
         
         LessonDto input = new LessonDto();
         input.setId(1);
         input.setTimetableId(1);
         input.setDate(LocalDate.of(2021, Month.OCTOBER, 6));
         input.setLessonNumber(1);
-        input.setGroupId(1);
+        input.setGroup(groupDto);
         input.setCourseId(1);
         input.setClassroomId(1);
-        input.setTeacherId(1);
+        input.setTeacher(teacherDto);
         
         LessonEntity actual = lessonConverter.toEntity(input);
         
@@ -95,10 +108,10 @@ class LessonConverterTest {
         lessonEntity.setTimetableId(1);
         lessonEntity.setDate(LocalDate.of(2021, Month.OCTOBER, 6));
         lessonEntity.setLessonNumber(1);
-        lessonEntity.setGroupId(1);
+        lessonEntity.setGroup(groupEntity);
         lessonEntity.setCourseId(1);
         lessonEntity.setClassroomId(1);
-        lessonEntity.setTeacherId(1);
+        lessonEntity.setTeacher(teacherEntity);
         
         List<LessonEntity> expected = new ArrayList<>();
         expected.add(lessonEntity);
@@ -108,10 +121,10 @@ class LessonConverterTest {
         lessonDto.setTimetableId(1);
         lessonDto.setDate(LocalDate.of(2021, Month.OCTOBER, 6));
         lessonDto.setLessonNumber(1);
-        lessonDto.setGroupId(1);
+        lessonDto.setGroup(groupDto);
         lessonDto.setCourseId(1);
         lessonDto.setClassroomId(1);
-        lessonDto.setTeacherId(1);
+        lessonDto.setTeacher(teacherDto);
         
         List<LessonDto> input = new ArrayList<>();
         input.add(lessonDto);
@@ -131,8 +144,12 @@ class LessonConverterTest {
     @Test
     void toDto_shouldreturnEmptyLessonDto_whenEmptyLessonEntity() {
         LessonDto expected = new LessonDto();
+        expected.setGroup(groupDto);
+        expected.setTeacher(teacherDto);
         
         LessonEntity input = new LessonEntity();
+        input.setGroup(groupEntity);
+        input.setTeacher(teacherEntity);
         
         LessonDto actual = lessonConverter.toDto(input);
         
@@ -146,20 +163,20 @@ class LessonConverterTest {
         expected.setTimetableId(1);
         expected.setDate(LocalDate.of(2021, Month.OCTOBER, 6));
         expected.setLessonNumber(1);
-        expected.setGroupId(1);
+        expected.setGroup(groupDto);
         expected.setCourseId(1);
         expected.setClassroomId(1);
-        expected.setTeacherId(1);
+        expected.setTeacher(teacherDto);
         
         LessonEntity input = new LessonEntity();
         input.setId(1);
         input.setTimetableId(1);
         input.setDate(LocalDate.of(2021, Month.OCTOBER, 6));
         input.setLessonNumber(1);
-        input.setGroupId(1);
+        input.setGroup(groupEntity);
         input.setCourseId(1);
         input.setClassroomId(1);
-        input.setTeacherId(1);
+        input.setTeacher(teacherEntity);
         
         LessonDto actual = lessonConverter.toDto(input);
         
@@ -191,10 +208,10 @@ class LessonConverterTest {
         lessonDto.setTimetableId(1);
         lessonDto.setDate(LocalDate.of(2021, Month.OCTOBER, 6));
         lessonDto.setLessonNumber(1);
-        lessonDto.setGroupId(1);
+        lessonDto.setGroup(groupDto);
         lessonDto.setCourseId(1);
         lessonDto.setClassroomId(1);
-        lessonDto.setTeacherId(1);
+        lessonDto.setTeacher(teacherDto);
         
         List<LessonDto> expected = new ArrayList<>();
         expected.add(lessonDto);
@@ -204,10 +221,10 @@ class LessonConverterTest {
         lessonEntity.setTimetableId(1);
         lessonEntity.setDate(LocalDate.of(2021, Month.OCTOBER, 6));
         lessonEntity.setLessonNumber(1);
-        lessonEntity.setGroupId(1);
+        lessonEntity.setGroup(groupEntity);
         lessonEntity.setCourseId(1);
         lessonEntity.setClassroomId(1);
-        lessonEntity.setTeacherId(1);
+        lessonEntity.setTeacher(teacherEntity);
         
         List<LessonEntity> input = new ArrayList<>();
         input.add(lessonEntity);

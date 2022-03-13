@@ -119,7 +119,7 @@ public class StudentDaoSqlHibernate implements StudentDao {
                 startDate.toString(), endDate.toString());
         List<LessonEntity> lessons = new ArrayList<>();
         try {
-            lessons = groupDao.readById(readById(studentId).getGroupId())
+            lessons = groupDao.readById(readById(studentId).getGroup().getId())
                     .getLessons().stream()
                     .filter(lesson -> lesson.getDate().isAfter(startDate))
                     .filter(lesson -> lesson.getDate().isBefore(endDate))

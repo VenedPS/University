@@ -35,14 +35,14 @@
 			<th>Lesson number</th>
 			<th>Course Id</th>
 			<th>Classroom Id</th>
-			<th>Teacher Id</th>
+			<th>Teacher</th>
 		</tr>
 		<tr th:each="lesson : ${lessons}">
 		    <td th:text="${lesson.getDate()}">
 		    <td th:text="${lesson.getLessonNumber()}">
 		    <td th:text="${lesson.getCourseId()}">
 		    <td th:text="${lesson.getClassroomId()}">
-		    <td th:text="${lesson.getTeacherId()}">
+		    <td th:text="${lesson.getTeacher()}">
 		</tr>
 	</table>
 </body>

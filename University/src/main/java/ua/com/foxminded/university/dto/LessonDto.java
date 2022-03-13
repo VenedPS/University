@@ -7,25 +7,25 @@ public class LessonDto {
     private int timetableId;
     private LocalDate date;
     private int lessonNumber;
-    private int groupId;
+    private GroupDto group;
     private int courseId;
     private int classroomId;
-    private int teacherId;
+    private TeacherDto teacher;
 
     public LessonDto() {
 
     }
 
-    public LessonDto(int id, int timetableId, LocalDate date, int lessonNumber, int groupId, int courseId, int classroomId,
-            int teacherId) {
+    public LessonDto(int id, int timetableId, LocalDate date, int lessonNumber, GroupDto group, int courseId, int classroomId,
+            TeacherDto teacher) {
         this.id = id;
         this.timetableId = timetableId;
         this.date = date;
         this.lessonNumber = lessonNumber;
-        this.groupId = groupId;
+        this.group = group;
         this.courseId = courseId;
         this.classroomId = classroomId;
-        this.teacherId = teacherId;
+        this.teacher = teacher;
     }
 
     public LessonDto(LessonDto lesson) {
@@ -33,10 +33,10 @@ public class LessonDto {
         this.timetableId = lesson.getTimetableId();
         this.date = lesson.getDate();
         this.lessonNumber = lesson.getLessonNumber();
-        this.groupId = lesson.getGroupId();
+        this.group = lesson.getGroup();
         this.courseId = lesson.getCourseId();
         this.classroomId = lesson.getClassroomId();
-        this.teacherId = lesson.getTeacherId();
+        this.teacher = lesson.getTeacher();
     }
 
     public int getId() {
@@ -71,12 +71,12 @@ public class LessonDto {
         this.lessonNumber = lessonNumber;
     }
 
-    public int getGroupId() {
-        return groupId;
+    public GroupDto getGroup() {
+        return group;
     }
 
-    public void setGroupId(int groupId) {
-        this.groupId = groupId;
+    public void setGroup(GroupDto group) {
+        this.group = group;
     }
 
     public int getCourseId() {
@@ -95,12 +95,12 @@ public class LessonDto {
         this.classroomId = classroomId;
     }
 
-    public int getTeacherId() {
-        return teacherId;
+    public TeacherDto getTeacher() {
+        return teacher;
     }
 
-    public void setTeacherId(int teacherId) {
-        this.teacherId = teacherId;
+    public void setTeacher(TeacherDto teacher) {
+        this.teacher = teacher;
     }
 
     @Override
@@ -110,10 +110,10 @@ public class LessonDto {
         result = prime * result + classroomId;
         result = prime * result + courseId;
         result = prime * result + ((date == null) ? 0 : date.hashCode());
-        result = prime * result + groupId;
+        result = prime * result + ((group == null) ? 0 : group.hashCode());
         result = prime * result + id;
         result = prime * result + lessonNumber;
-        result = prime * result + teacherId;
+        result = prime * result + ((teacher == null) ? 0 : teacher.hashCode());
         result = prime * result + timetableId;
         return result;
     }
@@ -136,13 +136,19 @@ public class LessonDto {
                 return false;
         } else if (!date.equals(other.date))
             return false;
-        if (groupId != other.groupId)
+        if (group == null) {
+            if (other.group != null)
+                return false;
+        } else if (!group.equals(other.group))
             return false;
         if (id != other.id)
             return false;
         if (lessonNumber != other.lessonNumber)
             return false;
-        if (teacherId != other.teacherId)
+        if (teacher == null) {
+            if (other.teacher != null)
+                return false;
+        } else if (!teacher.equals(other.teacher))
             return false;
         if (timetableId != other.timetableId)
             return false;
@@ -151,9 +157,9 @@ public class LessonDto {
 
     @Override
     public String toString() {
-        return "Lesson [id=" + id + ", timetableId=" + timetableId + ", date=" + date + ", lessonNumber=" + lessonNumber
-                + ", groupId=" + groupId + ", courseId=" + courseId + ", classroomId=" + classroomId + ", teacherId="
-                + teacherId + "]";
+        return "LessonDto [id=" + id + ", timetableId=" + timetableId + ", date=" + date + ", lessonNumber="
+                + lessonNumber + ", group=" + group + ", courseId=" + courseId + ", classroomId=" + classroomId
+                + ", teacher=" + teacher + "]";
     }
 
 }

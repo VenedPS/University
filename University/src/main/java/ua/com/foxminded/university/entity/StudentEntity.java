@@ -1,9 +1,9 @@
 package ua.com.foxminded.university.entity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -14,8 +14,8 @@ public class StudentEntity extends PersonEntity {
     @GeneratedValue
     private Integer id;
     
-    @Column(name = "group_id")
-    private Integer groupId;
+    @ManyToOne
+    private GroupEntity group;
     
     public StudentEntity() {
 
@@ -27,7 +27,7 @@ public class StudentEntity extends PersonEntity {
     }
 
     public StudentEntity(StudentEntity student) {
-        this.groupId = student.getGroupId();
+        this.group = student.getGroup();
         this.firstName = student.getFirstName();
         this.secondName = student.getSecondName();
         this.birthDate = student.getBirthDate();
@@ -44,12 +44,12 @@ public class StudentEntity extends PersonEntity {
         this.id = id;
     }
 
-    public Integer getGroupId() {
-        return groupId;
+    public GroupEntity getGroup() {
+        return group;
     }
 
-    public void setGroupId(Integer groupId) {
-        this.groupId = groupId;
+    public void setGroup(GroupEntity group) {
+        this.group = group;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class StudentEntity extends PersonEntity {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-        result = prime * result + ((groupId == null) ? 0 : groupId.hashCode());
+        result = prime * result + ((group == null) ? 0 : group.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((secondName == null) ? 0 : secondName.hashCode());
         return result;
@@ -77,10 +77,10 @@ public class StudentEntity extends PersonEntity {
                 return false;
         } else if (!firstName.equals(other.firstName))
             return false;
-        if (groupId == null) {
-            if (other.groupId != null)
+        if (group == null) {
+            if (other.group != null)
                 return false;
-        } else if (!groupId.equals(other.groupId))
+        } else if (!group.equals(other.group))
             return false;
         if (id == null) {
             if (other.id != null)
@@ -97,7 +97,7 @@ public class StudentEntity extends PersonEntity {
 
     @Override
     public String toString() {
-        return "Student [id=" + id + ", groupId=" + groupId + ", firstName=" + firstName + ", secondName=" + secondName
+        return "Student [id=" + id + ", group=" + group + ", firstName=" + firstName + ", secondName=" + secondName
                 + ", birthDate=" + birthDate + ", address=" + address + ", phone=" + phone + ", email=" + email + "]";
     }
 

@@ -21,17 +21,20 @@ import ua.com.foxminded.university.dto.LessonDto;
 import ua.com.foxminded.university.dto.StudentDto;
 import ua.com.foxminded.university.exception.LessonNotFoundException;
 import ua.com.foxminded.university.service.StudentService;
+import ua.com.foxminded.university.service.GroupService;
 
 @Controller
 @RequestMapping("/students")
 public class StudentController {
 
     private final StudentService studentService;
+    private final GroupService groupService;
     private final Logger logger = LoggerFactory.getLogger(StudentController.class);
 
     @Autowired
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService, GroupService groupService) {
         this.studentService = studentService;
+        this.groupService = groupService;
     }
 
     @GetMapping()
@@ -63,6 +66,7 @@ public class StudentController {
 
     @PostMapping()
     public String create(@ModelAttribute("student") StudentDto studentDto) {
+        studentDto.setGroup(groupService.readById(1));
         studentService.create(studentDto);
         return "redirect:/students";
     }

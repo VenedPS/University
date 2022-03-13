@@ -91,7 +91,7 @@ public class StudentDaoSql implements StudentDao {
         logger.info("Start creating student with id={}",student.getId());
         
         try {
-            jdbcTemplate.update(SQL_CREATE, student.getId(), student.getGroupId(), student.getFirstName(),
+            jdbcTemplate.update(SQL_CREATE, student.getId(), student.getGroup(), student.getFirstName(),
                     student.getSecondName(), student.getBirthDate(), student.getAddress(), student.getPhone(),
                     student.getEmail());
             logger.info("Student with id={} was created in the DB!", student.getId());
@@ -109,7 +109,7 @@ public class StudentDaoSql implements StudentDao {
         logger.info("Start updating student with id={}",student.getId());
         
         try {
-            jdbcTemplate.update(SQL_UPDATE, student.getGroupId(), student.getFirstName(), student.getSecondName(),
+            jdbcTemplate.update(SQL_UPDATE, student.getGroup(), student.getFirstName(), student.getSecondName(),
                     student.getBirthDate(), student.getAddress(), student.getPhone(), student.getEmail(),
                     student.getId());
             logger.info("Student with id={} was updated in the DB!", student.getId());

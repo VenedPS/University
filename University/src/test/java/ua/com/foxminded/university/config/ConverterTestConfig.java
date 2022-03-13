@@ -3,6 +3,8 @@ package ua.com.foxminded.university.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import ua.com.foxminded.university.converter.CourseConverter;
+import ua.com.foxminded.university.converter.GroupConverter;
 import ua.com.foxminded.university.converter.LessonConverter;
 import ua.com.foxminded.university.converter.StudentConverter;
 import ua.com.foxminded.university.converter.TeacherConverter;
@@ -23,5 +25,15 @@ public class ConverterTestConfig {
     @Bean
     public TeacherConverter teacherConverter() {
         return new TeacherConverter();
+    }
+    
+    @Bean
+    public CourseConverter courseConverter() {
+        return new CourseConverter();
+    }
+    
+    @Bean
+    public GroupConverter groupConverter() {
+        return new GroupConverter(new StudentConverter(), new CourseConverter());
     }
 }

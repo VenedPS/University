@@ -16,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import ua.com.foxminded.university.config.ConverterTestConfig;
 import ua.com.foxminded.university.config.ServiceImplTestConfig;
+import ua.com.foxminded.university.dto.GroupDto;
 import ua.com.foxminded.university.dto.LessonDto;
 import ua.com.foxminded.university.dto.TeacherDto;
 import ua.com.foxminded.university.entity.TeacherEntity;
@@ -28,6 +29,9 @@ class TeacherServiceImplTest {
     
     @Autowired
     private TeacherServiceImpl teacherServiceImpl;
+    
+    private GroupDto groupDto = new GroupDto();
+    private TeacherDto teacherDto = new TeacherDto();
 
     @Test
     void readAll_shouldReturnTeacherList_whenTeachersExists() {
@@ -146,10 +150,10 @@ class TeacherServiceImplTest {
       input.setTimetableId(1);
       input.setDate(TEST_DATE);
       input.setLessonNumber(1);
-      input.setGroupId(1);
+      input.setGroup(groupDto);
       input.setCourseId(1);
       input.setClassroomId(1);
-      input.setTeacherId(1);
+      input.setTeacher(teacherDto);
       
       List<LessonDto> expected = new ArrayList<>();
       expected.add(input);

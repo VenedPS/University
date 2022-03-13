@@ -16,8 +16,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import ua.com.foxminded.university.config.ConverterTestConfig;
 import ua.com.foxminded.university.config.ServiceImplTestConfig;
+import ua.com.foxminded.university.dto.GroupDto;
 import ua.com.foxminded.university.dto.LessonDto;
 import ua.com.foxminded.university.dto.StudentDto;
+import ua.com.foxminded.university.dto.TeacherDto;
+import ua.com.foxminded.university.entity.GroupEntity;
 import ua.com.foxminded.university.entity.StudentEntity;
 
 @ExtendWith(SpringExtension.class)
@@ -28,12 +31,16 @@ class StudentServiceImplTest {
     
     @Autowired
     private StudentServiceImpl studentServiceImpl;
+    
+    private GroupEntity groupEntity = new GroupEntity();
+    private GroupDto groupDto = new GroupDto();
+    private TeacherDto teacherDto = new TeacherDto();
 
     @Test
     void readAll_shouldReturnStudentList_whenStudentsExists() {
         StudentDto input = new StudentDto();
         input.setId(1);
-        input.setGroupId(1);
+        input.setGroup(groupDto);
         input.setFirstName("first_name");
         input.setSecondName("second_name");
         input.setBirthDate(TEST_DATE);
@@ -60,7 +67,7 @@ class StudentServiceImplTest {
     void readById_shouldReturnStudent_whenStudentExists() {
         StudentDto expected = new StudentDto();
         expected.setId(1);
-        expected.setGroupId(1);
+        expected.setGroup(groupDto);
         expected.setFirstName("first_name");
         expected.setSecondName("second_name");
         expected.setBirthDate(TEST_DATE);
@@ -84,7 +91,7 @@ class StudentServiceImplTest {
     void create_shouldCalledVerified_whenMethodMocked() {
         StudentDto inputDto = new StudentDto();
         inputDto.setId(1);
-        inputDto.setGroupId(1);
+        inputDto.setGroup(groupDto);
         inputDto.setFirstName("first_name");
         inputDto.setSecondName("second_name");
         inputDto.setBirthDate(TEST_DATE);
@@ -94,7 +101,7 @@ class StudentServiceImplTest {
 
         StudentEntity inputEntity = new StudentEntity();
         inputEntity.setId(1);
-        inputEntity.setGroupId(1);
+        inputEntity.setGroup(groupEntity);
         inputEntity.setFirstName("first_name");
         inputEntity.setSecondName("second_name");
         inputEntity.setBirthDate(TEST_DATE);
@@ -117,7 +124,7 @@ class StudentServiceImplTest {
     void update_shouldCalledVerified_whenMethodMocked() {
         StudentDto inputDto = new StudentDto();
         inputDto.setId(1);
-        inputDto.setGroupId(1);
+        inputDto.setGroup(groupDto);
         inputDto.setFirstName("first_name");
         inputDto.setSecondName("second_name");
         inputDto.setBirthDate(TEST_DATE);
@@ -127,7 +134,7 @@ class StudentServiceImplTest {
         
         StudentEntity inputEntity = new StudentEntity();
         inputEntity.setId(1);
-        inputEntity.setGroupId(1);
+        inputEntity.setGroup(groupEntity);
         inputEntity.setFirstName("first_name");
         inputEntity.setSecondName("second_name");
         inputEntity.setBirthDate(TEST_DATE);
@@ -152,10 +159,10 @@ class StudentServiceImplTest {
       input.setTimetableId(1);
       input.setDate(TEST_DATE);
       input.setLessonNumber(1);
-      input.setGroupId(1);
+      input.setGroup(groupDto);
       input.setCourseId(1);
       input.setClassroomId(1);
-      input.setTeacherId(1);
+      input.setTeacher(teacherDto);
 
       List<LessonDto> expected = new ArrayList<>();
       expected.add(input);

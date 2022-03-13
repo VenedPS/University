@@ -33,10 +33,10 @@ public class GroupEntity {
         inverseJoinColumns = @JoinColumn(name = "course_id"))
     private List<CourseEntity> courses;
 
-    @OneToMany(mappedBy = "groupId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     private List<StudentEntity> students;
     
-    @OneToMany(mappedBy = "groupId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     @Filter(
             name = "groupLessons", 
             condition = "groupId = :id"

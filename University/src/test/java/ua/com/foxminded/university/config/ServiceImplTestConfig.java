@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import ua.com.foxminded.university.dao.LessonDao;
 import ua.com.foxminded.university.dao.StudentDao;
 import ua.com.foxminded.university.dao.TeacherDao;
+import ua.com.foxminded.university.entity.GroupEntity;
 import ua.com.foxminded.university.entity.LessonEntity;
 import ua.com.foxminded.university.entity.StudentEntity;
 import ua.com.foxminded.university.entity.TeacherEntity;
@@ -24,6 +25,9 @@ public class ServiceImplTestConfig {
     
     private final LocalDate TEST_DATE = LocalDate.of(2021, Month.OCTOBER, 6);
     
+    private GroupEntity groupEntity = new GroupEntity();
+    private TeacherEntity teacherEntity = new TeacherEntity();
+    
     @Bean
     public LessonServiceImpl lessonServiceImpl() {
         LessonEntity output = new LessonEntity();
@@ -31,10 +35,10 @@ public class ServiceImplTestConfig {
         output.setTimetableId(1);
         output.setDate(TEST_DATE);
         output.setLessonNumber(1);
-        output.setGroupId(1);
+        output.setGroup(groupEntity);
         output.setCourseId(1);
         output.setClassroomId(1);
-        output.setTeacherId(1);
+        output.setTeacher(teacherEntity);
         
         List<LessonEntity> outputList = new ArrayList<>();
         outputList.add(output);
@@ -51,7 +55,7 @@ public class ServiceImplTestConfig {
     public StudentServiceImpl studentServiceImpl() {
         StudentEntity output = new StudentEntity();
         output.setId(1);
-        output.setGroupId(1);
+        output.setGroup(groupEntity);
         output.setFirstName("first_name");
         output.setSecondName("second_name");
         output.setBirthDate(TEST_DATE);
@@ -67,10 +71,10 @@ public class ServiceImplTestConfig {
         outputLesson.setTimetableId(1);
         outputLesson.setDate(TEST_DATE);
         outputLesson.setLessonNumber(1);
-        outputLesson.setGroupId(1);
+        outputLesson.setGroup(groupEntity);
         outputLesson.setCourseId(1);
         outputLesson.setClassroomId(1);
-        outputLesson.setTeacherId(1);
+        outputLesson.setTeacher(teacherEntity);
         
         List<LessonEntity> outputLessonList = new ArrayList<>();
         outputLessonList.add(outputLesson);
@@ -105,10 +109,10 @@ public class ServiceImplTestConfig {
         outputLesson.setTimetableId(1);
         outputLesson.setDate(TEST_DATE);
         outputLesson.setLessonNumber(1);
-        outputLesson.setGroupId(1);
+        outputLesson.setGroup(groupEntity);
         outputLesson.setCourseId(1);
         outputLesson.setClassroomId(1);
-        outputLesson.setTeacherId(1);
+        outputLesson.setTeacher(teacherEntity);
         
         List<LessonEntity> outputLessonList = new ArrayList<>();
         outputLessonList.add(outputLesson);

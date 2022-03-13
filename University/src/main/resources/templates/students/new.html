@@ -7,9 +7,6 @@
 <body>
 
 	<form th:method="POST" th:action="@{/students}" th:object="${student}">
-	    <label for="name">Enter group Id: </label>
-	    <input type="text" th:field="*{groupId}" id="groupId"/>
-	    <br/>
 	    <label for="name">Enter first name: </label>
 	    <input type="text" th:field="*{firstName}" id="firstName"/>
 	    <br/>

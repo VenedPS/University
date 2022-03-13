@@ -3,29 +3,33 @@ package ua.com.foxminded.university.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+//import javax.persistence.Column;
+//import javax.persistence.Entity;
+//import javax.persistence.GeneratedValue;
+//import javax.persistence.Id;
+//import javax.persistence.Table;
 
-@Entity
-@Table (name = "study_calendars")
+//@Entity
+//@Table (name = "study_calendars")
 public class StudyCalendar {
 
-    @Id
-    @GeneratedValue
+//    @Id
+//    @GeneratedValue
     private Integer id;
 
-    @Column(name = "year")
+//    @Column(name = "year")
     private Integer year;
 
-    @Column(name = "semester")
+//    @Column(name = "semester")
     private Integer semester;
 
-    @Column(name = "")
+//    @Column(name = "")
     private List<StudyCalendarDays> days;
 
+    public StudyCalendar() {
+    
+    }
+    
     public StudyCalendar(Integer id, Integer year, Integer semester, List<StudyCalendarDays> days) {
         this.id = id;
         this.year = year;

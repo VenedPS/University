@@ -5,7 +5,6 @@
     <title>Show</title>
 </head>
 <body>
-	<p th:text="${student.getGroupId()}"></p>
 	<p th:text="${student.getFirstName()}"></p>
 	<p th:text="${student.getSecondName()}"></p>
 	<p th:text="${student.getBirthDate()}"></p>
@@ -43,7 +42,7 @@
 		    <td th:text="${lesson.getLessonNumber()}">
 		    <td th:text="${lesson.getCourseId()}">
 		    <td th:text="${lesson.getClassroomId()}">
-		    <td th:text="${lesson.getTeacherId()}">
+		    <td th:text="${lesson.getTeacher()}">
 		</tr>
 	</table>
 </body>

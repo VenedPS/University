@@ -14,6 +14,7 @@ import ua.com.foxminded.university.dto.LessonDto;
 import ua.com.foxminded.university.dto.StudentDto;
 import ua.com.foxminded.university.dto.TeacherDto;
 import ua.com.foxminded.university.service.StudentService;
+import ua.com.foxminded.university.service.GroupService;
 import ua.com.foxminded.university.service.TeacherService;
 
 @Configuration
@@ -22,6 +23,7 @@ public class ControllerTestConfig {
     @Bean
     public StudentController studentController() {
         StudentService studentService = Mockito.mock(StudentService.class);
+        GroupService groupService = Mockito.mock(GroupService.class);
         List<StudentDto> students = new ArrayList<>();
         Mockito.when(studentService.readAll()).thenReturn(students);
         StudentDto studentDto = new StudentDto("firstName", "secondName");
@@ -34,7 +36,7 @@ public class ControllerTestConfig {
         List<LessonDto> lessons = new ArrayList<LessonDto>();
         Mockito.when(studentService.getStudentLessons(0, testDate, testDate)).thenReturn(lessons);
 
-        return new StudentController(studentService);
+        return new StudentController(studentService, groupService);
     }
 
     @Bean

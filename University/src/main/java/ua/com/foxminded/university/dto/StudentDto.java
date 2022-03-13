@@ -2,7 +2,7 @@ package ua.com.foxminded.university.dto;
 
 public class StudentDto extends PersonDto {
     private Integer id;
-    private Integer groupId;
+    private GroupDto group;
     
     public StudentDto() {
 
@@ -14,7 +14,7 @@ public class StudentDto extends PersonDto {
     }
     
     public StudentDto(StudentDto student) {
-        this.groupId = student.getGroupId();
+        this.group = student.getGroup();
         this.firstName = student.getFirstName();
         this.secondName = student.getSecondName();
         this.birthDate = student.getBirthDate();
@@ -31,12 +31,12 @@ public class StudentDto extends PersonDto {
         this.id = id;
     }
 
-    public Integer getGroupId() {
-        return groupId;
+    public GroupDto getGroup() {
+        return group;
     }
 
-    public void setGroupId(Integer groupId) {
-        this.groupId = groupId;
+    public void setGroup(GroupDto group) {
+        this.group = group;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class StudentDto extends PersonDto {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-        result = prime * result + ((groupId == null) ? 0 : groupId.hashCode());
+        result = prime * result + ((group == null) ? 0 : group.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((secondName == null) ? 0 : secondName.hashCode());
         return result;
@@ -64,10 +64,10 @@ public class StudentDto extends PersonDto {
                 return false;
         } else if (!firstName.equals(other.firstName))
             return false;
-        if (groupId == null) {
-            if (other.groupId != null)
+        if (group == null) {
+            if (other.group != null)
                 return false;
-        } else if (!groupId.equals(other.groupId))
+        } else if (!group.equals(other.group))
             return false;
         if (id == null) {
             if (other.id != null)
@@ -84,7 +84,7 @@ public class StudentDto extends PersonDto {
 
     @Override
     public String toString() {
-        return "Student [id=" + id + ", groupId=" + groupId + ", firstName=" + firstName + ", secondName=" + secondName
+        return "Student [id=" + id + ", group=" + group + ", firstName=" + firstName + ", secondName=" + secondName
                 + ", birthDate=" + birthDate + ", address=" + address + ", phone=" + phone + ", email=" + email + "]";
     }
 }

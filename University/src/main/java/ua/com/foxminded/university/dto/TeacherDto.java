@@ -1,7 +1,10 @@
 package ua.com.foxminded.university.dto;
 
+import java.util.List;
+
 public class TeacherDto extends PersonDto {
     private Integer id;
+    private List<LessonDto> lessons;
 
     public TeacherDto() {
         
@@ -21,12 +24,21 @@ public class TeacherDto extends PersonDto {
         this.address = teacher.getAddress();
         this.phone = teacher.getPhone();
         this.email = teacher.getEmail();
+        this.lessons = teacher.getLessons();
+    }
+    
+    public List<LessonDto> getLessons() {
+        return lessons;
+    }
+
+    public void setLessons(List<LessonDto> lessons) {
+        this.lessons = lessons;
     }
     
     public Integer getId() {
         return id;
     }
-
+    
     public void setId(Integer id) {
         this.id = id;
     }
@@ -35,9 +47,8 @@ public class TeacherDto extends PersonDto {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((secondName == null) ? 0 : secondName.hashCode());
+        result = prime * result + ((lessons == null) ? 0 : lessons.hashCode());
         return result;
     }
 
@@ -50,28 +61,22 @@ public class TeacherDto extends PersonDto {
         if (getClass() != obj.getClass())
             return false;
         TeacherDto other = (TeacherDto) obj;
-        if (firstName == null) {
-            if (other.firstName != null)
-                return false;
-        } else if (!firstName.equals(other.firstName))
-            return false;
         if (id == null) {
             if (other.id != null)
                 return false;
         } else if (!id.equals(other.id))
             return false;
-        if (secondName == null) {
-            if (other.secondName != null)
+        if (lessons == null) {
+            if (other.lessons != null)
                 return false;
-        } else if (!secondName.equals(other.secondName))
+        } else if (!lessons.equals(other.lessons))
             return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "Teacher [id=" + id + ", firstName=" + firstName + ", secondName=" + secondName + ", birthDate="
-                + birthDate + ", address=" + address + ", phone=" + phone + ", email=" + email + "]";
+        return "TeacherDto [firstName=" + firstName + ", secondName=" + secondName + "]";
     }
 
 }

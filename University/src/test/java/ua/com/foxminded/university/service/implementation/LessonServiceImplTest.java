@@ -15,7 +15,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import ua.com.foxminded.university.config.ConverterTestConfig;
 import ua.com.foxminded.university.config.ServiceImplTestConfig;
+import ua.com.foxminded.university.dto.GroupDto;
 import ua.com.foxminded.university.dto.LessonDto;
+import ua.com.foxminded.university.dto.TeacherDto;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { ServiceImplTestConfig.class, ConverterTestConfig.class })
@@ -25,6 +27,9 @@ class LessonServiceImplTest {
     
     @Autowired
     private LessonServiceImpl lessonServiceImpl;
+    
+    private GroupDto groupDto = new GroupDto();
+    private TeacherDto teacherDto = new TeacherDto();
 
     @Test
     void readAll_shouldReturnLessonList_whenLessonsExists() {
@@ -33,10 +38,10 @@ class LessonServiceImplTest {
         input.setTimetableId(1);
         input.setDate(TEST_DATE);
         input.setLessonNumber(1);
-        input.setGroupId(1);
+        input.setGroup(groupDto);
         input.setCourseId(1);
         input.setClassroomId(1);
-        input.setTeacherId(1);
+        input.setTeacher(teacherDto);
 
         List<LessonDto> expected = new ArrayList<>();
         expected.add(input);
@@ -60,10 +65,10 @@ class LessonServiceImplTest {
         expected.setTimetableId(1);
         expected.setDate(TEST_DATE);
         expected.setLessonNumber(1);
-        expected.setGroupId(1);
+        expected.setGroup(groupDto);
         expected.setCourseId(1);
         expected.setClassroomId(1);
-        expected.setTeacherId(1);
+        expected.setTeacher(teacherDto);
 
         LessonDto actual = lessonServiceImpl.readById(0);
 

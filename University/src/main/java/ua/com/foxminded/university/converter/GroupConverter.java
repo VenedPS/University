@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import ua.com.foxminded.university.dto.CourseDto;
@@ -16,11 +17,15 @@ import ua.com.foxminded.university.entity.StudentEntity;
 @Service
 public class GroupConverter {
     
-    @Autowired
     private StudentConverter studentConverter;
     
-    @Autowired
     private CourseConverter courseConverter;
+    
+    @Autowired
+    public GroupConverter(@Lazy StudentConverter studentConverter, @Lazy CourseConverter courseConverter) {
+        this.studentConverter = studentConverter;
+        this.courseConverter = courseConverter;
+    }
     
     public GroupEntity toEntity(GroupDto groupDto) {
         if (groupDto == null) {
@@ -30,18 +35,18 @@ public class GroupConverter {
         GroupEntity groupEntity = new GroupEntity();
         groupEntity.setId(groupDto.getId());
         groupEntity.setName(groupDto.getName());
-        
-        List<StudentEntity> students = new ArrayList<>();
-        for (StudentDto studentDto : groupDto.getStudents()) {
-            students.add(studentConverter.toEntity(studentDto));
-        }
-        groupEntity.setStudents(students);
-        
-        List<CourseEntity> courses = new ArrayList<>();
-        for (CourseDto courseDto : groupDto.getCourses()) {
-            courses.add(courseConverter.toEntity(courseDto));
-        }
-        groupEntity.setCourses(courses);
+//        
+//        List<StudentEntity> students = new ArrayList<>();
+//        for (StudentDto studentDto : groupDto.getStudents()) {
+//            students.add(studentConverter.toEntity(studentDto, groupEntity));
+//        }
+//        groupEntity.setStudents(students);
+//        
+//        List<CourseEntity> courses = new ArrayList<>();
+//        for (CourseDto courseDto : groupDto.getCourses()) {
+//            courses.add(courseConverter.toEntity(courseDto));
+//        }
+//        groupEntity.setCourses(courses);
         return groupEntity;
     }
 
@@ -66,17 +71,17 @@ public class GroupConverter {
         groupDto.setId(groupEntity.getId());
         groupDto.setName(groupEntity.getName());
         
-        List<StudentDto> students = new ArrayList<>();
-        for (StudentEntity studentEntity : groupEntity.getStudents()) {
-            students.add(studentConverter.toDto(studentEntity));
-        }
-        groupDto.setStudents(students);
-        
-        List<CourseDto> courses = new ArrayList<>();
-        for (CourseEntity courseEntity : groupEntity.getCourses()) {
-            courses.add(courseConverter.toDto(courseEntity));
-        }
-        groupDto.setCourses(courses);
+//        List<StudentDto> students = new ArrayList<>();
+//        for (StudentEntity studentEntity : groupEntity.getStudents()) {
+//            students.add(studentConverter.toDto(studentEntity, groupDto));
+//        }
+//        groupDto.setStudents(students);
+//        
+//        List<CourseDto> courses = new ArrayList<>();
+//        for (CourseEntity courseEntity : groupEntity.getCourses()) {
+//            courses.add(courseConverter.toDto(courseEntity));
+//        }
+//        groupDto.setCourses(courses);
         return groupDto;
     }
 
