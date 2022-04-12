@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import ua.com.foxminded.university.converter.LessonConverter;
@@ -28,33 +27,33 @@ public class TeacherServiceImpl implements TeacherService {
     private TeacherDao teacherDao;
     
     @Autowired
-    public TeacherServiceImpl(@Qualifier("teacherDaoSqlHibernate") TeacherDao teacherDao) {
+    public TeacherServiceImpl(TeacherDao teacherDao) {
         this.teacherDao = teacherDao;
     }
 
     @Override
     public List<TeacherDto> readAll() throws TeacherNotFoundException {
-        return teacherConverter.toDtoList(teacherDao.readAll());
+        return teacherConverter.toDtoList(teacherDao.findAll());
     }
 
     @Override
     public TeacherDto readById(int id) throws TeacherNotFoundException {
-        return teacherConverter.toDto(teacherDao.readById(id));
+    	return teacherConverter.toDto(teacherDao.findById(id).get());
     }
 
     @Override
     public void create(TeacherDto teacherDto) throws TeacherNotChangedException {
-        teacherDao.create(teacherConverter.toEntity(teacherDto));
+        teacherDao.save(teacherConverter.toEntity(teacherDto));
     }
 
     @Override
     public void update(TeacherDto teacherDto) throws TeacherNotChangedException {
-        teacherDao.update(teacherConverter.toEntity(teacherDto));
+        teacherDao.save(teacherConverter.toEntity(teacherDto));
     }
 
     @Override
     public void delete(int id) throws TeacherNotChangedException {
-        teacherDao.delete(id);
+        teacherDao.deleteById(id);
     }
     
     public List<LessonDto> getTeacherLessons(int teacherId, LocalDate startDate, LocalDate endDate) throws LessonNotFoundException  {

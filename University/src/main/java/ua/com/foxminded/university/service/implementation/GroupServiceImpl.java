@@ -1,6 +1,5 @@
 package ua.com.foxminded.university.service.implementation;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import ua.com.foxminded.university.dao.GroupDao;
 import ua.com.foxminded.university.exception.GroupNotChangedException;
 import ua.com.foxminded.university.exception.GroupNotFoundException;
 import ua.com.foxminded.university.dto.GroupDto;
-import ua.com.foxminded.university.entity.GroupEntity;
 import ua.com.foxminded.university.service.GroupService;
 
 @Service
@@ -28,22 +26,20 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<GroupDto> readAll() throws GroupNotFoundException {
-        List<GroupEntity> groupEntity = new ArrayList<>();
-        groupEntity = groupDao.readAll();
-        List<GroupDto> groupDto = groupConverter.toDtoList(groupEntity);
+        List<GroupDto> groupDto = groupConverter.toDtoList(groupDao.findAll());
         return groupDto;
     }
 
     @Override
     public GroupDto readById(int id) throws GroupNotFoundException {
         GroupDto groupDto = new GroupDto();
-        groupDto = groupConverter.toDto(groupDao.readById(id));
+        groupDto = groupConverter.toDto(groupDao.findById(id).get());
         return groupDto;
     }
 
     @Override
     public void create(GroupDto groupDto) throws GroupNotChangedException {
-        groupDao.create(groupConverter.toEntity(groupDto));
+        groupDao.save(groupConverter.toEntity(groupDto));
     }
 
     public GroupConverter getStudentConverter() {

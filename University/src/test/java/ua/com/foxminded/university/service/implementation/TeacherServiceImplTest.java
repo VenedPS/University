@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,7 +55,7 @@ class TeacherServiceImplTest {
 
     @Test
     void readById_shouldThrowIllegalArgumentException_whenTeacherDoesNotExist() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(NoSuchElementException.class, () -> {
             teacherServiceImpl.readById(1);
         });
     }
@@ -103,7 +104,7 @@ class TeacherServiceImplTest {
         inputEntity.setEmail("email");
 
         teacherServiceImpl.create(inputDto);
-        Mockito.verify(teacherServiceImpl.getTeacherDao(), Mockito.times(1)).create(inputEntity);
+        Mockito.verify(teacherServiceImpl.getTeacherDao(), Mockito.times(2)).save(inputEntity);
     }
     
     @Test
@@ -134,13 +135,13 @@ class TeacherServiceImplTest {
         inputEntity.setEmail("email");
         
         teacherServiceImpl.update(inputDto);
-        Mockito.verify(teacherServiceImpl.getTeacherDao(), Mockito.times(1)).update(inputEntity);
+        Mockito.verify(teacherServiceImpl.getTeacherDao(), Mockito.times(1)).save(inputEntity);
     }
     
     @Test
     void delete_shouldCalledVerified_whenMethodMocked() {
         teacherServiceImpl.delete(0);
-        Mockito.verify(teacherServiceImpl.getTeacherDao(), Mockito.times(1)).delete(0);
+        Mockito.verify(teacherServiceImpl.getTeacherDao(), Mockito.times(1)).deleteById(0);
     }
 
   @Test
@@ -154,6 +155,15 @@ class TeacherServiceImplTest {
       input.setCourseId(1);
       input.setClassroomId(1);
       input.setTeacher(teacherDto);
+      
+      TeacherDto teacherDto = new TeacherDto();
+      teacherDto.setId(1);
+      teacherDto.setFirstName("first_name");
+      teacherDto.setSecondName("second_name");
+      teacherDto.setBirthDate(TEST_DATE);
+      teacherDto.setAddress("address");
+      teacherDto.setPhone("phone");
+      teacherDto.setEmail("email");
       
       List<LessonDto> expected = new ArrayList<>();
       expected.add(input);

@@ -27,7 +27,7 @@ public class CourseConverter {
         return courseEntity;
     }
 
-    public List<CourseEntity> toEntityList(List<CourseDto> courseDtoList) {
+    public List<CourseEntity> toEntityList(Iterable<CourseDto> courseDtoList) {
         if (courseDtoList == null) {
             throw new IllegalArgumentException("Cannot convert null!");
         }
@@ -51,7 +51,7 @@ public class CourseConverter {
         return courseDto;
     }
 
-    public List<CourseDto> toDtoList(List<CourseEntity> courseEntityList) {
+    public List<CourseDto> toDtoList(Iterable<CourseEntity> courseEntityList) {
         if (courseEntityList == null) {
             throw new IllegalArgumentException("Cannot convert null!");
         }

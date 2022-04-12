@@ -5,15 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import ua.com.foxminded.university.dao.CustomizedStudentDao;
 import ua.com.foxminded.university.dao.GroupDao;
@@ -21,13 +16,8 @@ import ua.com.foxminded.university.exception.LessonNotFoundException;
 import ua.com.foxminded.university.entity.LessonEntity;
 import ua.com.foxminded.university.entity.StudentEntity;
 
-@Repository
-@Transactional
 public class StudentDaoImpl implements CustomizedStudentDao {
 
-    @PersistenceContext
-    private EntityManager entityManager;
-    
     @Autowired
     private GroupDao groupDao;
     

@@ -3,20 +3,14 @@ package ua.com.foxminded.university.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ua.com.foxminded.university.dto.LessonDto;
 import ua.com.foxminded.university.dto.TeacherDto;
-import ua.com.foxminded.university.entity.LessonEntity;
 import ua.com.foxminded.university.entity.TeacherEntity;
 
 @Service
 public class TeacherConverter {
-    
-//    @Autowired
-//    private LessonConverter lessonConverter;
-    
+	
     public TeacherEntity toEntity(TeacherDto teacherDto) {
         if (teacherDto == null) {
             throw new IllegalArgumentException("Cannot convert null!");
@@ -30,17 +24,10 @@ public class TeacherConverter {
         teacherEntity.setAddress(teacherDto.getAddress());
         teacherEntity.setPhone(teacherDto.getPhone());
         teacherEntity.setEmail(teacherDto.getEmail());
-        
-//        List<LessonEntity> lessons = new ArrayList<>();
-//        for (LessonDto lessonDto : teacherDto.getLessons()) {
-//            lessons.add(lessonConverter.toEntity(lessonDto, teacherEntity));
-//        }
-//        teacherEntity.setLessons(lessons);
-        
         return teacherEntity;
     }
 
-    public List<TeacherEntity> toEntityList(List<TeacherDto> teacherDtoList) {
+    public List<TeacherEntity> toEntityList(Iterable<TeacherDto> teacherDtoList) {
         if (teacherDtoList == null) {
             throw new IllegalArgumentException("Cannot convert null!");
         }
@@ -65,17 +52,10 @@ public class TeacherConverter {
         teacherDto.setAddress(teacherEntity.getAddress());
         teacherDto.setPhone(teacherEntity.getPhone());
         teacherDto.setEmail(teacherEntity.getEmail());
-        
-//        List<LessonDto> lessons = new ArrayList<>();
-//        for (LessonEntity lessonEntity : teacherEntity.getLessons()) {
-//            lessons.add(lessonConverter.toDto(lessonEntity, teacherDto));
-//        }
-//        teacherDto.setLessons(lessons);
-        
         return teacherDto;
     }
 
-    public List<TeacherDto> toDtoList(List<TeacherEntity> teacherEntityList) {
+    public List<TeacherDto> toDtoList(Iterable<TeacherEntity> teacherEntityList) {
         if (teacherEntityList == null) {
             throw new IllegalArgumentException("Cannot convert null!");
         }

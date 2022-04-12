@@ -42,7 +42,7 @@ public class TeacherController {
     
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-        model.addAttribute("teacher", teacherService.readById(id));
+    	model.addAttribute("teacher", teacherService.readById(id));
         
         LocalDate startDate = LocalDate.now().plusMonths(-2).withDayOfMonth(1);
         LocalDate endDate = LocalDate.now().plusMonths(1).withDayOfMonth(1).minusDays(1);        

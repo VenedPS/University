@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
@@ -43,9 +44,11 @@ public class ServiceImplTestConfig {
         List<LessonEntity> outputList = new ArrayList<>();
         outputList.add(output);
         
+        Optional<LessonEntity> optionalOutput = Optional.ofNullable(output);
+        
         LessonDao lessonDao = Mockito.mock(LessonDao.class);
-        Mockito.when(lessonDao.readAll()).thenReturn(outputList);
-        Mockito.when(lessonDao.readById(0)).thenReturn(output);
+        Mockito.when(lessonDao.findAll()).thenReturn(outputList);
+        Mockito.when(lessonDao.findById(0)).thenReturn(optionalOutput);
         
         return new LessonServiceImpl(lessonDao);
     }
@@ -79,13 +82,14 @@ public class ServiceImplTestConfig {
         List<LessonEntity> outputLessonList = new ArrayList<>();
         outputLessonList.add(outputLesson);
         
+        Optional<StudentEntity> optionalOutput = Optional.ofNullable(output);
+        
         StudentDao studentDao = Mockito.mock(StudentDao.class);
-        Mockito.when(studentDao.readAll()).thenReturn(outputList);
-        Mockito.when(studentDao.readById(0)).thenReturn(output);
-        Mockito.doNothing().when(studentDao).create(output);
-        Mockito.doNothing().when(studentDao).update(output);
-        Mockito.doNothing().when(studentDao).delete(0);
-        Mockito.when(studentDao.getStudentLessons(0,TEST_DATE,TEST_DATE)).thenReturn(outputLessonList);
+        Mockito.when(studentDao.findAll()).thenReturn(outputList);
+        Mockito.when(studentDao.findById(0)).thenReturn(optionalOutput);
+        Mockito.when(studentDao.save(output)).thenReturn(output);
+        Mockito.doNothing().when(studentDao).deleteById(0);
+        Mockito.when(studentDao.getStudentLessons(output,TEST_DATE,TEST_DATE)).thenReturn(outputLessonList);
         
         return new StudentServiceImpl(studentDao);
     }
@@ -117,12 +121,13 @@ public class ServiceImplTestConfig {
         List<LessonEntity> outputLessonList = new ArrayList<>();
         outputLessonList.add(outputLesson);
         
+        Optional<TeacherEntity> optionalOutput = Optional.ofNullable(output);
+        
         TeacherDao teacherDao = Mockito.mock(TeacherDao.class);
-        Mockito.when(teacherDao.readAll()).thenReturn(outputList);
-        Mockito.when(teacherDao.readById(0)).thenReturn(output);
-        Mockito.doNothing().when(teacherDao).create(output);
-        Mockito.doNothing().when(teacherDao).update(output);
-        Mockito.doNothing().when(teacherDao).delete(0);
+        Mockito.when(teacherDao.findAll()).thenReturn(outputList);
+        Mockito.when(teacherDao.findById(0)).thenReturn(optionalOutput);
+        Mockito.when(teacherDao.save(output)).thenReturn(output);
+        Mockito.doNothing().when(teacherDao).deleteById(0);
         Mockito.when(teacherDao.getTeacherLessons(0,TEST_DATE,TEST_DATE)).thenReturn(outputLessonList);
         
         return new TeacherServiceImpl(teacherDao);

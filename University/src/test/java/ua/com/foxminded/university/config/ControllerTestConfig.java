@@ -34,7 +34,7 @@ public class ControllerTestConfig {
         
         LocalDate testDate = LocalDate.of(1, 1, 1);
         List<LessonDto> lessons = new ArrayList<LessonDto>();
-        Mockito.when(studentService.getStudentLessons(0, testDate, testDate)).thenReturn(lessons);
+        Mockito.when(studentService.getStudentLessons(studentDto, testDate, testDate)).thenReturn(lessons);
 
         return new StudentController(studentService, groupService);
     }

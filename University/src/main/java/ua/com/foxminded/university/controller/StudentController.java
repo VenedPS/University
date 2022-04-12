@@ -45,13 +45,14 @@ public class StudentController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-        model.addAttribute("student", studentService.readById(id));
+        StudentDto studentDto = studentService.readById(id);
+    	model.addAttribute("student", studentDto);
         
         LocalDate startDate = LocalDate.now().plusMonths(-2).withDayOfMonth(1);
         LocalDate endDate = LocalDate.now().plusMonths(1).withDayOfMonth(1).minusDays(1);        
         List<LessonDto> lessons = new ArrayList<LessonDto>();
         try {
-            lessons = studentService.getStudentLessons(id, startDate, endDate);
+            lessons = studentService.getStudentLessons(studentDto, startDate, endDate);
         } catch (LessonNotFoundException e) {
             logger.error(e.getMessage());
         }
@@ -73,13 +74,14 @@ public class StudentController {
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
-        model.addAttribute("student", studentService.readById(id));
+    	model.addAttribute("student", studentService.readById(id));
         return "students/edit";
     }
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("student") StudentDto studentDto) {
-        studentService.update(studentDto);
+    	studentDto.setGroup(groupService.readById(1));
+    	studentService.update(studentDto);
         return "redirect:/students";
     }
 

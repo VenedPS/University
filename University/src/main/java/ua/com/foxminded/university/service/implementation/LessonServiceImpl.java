@@ -3,7 +3,6 @@ package ua.com.foxminded.university.service.implementation;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import ua.com.foxminded.university.converter.LessonConverter;
@@ -20,18 +19,18 @@ public class LessonServiceImpl implements LessonService {
     private LessonDao lessonDao;
     
     @Autowired
-    public LessonServiceImpl(@Qualifier("lessonDaoSqlHibernate") LessonDao lessonDao) {
+    public LessonServiceImpl(LessonDao lessonDao) {
         this.lessonDao = lessonDao;
     }
 
     @Override
     public List<LessonDto> readAll() throws LessonNotFoundException {
-        return lessonConverter.toDtoList(lessonDao.readAll());
+        return lessonConverter.toDtoList(lessonDao.findAll());
     }
 
     @Override
     public LessonDto readById(int id) throws LessonNotFoundException {
-        return lessonConverter.toDto(lessonDao.readById(id));
+        return lessonConverter.toDto(lessonDao.findById(id).get());
     }
 
     public LessonConverter getLessonConverter() {

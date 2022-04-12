@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Filter;
+
 @Entity
 @Table (name = "teachers")
 public class TeacherEntity extends PersonEntity {
@@ -18,6 +20,10 @@ public class TeacherEntity extends PersonEntity {
     private Integer id;
     
     @OneToMany(mappedBy = "teacher", fetch = FetchType.LAZY)
+    @Filter(
+            name = "teacherLessons", 
+            condition = "teacherId = :id"
+        )
     private List<LessonEntity> lessons;
 
     public TeacherEntity() {
@@ -89,7 +95,7 @@ public class TeacherEntity extends PersonEntity {
 
     @Override
     public String toString() {
-        return "TeacherDto [firstName=" + firstName + ", secondName=" + secondName + "]";
+        return "TeacherEntity [firstName=" + firstName + ", secondName=" + secondName + "]";
     }
 
 }

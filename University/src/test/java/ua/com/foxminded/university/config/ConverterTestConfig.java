@@ -34,6 +34,6 @@ public class ConverterTestConfig {
     
     @Bean
     public GroupConverter groupConverter() {
-        return new GroupConverter(new StudentConverter(), new CourseConverter());
+        return new GroupConverter();
     }
 }

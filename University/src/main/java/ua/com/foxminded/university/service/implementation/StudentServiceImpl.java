@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import ua.com.foxminded.university.converter.LessonConverter;
@@ -30,14 +29,14 @@ public class StudentServiceImpl implements StudentService {
     private StudentDao studentDao;
 
     @Autowired
-    public StudentServiceImpl(@Qualifier("studentDaoSqlHibernate") StudentDao studentDao) {
+    public StudentServiceImpl(StudentDao studentDao) {
         this.studentDao = studentDao;
     }
     
     @Override
     public List<StudentDto> readAll() throws StudentNotFoundException {
-        List<StudentEntity> studentsEntity = new ArrayList<>();
-        studentsEntity = studentDao.readAll();
+        Iterable<StudentEntity> studentsEntity = new ArrayList<>();
+        studentsEntity = studentDao.findAll();
         List<StudentDto> studentsDto = studentConverter.toDtoList(studentsEntity);
         return studentsDto;
     }
@@ -45,28 +44,28 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentDto readById(int id) throws StudentNotFoundException {
         StudentDto studentDto = new StudentDto();
-        studentDto = studentConverter.toDto(studentDao.readById(id));
+        studentDto = studentConverter.toDto(studentDao.findById(id).get());
         return studentDto;
     }
 
     @Override
     public void create(StudentDto studentDto) throws StudentNotChangedException {
-        studentDao.create(studentConverter.toEntity(studentDto));
+        studentDao.save(studentConverter.toEntity(studentDto));
     }
 
     @Override
     public void update(StudentDto studentDto) throws StudentNotChangedException {
-        studentDao.update(studentConverter.toEntity(studentDto));
+        studentDao.save(studentConverter.toEntity(studentDto));
     }
 
     @Override
     public void delete(int id) throws StudentNotChangedException {
-        studentDao.delete(id);
+        studentDao.deleteById(id);
     }
 
     @Override
-    public List<LessonDto> getStudentLessons(int studentId, LocalDate startDate, LocalDate endDate) throws LessonNotFoundException {
-        return lessonConverter.toDtoList(studentDao.getStudentLessons(studentId, startDate, endDate));
+    public List<LessonDto> getStudentLessons(StudentDto studentDto, LocalDate startDate, LocalDate endDate) throws LessonNotFoundException {
+        return lessonConverter.toDtoList(studentDao.getStudentLessons(studentConverter.toEntity(studentDto), startDate, endDate));
     }
     
     public StudentConverter getStudentConverter() {

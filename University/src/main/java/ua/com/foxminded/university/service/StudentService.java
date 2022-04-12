@@ -14,5 +14,5 @@ public interface StudentService {
     public void create(StudentDto studentDto)throws StudentNotChangedException;
     public void update(StudentDto studentDto)throws StudentNotChangedException;
     public void delete(int id)throws StudentNotChangedException;
-    public List<LessonDto> getStudentLessons(int studentId, LocalDate startDate, LocalDate endDate);
+    public List<LessonDto> getStudentLessons(StudentDto studentDto, LocalDate startDate, LocalDate endDate);
 }

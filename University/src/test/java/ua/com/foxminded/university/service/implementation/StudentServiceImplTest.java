@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,7 +59,7 @@ class StudentServiceImplTest {
 
     @Test
     void readById_shouldThrowIllegalArgumentException_whenStudentDoesNotExist() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(NoSuchElementException.class, () -> {
             studentServiceImpl.readById(1);
         });
     }
@@ -110,7 +111,7 @@ class StudentServiceImplTest {
         inputEntity.setEmail("email");
 
         studentServiceImpl.create(inputDto);
-        Mockito.verify(studentServiceImpl.getStudentDao(), Mockito.times(1)).create(inputEntity);
+        Mockito.verify(studentServiceImpl.getStudentDao(), Mockito.times(2)).save(inputEntity);
     }
     
     @Test
@@ -143,13 +144,13 @@ class StudentServiceImplTest {
         inputEntity.setEmail("email");
         
         studentServiceImpl.update(inputDto);
-        Mockito.verify(studentServiceImpl.getStudentDao(), Mockito.times(1)).update(inputEntity);
+        Mockito.verify(studentServiceImpl.getStudentDao(), Mockito.times(1)).save(inputEntity);
     }
     
     @Test
     void delete_shouldCalledVerified_whenMethodMocked() {
         studentServiceImpl.delete(0);
-        Mockito.verify(studentServiceImpl.getStudentDao(), Mockito.times(1)).delete(0);
+        Mockito.verify(studentServiceImpl.getStudentDao(), Mockito.times(1)).deleteById(0);
     }
     
   @Test
@@ -163,11 +164,21 @@ class StudentServiceImplTest {
       input.setCourseId(1);
       input.setClassroomId(1);
       input.setTeacher(teacherDto);
+      
+      StudentDto studentDto = new StudentDto();
+      studentDto.setId(1);
+      studentDto.setGroup(groupDto);
+      studentDto.setFirstName("first_name");
+      studentDto.setSecondName("second_name");
+      studentDto.setBirthDate(TEST_DATE);
+      studentDto.setAddress("address");
+      studentDto.setPhone("phone");
+      studentDto.setEmail("email");
 
       List<LessonDto> expected = new ArrayList<>();
       expected.add(input);
 
-      List<LessonDto> actual = studentServiceImpl.getStudentLessons(0,TEST_DATE,TEST_DATE);
+      List<LessonDto> actual = studentServiceImpl.getStudentLessons(studentDto,TEST_DATE,TEST_DATE);
 
       assertEquals(expected, actual);
   }

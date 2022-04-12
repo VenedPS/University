@@ -29,15 +29,16 @@ public class TeacherDaoImpl implements CustomizedTeacherDao {
     private final Logger logger = LoggerFactory.getLogger(TeacherDaoImpl.class);
 
     @Override
-    public List<LessonEntity> getTeacherLessons(TeacherEntity teacherEntity, LocalDate startDate, LocalDate endDate)
+    public List<LessonEntity> getTeacherLessons(int teacherId, LocalDate startDate, LocalDate endDate)
             throws LessonNotFoundException {
         
-        logger.info("Start getting teacher lessons with teacherId={} from startDate={} to endDate={}", teacherEntity.getId(),
+        logger.info("Start getting teacher lessons with teacherId={} from startDate={} to endDate={}", teacherId,
                 startDate.toString(), endDate.toString());
         
         List<LessonEntity> lessons = new ArrayList<>();
         try {
-            lessons = teacherEntity.getLessons()
+            lessons = entityManager.find(TeacherEntity.class, teacherId)
+            		.getLessons()
                     .stream()
                     .filter(lesson -> lesson.getDate().isAfter(startDate))
                     .filter(lesson -> lesson.getDate().isBefore(endDate))
@@ -47,7 +48,7 @@ public class TeacherDaoImpl implements CustomizedTeacherDao {
         }
         if (lessons.isEmpty()) {
             throw new LessonNotFoundException(
-                    String.format("Empty lessons list for teacherId=%d from startDate=%s to endDate=%s", teacherEntity.getId(),
+                    String.format("Empty lessons list for teacherId=%d from startDate=%s to endDate=%s", teacherId,
                             startDate.toString(), endDate.toString()));
         }
         logger.info("All teacher lessons from DB was read!");
