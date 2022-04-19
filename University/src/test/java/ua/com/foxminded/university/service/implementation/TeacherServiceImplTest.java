@@ -31,7 +31,7 @@ class TeacherServiceImplTest {
     @Autowired
     private TeacherServiceImpl teacherServiceImpl;
     
-    private GroupDto groupDto = new GroupDto();
+    private GroupDto groupDto = new GroupDto(0, null, null, null);
     private TeacherDto teacherDto = new TeacherDto();
 
     @Test

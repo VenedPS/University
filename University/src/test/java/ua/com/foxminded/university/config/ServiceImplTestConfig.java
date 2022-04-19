@@ -26,7 +26,7 @@ public class ServiceImplTestConfig {
     
     private final LocalDate TEST_DATE = LocalDate.of(2021, Month.OCTOBER, 6);
     
-    private GroupEntity groupEntity = new GroupEntity();
+    private GroupEntity groupEntity = new GroupEntity(0, null, null, null, null);
     private TeacherEntity teacherEntity = new TeacherEntity();
     
     @Bean
@@ -89,7 +89,7 @@ public class ServiceImplTestConfig {
         Mockito.when(studentDao.findById(0)).thenReturn(optionalOutput);
         Mockito.when(studentDao.save(output)).thenReturn(output);
         Mockito.doNothing().when(studentDao).deleteById(0);
-        Mockito.when(studentDao.getStudentLessons(output,TEST_DATE,TEST_DATE)).thenReturn(outputLessonList);
+        Mockito.when(studentDao.getStudentLessons(0,TEST_DATE,TEST_DATE)).thenReturn(outputLessonList);
         
         return new StudentServiceImpl(studentDao);
     }

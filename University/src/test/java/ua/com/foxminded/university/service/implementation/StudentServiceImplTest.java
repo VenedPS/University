@@ -33,8 +33,8 @@ class StudentServiceImplTest {
     @Autowired
     private StudentServiceImpl studentServiceImpl;
     
-    private GroupEntity groupEntity = new GroupEntity();
-    private GroupDto groupDto = new GroupDto();
+    private GroupEntity groupEntity = new GroupEntity(0, null, null, null, null);
+    private GroupDto groupDto = new GroupDto(0, null, null, null);
     private TeacherDto teacherDto = new TeacherDto();
 
     @Test

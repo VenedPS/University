@@ -23,7 +23,7 @@ public class LessonEntity {
     @Column(name = "date")
     private LocalDate date;
 
-    @Column(name = "lessonNumber")
+    @Column(name = "lesson_number")
     private int lessonNumber;
 
     @ManyToOne

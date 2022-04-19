@@ -65,7 +65,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<LessonDto> getStudentLessons(StudentDto studentDto, LocalDate startDate, LocalDate endDate) throws LessonNotFoundException {
-        return lessonConverter.toDtoList(studentDao.getStudentLessons(studentConverter.toEntity(studentDto), startDate, endDate));
+    	return lessonConverter.toDtoList(studentDao.getStudentLessons(studentDto.getGroup().getId(), startDate, endDate));
+    	
     }
     
     public StudentConverter getStudentConverter() {

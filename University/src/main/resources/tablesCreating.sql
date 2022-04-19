@@ -96,7 +96,7 @@ CREATE TABLE lessons
 (id integer NOT NULL,
 	timetable_id integer NOT NULL,
 	date date,
-    lessonNumber integer,
+    	lesson_number integer,
 	group_id integer,
 	course_id integer,
 	classroom_id integer,
