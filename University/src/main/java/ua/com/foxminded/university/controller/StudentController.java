@@ -4,11 +4,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -66,7 +69,12 @@ public class StudentController {
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("student") StudentDto studentDto) {
+    public String create(@ModelAttribute("student") @Valid StudentDto studentDto,
+    		BindingResult bindingResult) {
+    	
+    	if(bindingResult.hasErrors()) {
+    		return "students/new";
+    	}
         studentDto.setGroup(groupService.readById(1));
         studentService.create(studentDto);
         return "redirect:/students";
@@ -79,7 +87,12 @@ public class StudentController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("student") StudentDto studentDto) {
+    public String update(@ModelAttribute("student") @Valid StudentDto studentDto,
+    		BindingResult bindingResult) {
+    	
+    	if(bindingResult.hasErrors()) {
+    		return "students/edit";
+    	}
     	studentDto.setGroup(groupService.readById(1));
     	studentService.update(studentDto);
         return "redirect:/students";

@@ -9,21 +9,27 @@
 	<form th:method="POST" th:action="@{/teachers}" th:object="${teacher}">
 	    <label for="name">Enter first name: </label>
 	    <input type="text" th:field="*{firstName}" id="firstName"/>
+	    <div style="color:red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
 	    <br/>
 	    <label for="name">Enter second name: </label>
 	    <input type="text" th:field="*{secondName}" id="secondName"/>
+	    <div style="color:red" th:if="${#fields.hasErrors('secondName')}" th:errors="*{secondName}"></div>
 	    <br/>
 	    <label for="name">Enter date of birth: </label>
 	    <input type="date" th:field="*{birthDate}" id="birthDate"/>
+	    <div style="color:red" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></div>
 	    <br/>
 	    <label for="name">Enter address: </label>
 	    <input type="text" th:field="*{address}" id="address"/>
+	    <div style="color:red" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
 	    <br/>
 	    <label for="name">Enter phone: </label>
 	    <input type="text" th:field="*{phone}" id="phone"/>
+	    <div style="color:red" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
 	    <br/>
 	    <label for="email">Enter email: </label>
 	    <input type="text" th:field="*{email}" id="email"/>
+	    <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
 	    <br/>
 	    <hr/>
 	    <input type="submit" value="Create!"/>

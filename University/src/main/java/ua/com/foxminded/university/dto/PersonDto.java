@@ -4,13 +4,35 @@ import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import ua.com.foxminded.university.validation.AddressConstraint;
+import ua.com.foxminded.university.validation.BirthDateConstraint;
+import ua.com.foxminded.university.validation.PhoneConstraint;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 public abstract class PersonDto {
+    
+    @NotEmpty(message = "Please enter first name!")
+    @Size(min = 2, max = 20)
     protected String firstName;
+    
+    @NotEmpty(message = "Please enter second name!")
+    @Size(min = 2, max = 25)
     protected String secondName;
+    
     @DateTimeFormat(pattern="yyyy-MM-dd")
+    @BirthDateConstraint
     protected LocalDate birthDate;
+    
+    @AddressConstraint
     protected String address;
+    
+    @PhoneConstraint
     protected String phone;
+    
+    @Email
     protected String email;
 
     public String getFirstName() {

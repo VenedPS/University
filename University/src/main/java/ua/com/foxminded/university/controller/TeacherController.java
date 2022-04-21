@@ -4,11 +4,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -62,8 +65,14 @@ public class TeacherController {
     }
    
     @PostMapping()
-    public String create(@ModelAttribute("teacher") TeacherDto teacherDto) {
-        teacherService.create(teacherDto);
+    public String create(@ModelAttribute("teacher") @Valid TeacherDto teacherDto,
+    		BindingResult bindingResult) {
+    	
+    	if(bindingResult.hasErrors()) {
+    		return "teachers/new";
+    	}
+        
+    	teacherService.create(teacherDto);
         return "redirect:/teachers";
     }
     
@@ -74,8 +83,14 @@ public class TeacherController {
     }
     
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("teacher") TeacherDto teacherDto) {
-        teacherService.update(teacherDto);
+    public String update(@ModelAttribute("teacher") @Valid TeacherDto teacherDto,
+    		BindingResult bindingResult) {
+    	
+    	if(bindingResult.hasErrors()) {
+    		return "teachers/edit";
+    	}
+    	
+    	teacherService.update(teacherDto);
         return "redirect:/teachers";
     }
     
