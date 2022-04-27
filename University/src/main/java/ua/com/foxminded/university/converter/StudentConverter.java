@@ -8,12 +8,17 @@ import org.springframework.stereotype.Service;
 
 import ua.com.foxminded.university.dto.StudentDto;
 import ua.com.foxminded.university.entity.StudentEntity;
+import ua.com.foxminded.university.service.GroupService;
 
 @Service
 public class StudentConverter {
     
+    private GroupService groupService;
+    
     @Autowired
-    private GroupConverter groupConverter;
+    public StudentConverter(GroupService groupService) {
+        this.groupService = groupService;
+    }
     
     public StudentEntity toEntity(StudentDto studentDto) {
         if (studentDto == null) {
@@ -22,7 +27,7 @@ public class StudentConverter {
 
         StudentEntity studentEntity = new StudentEntity();
         studentEntity.setId(studentDto.getId());
-        studentEntity.setGroup(groupConverter.toEntity(studentDto.getGroup()));
+        studentEntity.setGroup(groupService.readByIdEntity(studentDto.getGroupId()));
         studentEntity.setFirstName(studentDto.getFirstName());
         studentEntity.setSecondName(studentDto.getSecondName());
         studentEntity.setBirthDate(studentDto.getBirthDate());
@@ -51,7 +56,7 @@ public class StudentConverter {
 
         StudentDto studentDto = new StudentDto();
         studentDto.setId(studentEntity.getId());
-        studentDto.setGroup(groupConverter.toDto(studentEntity.getGroup()));
+        studentDto.setGroupId(studentEntity.getGroup().getId());
         studentDto.setFirstName(studentEntity.getFirstName());
         studentDto.setSecondName(studentEntity.getSecondName());
         studentDto.setBirthDate(studentEntity.getBirthDate());

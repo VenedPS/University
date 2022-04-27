@@ -8,12 +8,17 @@ import org.springframework.stereotype.Service;
 
 import ua.com.foxminded.university.dto.CourseDto;
 import ua.com.foxminded.university.entity.CourseEntity;
+import ua.com.foxminded.university.service.TeacherService;
 
 @Service
 public class CourseConverter {
     
+    private TeacherService teacherService;
+    
     @Autowired
-    private TeacherConverter teacherConverter;
+    public CourseConverter(TeacherService teacherService) {
+        this.teacherService = teacherService;
+    }
     
     public  CourseEntity toEntity(CourseDto courseDto) {
         if (courseDto == null) {
@@ -23,7 +28,7 @@ public class CourseConverter {
         CourseEntity courseEntity = new CourseEntity();
         courseEntity.setId(courseDto.getId());
         courseEntity.setName(courseDto.getName());
-        courseEntity.setTeacher(teacherConverter.toEntity(courseDto.getTeacher()));
+        courseEntity.setTeacher(teacherService.readByIdEntity(courseDto.getTeacherId()));
         return courseEntity;
     }
 
@@ -47,7 +52,7 @@ public class CourseConverter {
         CourseDto courseDto = new CourseDto();
         courseDto.setId(courseEntity.getId());
         courseDto.setName(courseEntity.getName());
-        courseDto.setTeacher(teacherConverter.toDto(courseEntity.getTeacher()));
+        courseDto.setTeacherId(courseEntity.getTeacher().getId());
         return courseDto;
     }
 

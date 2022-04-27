@@ -13,14 +13,14 @@ import ua.com.foxminded.university.service.LessonService;
 
 @Service
 public class LessonServiceImpl implements LessonService {
-    @Autowired
-    private LessonConverter lessonConverter;
-    
+
+	private LessonConverter lessonConverter;    
     private LessonDao lessonDao;
     
     @Autowired
-    public LessonServiceImpl(LessonDao lessonDao) {
+    public LessonServiceImpl(LessonDao lessonDao, LessonConverter lessonConverter) {
         this.lessonDao = lessonDao;
+        this.lessonConverter = lessonConverter;
     }
 
     @Override

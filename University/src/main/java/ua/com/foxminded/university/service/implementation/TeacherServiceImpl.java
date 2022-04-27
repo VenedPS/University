@@ -11,6 +11,7 @@ import ua.com.foxminded.university.converter.TeacherConverter;
 import ua.com.foxminded.university.dao.TeacherDao;
 import ua.com.foxminded.university.dto.LessonDto;
 import ua.com.foxminded.university.dto.TeacherDto;
+import ua.com.foxminded.university.entity.TeacherEntity;
 import ua.com.foxminded.university.exception.LessonNotFoundException;
 import ua.com.foxminded.university.exception.TeacherNotChangedException;
 import ua.com.foxminded.university.exception.TeacherNotFoundException;
@@ -18,17 +19,20 @@ import ua.com.foxminded.university.service.TeacherService;
 
 @Service
 public class TeacherServiceImpl implements TeacherService {
-    @Autowired
-    private TeacherConverter teacherConverter;
-    
-    @Autowired
-    private LessonConverter lessonConverter;
 
+	private TeacherConverter teacherConverter;    
+    private LessonConverter lessonConverter;
     private TeacherDao teacherDao;
     
     @Autowired
-    public TeacherServiceImpl(TeacherDao teacherDao) {
+    public TeacherServiceImpl(
+    		TeacherDao teacherDao,
+    		TeacherConverter teacherConverter,
+    		LessonConverter lessonConverter) {
+    	
         this.teacherDao = teacherDao;
+        this.teacherConverter = teacherConverter;
+        this.lessonConverter = lessonConverter;
     }
 
     @Override
@@ -39,6 +43,11 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public TeacherDto readById(int id) throws TeacherNotFoundException {
     	return teacherConverter.toDto(teacherDao.findById(id).get());
+    }
+    
+    @Override
+    public TeacherEntity readByIdEntity(int id) throws TeacherNotFoundException {
+    	return teacherDao.findById(id).get();
     }
 
     @Override

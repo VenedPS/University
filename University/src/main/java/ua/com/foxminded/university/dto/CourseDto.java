@@ -1,89 +1,67 @@
 package ua.com.foxminded.university.dto;
 
+import java.util.Objects;
+
 public class CourseDto {
 
     private Integer id;
     private String name;
-    private TeacherDto teacher;
+    private Integer teacherId;
 
     public CourseDto() {
 
     }
 
-    public CourseDto(String name, TeacherDto teacher) {
+    public CourseDto(String name, Integer teacherId) {
         this.name = name;
-        this.teacher = teacher;
+        this.teacherId = teacherId;
     }
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Integer getTeacherId() {
+		return teacherId;
+	}
+
+	public void setTeacherId(Integer teacherId) {
+		this.teacherId = teacherId;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, name, teacherId);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CourseDto other = (CourseDto) obj;
+		return Objects.equals(id, other.id) && Objects.equals(name, other.name)
+				&& Objects.equals(teacherId, other.teacherId);
+	}
+
+	@Override
+	public String toString() {
+		return "CourseDto [id=" + id + ", name=" + name + ", teacherId=" + teacherId + "]";
+	}
     
-    public CourseDto(CourseDto course) {
-        this.name = course.getName();
-        this.teacher = course.getTeacher();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public TeacherDto getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(TeacherDto teacher) {
-        this.teacher = teacher;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((teacher == null) ? 0 : teacher.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        CourseDto other = (CourseDto) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        if (name == null) {
-            if (other.name != null)
-                return false;
-        } else if (!name.equals(other.name))
-            return false;
-        if (teacher == null) {
-            if (other.teacher != null)
-                return false;
-        } else if (!teacher.equals(other.teacher))
-            return false;
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "Course [id=" + id + ", name=" + name + ", teacher=" + teacher + "]";
-    }
-
 }

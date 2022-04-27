@@ -1,6 +1,6 @@
 CREATE TABLE groups
 (id integer NOT NULL,
-    name character(25) NOT NULL,
+    name character varying(25) NOT NULL,
     CONSTRAINT groups_pkey PRIMARY KEY (id));
 
 CREATE TABLE students

@@ -20,17 +20,20 @@ import ua.com.foxminded.university.service.StudentService;
 
 @Service
 public class StudentServiceImpl implements StudentService {
-    @Autowired
-    private StudentConverter studentConverter;
-    
-    @Autowired
-    private LessonConverter lessonConverter;
-    
+
+	private StudentConverter studentConverter;    
+    private LessonConverter lessonConverter;    
     private StudentDao studentDao;
 
     @Autowired
-    public StudentServiceImpl(StudentDao studentDao) {
+    public StudentServiceImpl(
+    		StudentDao studentDao, 
+    		StudentConverter studentConverter, 
+    		LessonConverter lessonConverter) {
+    	
         this.studentDao = studentDao;
+        this.studentConverter = studentConverter;
+        this.lessonConverter = lessonConverter;
     }
     
     @Override
@@ -65,7 +68,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<LessonDto> getStudentLessons(StudentDto studentDto, LocalDate startDate, LocalDate endDate) throws LessonNotFoundException {
-    	return lessonConverter.toDtoList(studentDao.getStudentLessons(studentDto.getGroup().getId(), startDate, endDate));
+    	return lessonConverter.toDtoList(studentDao.getStudentLessons(studentDto.getGroupId(), startDate, endDate));
     	
     }
     

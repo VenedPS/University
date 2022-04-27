@@ -10,18 +10,19 @@ import ua.com.foxminded.university.dao.GroupDao;
 import ua.com.foxminded.university.exception.GroupNotChangedException;
 import ua.com.foxminded.university.exception.GroupNotFoundException;
 import ua.com.foxminded.university.dto.GroupDto;
+import ua.com.foxminded.university.entity.GroupEntity;
 import ua.com.foxminded.university.service.GroupService;
 
 @Service
 public class GroupServiceImpl implements GroupService {
-    @Autowired
-    private GroupConverter groupConverter;
 
+	private GroupConverter groupConverter;
     private GroupDao groupDao;
 
     @Autowired
-    public GroupServiceImpl(GroupDao groupDao) {
+    public GroupServiceImpl(GroupDao groupDao, GroupConverter groupConverter) {
         this.groupDao = groupDao;
+        this.groupConverter = groupConverter;
     }
 
     @Override
@@ -32,9 +33,12 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupDto readById(int id) throws GroupNotFoundException {
-        GroupDto groupDto = new GroupDto();
-        groupDto = groupConverter.toDto(groupDao.findById(id).get());
-        return groupDto;
+        return groupConverter.toDto(groupDao.findById(id).get());
+    }
+    
+    @Override
+    public GroupEntity readByIdEntity(int id) throws GroupNotFoundException {
+    	return groupDao.findById(id).get();
     }
 
     @Override

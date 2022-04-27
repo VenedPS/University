@@ -14,14 +14,14 @@ import ua.com.foxminded.university.service.CourseService;
 
 @Service
 public class CourseServiceImpl implements CourseService {
-    @Autowired
-    private CourseConverter courseConverter;
-    
+
+    private CourseConverter courseConverter;    
     private CourseDao courseDao;
 
     @Autowired
-    public CourseServiceImpl(CourseDao courseDao) {
+    public CourseServiceImpl(CourseDao courseDao, CourseConverter courseConverter) {
         this.courseDao = courseDao;
+        this.courseConverter = courseConverter;
     }
     
     @Override

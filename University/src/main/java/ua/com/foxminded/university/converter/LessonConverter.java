@@ -8,15 +8,20 @@ import org.springframework.stereotype.Service;
 
 import ua.com.foxminded.university.dto.LessonDto;
 import ua.com.foxminded.university.entity.LessonEntity;
+import ua.com.foxminded.university.service.GroupService;
+import ua.com.foxminded.university.service.TeacherService;
 
 @Service
 public class LessonConverter {
     
+    private TeacherService teacherService;
+	private GroupService groupService;
+	
 	@Autowired
-	private TeacherConverter teacherConverter;
-    
-	@Autowired
-	private GroupConverter groupConverter;
+    public LessonConverter(TeacherService teacherService, GroupService groupService) {
+        this.teacherService = teacherService;
+        this.groupService = groupService;
+    }
     
     public LessonEntity toEntity(LessonDto lessonDto) {
         if (lessonDto == null) {
@@ -28,10 +33,10 @@ public class LessonConverter {
         lessonEntity.setTimetableId(lessonDto.getTimetableId());
         lessonEntity.setDate(lessonDto.getDate());
         lessonEntity.setLessonNumber(lessonDto.getLessonNumber());
-        lessonEntity.setGroup(groupConverter.toEntity(lessonDto.getGroup()));
+        lessonEntity.setGroup(groupService.readByIdEntity(lessonDto.getGroupId()));
         lessonEntity.setCourseId(lessonDto.getCourseId());
         lessonEntity.setClassroomId(lessonDto.getClassroomId());
-        lessonEntity.setTeacher(teacherConverter.toEntity(lessonDto.getTeacher()));
+        lessonEntity.setTeacher(teacherService.readByIdEntity(lessonDto.getTeacherId()));
         return lessonEntity;
     }
     
@@ -57,10 +62,10 @@ public class LessonConverter {
         lessonDto.setTimetableId(lessonEntity.getTimetableId());
         lessonDto.setDate(lessonEntity.getDate());
         lessonDto.setLessonNumber(lessonEntity.getLessonNumber());
-        lessonDto.setGroup(groupConverter.toDto(lessonEntity.getGroup()));
+        lessonDto.setGroupId(lessonEntity.getGroup().getId());
         lessonDto.setCourseId(lessonEntity.getCourseId());
         lessonDto.setClassroomId(lessonEntity.getClassroomId());
-        lessonDto.setTeacher(teacherConverter.toDto(lessonEntity.getTeacher()));
+        lessonDto.setTeacherId(lessonEntity.getTeacher().getId());
         return lessonDto;
     }
     

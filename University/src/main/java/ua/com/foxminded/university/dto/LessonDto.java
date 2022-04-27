@@ -1,165 +1,125 @@
 package ua.com.foxminded.university.dto;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class LessonDto {
-    private int id;
-    private int timetableId;
+    private Integer id;
+    private Integer timetableId;
     private LocalDate date;
-    private int lessonNumber;
-    private GroupDto group;
-    private int courseId;
-    private int classroomId;
-    private TeacherDto teacher;
+    private Integer lessonNumber;
+    private Integer groupId;
+    private Integer courseId;
+    private Integer classroomId;
+    private Integer teacherId;
 
     public LessonDto() {
 
     }
 
-    public LessonDto(int id, int timetableId, LocalDate date, int lessonNumber, GroupDto group, int courseId, int classroomId,
-            TeacherDto teacher) {
+    public LessonDto(Integer id, Integer timetableId, LocalDate date, 
+    		Integer lessonNumber, Integer groupId, Integer courseId, 
+    		Integer classroomId, Integer teacherId) {
+    	
         this.id = id;
         this.timetableId = timetableId;
         this.date = date;
         this.lessonNumber = lessonNumber;
-        this.group = group;
+        this.groupId = groupId;
         this.courseId = courseId;
         this.classroomId = classroomId;
-        this.teacher = teacher;
+        this.teacherId = teacherId;
     }
 
-    public LessonDto(LessonDto lesson) {
-        this.id = lesson.getId();
-        this.timetableId = lesson.getTimetableId();
-        this.date = lesson.getDate();
-        this.lessonNumber = lesson.getLessonNumber();
-        this.group = lesson.getGroup();
-        this.courseId = lesson.getCourseId();
-        this.classroomId = lesson.getClassroomId();
-        this.teacher = lesson.getTeacher();
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public int getId() {
-        return id;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public Integer getTimetableId() {
+		return timetableId;
+	}
 
-    public int getTimetableId() {
-        return timetableId;
-    }
+	public void setTimetableId(Integer timetableId) {
+		this.timetableId = timetableId;
+	}
 
-    public void setTimetableId(int timetableId) {
-        this.timetableId = timetableId;
-    }
+	public LocalDate getDate() {
+		return date;
+	}
 
-    public LocalDate getDate() {
-        return date;
-    }
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
+	public Integer getLessonNumber() {
+		return lessonNumber;
+	}
 
-    public int getLessonNumber() {
-        return lessonNumber;
-    }
+	public void setLessonNumber(Integer lessonNumber) {
+		this.lessonNumber = lessonNumber;
+	}
 
-    public void setLessonNumber(int lessonNumber) {
-        this.lessonNumber = lessonNumber;
-    }
+	public Integer getGroupId() {
+		return groupId;
+	}
 
-    public GroupDto getGroup() {
-        return group;
-    }
+	public void setGroupId(Integer groupId) {
+		this.groupId = groupId;
+	}
 
-    public void setGroup(GroupDto group) {
-        this.group = group;
-    }
+	public Integer getCourseId() {
+		return courseId;
+	}
 
-    public int getCourseId() {
-        return courseId;
-    }
+	public void setCourseId(Integer courseId) {
+		this.courseId = courseId;
+	}
 
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
-    }
+	public Integer getClassroomId() {
+		return classroomId;
+	}
 
-    public int getClassroomId() {
-        return classroomId;
-    }
+	public void setClassroomId(Integer classroomId) {
+		this.classroomId = classroomId;
+	}
 
-    public void setClassroomId(int classroomId) {
-        this.classroomId = classroomId;
-    }
+	public Integer getTeacherId() {
+		return teacherId;
+	}
 
-    public TeacherDto getTeacher() {
-        return teacher;
-    }
+	public void setTeacherId(Integer teacherId) {
+		this.teacherId = teacherId;
+	}
 
-    public void setTeacher(TeacherDto teacher) {
-        this.teacher = teacher;
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(classroomId, courseId, date, groupId, id, lessonNumber, teacherId, timetableId);
+	}
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + classroomId;
-        result = prime * result + courseId;
-        result = prime * result + ((date == null) ? 0 : date.hashCode());
-        result = prime * result + ((group == null) ? 0 : group.hashCode());
-        result = prime * result + id;
-        result = prime * result + lessonNumber;
-        result = prime * result + ((teacher == null) ? 0 : teacher.hashCode());
-        result = prime * result + timetableId;
-        return result;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		LessonDto other = (LessonDto) obj;
+		return Objects.equals(classroomId, other.classroomId) && Objects.equals(courseId, other.courseId)
+				&& Objects.equals(date, other.date) && Objects.equals(groupId, other.groupId)
+				&& Objects.equals(id, other.id) && Objects.equals(lessonNumber, other.lessonNumber)
+				&& Objects.equals(teacherId, other.teacherId) && Objects.equals(timetableId, other.timetableId);
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        LessonDto other = (LessonDto) obj;
-        if (classroomId != other.classroomId)
-            return false;
-        if (courseId != other.courseId)
-            return false;
-        if (date == null) {
-            if (other.date != null)
-                return false;
-        } else if (!date.equals(other.date))
-            return false;
-        if (group == null) {
-            if (other.group != null)
-                return false;
-        } else if (!group.equals(other.group))
-            return false;
-        if (id != other.id)
-            return false;
-        if (lessonNumber != other.lessonNumber)
-            return false;
-        if (teacher == null) {
-            if (other.teacher != null)
-                return false;
-        } else if (!teacher.equals(other.teacher))
-            return false;
-        if (timetableId != other.timetableId)
-            return false;
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "LessonDto [id=" + id + ", timetableId=" + timetableId + ", date=" + date + ", lessonNumber="
-                + lessonNumber + ", group=" + group + ", courseId=" + courseId + ", classroomId=" + classroomId
-                + ", teacher=" + teacher + "]";
-    }
+	@Override
+	public String toString() {
+		return "LessonDto [id=" + id + ", timetableId=" + timetableId + ", date=" + date + ", lessonNumber="
+				+ lessonNumber + ", groupId=" + groupId + ", courseId=" + courseId + ", classroomId=" + classroomId
+				+ ", teacherId=" + teacherId + "]";
+	}
 
 }

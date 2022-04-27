@@ -1,8 +1,10 @@
 package ua.com.foxminded.university.dto;
 
+import java.util.Objects;
+
 public class StudentDto extends PersonDto {
     private Integer id;
-    private GroupDto group;
+    private Integer groupId;
     
     public StudentDto() {
 
@@ -14,7 +16,7 @@ public class StudentDto extends PersonDto {
     }
     
     public StudentDto(StudentDto student) {
-        this.group = student.getGroup();
+        this.groupId = student.getGroupId();
         this.firstName = student.getFirstName();
         this.secondName = student.getSecondName();
         this.birthDate = student.getBirthDate();
@@ -23,68 +25,42 @@ public class StudentDto extends PersonDto {
         this.email = student.getEmail();
     }
 
-    public Integer getId() {
-        return id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public GroupDto getGroup() {
-        return group;
-    }
+	public Integer getGroupId() {
+		return groupId;
+	}
 
-    public void setGroup(GroupDto group) {
-        this.group = group;
-    }
+	public void setGroupId(Integer groupId) {
+		this.groupId = groupId;
+	}
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-        result = prime * result + ((group == null) ? 0 : group.hashCode());
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((secondName == null) ? 0 : secondName.hashCode());
-        return result;
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(groupId, id);
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        StudentDto other = (StudentDto) obj;
-        if (firstName == null) {
-            if (other.firstName != null)
-                return false;
-        } else if (!firstName.equals(other.firstName))
-            return false;
-        if (group == null) {
-            if (other.group != null)
-                return false;
-        } else if (!group.equals(other.group))
-            return false;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        if (secondName == null) {
-            if (other.secondName != null)
-                return false;
-        } else if (!secondName.equals(other.secondName))
-            return false;
-        return true;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		StudentDto other = (StudentDto) obj;
+		return Objects.equals(groupId, other.groupId) && Objects.equals(id, other.id);
+	}
 
-    @Override
-    public String toString() {
-        return "Student [id=" + id + ", group=" + group + ", firstName=" + firstName + ", secondName=" + secondName
-                + ", birthDate=" + birthDate + ", address=" + address + ", phone=" + phone + ", email=" + email + "]";
-    }
+	@Override
+	public String toString() {
+		return "StudentDto [id=" + id + ", groupId=" + groupId + "]";
+	}
+    
 }
