@@ -14,15 +14,12 @@ import ua.com.foxminded.university.service.TeacherService;
 @Service
 public class LessonConverter {
     
-    private TeacherService teacherService;
-	private GroupService groupService;
+	@Autowired
+	private TeacherService teacherService;
 	
 	@Autowired
-    public LessonConverter(TeacherService teacherService, GroupService groupService) {
-        this.teacherService = teacherService;
-        this.groupService = groupService;
-    }
-    
+	private GroupService groupService;
+	
     public LessonEntity toEntity(LessonDto lessonDto) {
         if (lessonDto == null) {
             throw new IllegalArgumentException("Cannot convert null!");
@@ -33,14 +30,14 @@ public class LessonConverter {
         lessonEntity.setTimetableId(lessonDto.getTimetableId());
         lessonEntity.setDate(lessonDto.getDate());
         lessonEntity.setLessonNumber(lessonDto.getLessonNumber());
-        lessonEntity.setGroup(groupService.readByIdEntity(lessonDto.getGroupId()));
+        lessonEntity.setGroup(groupService.readById(lessonDto.getGroupId()));
         lessonEntity.setCourseId(lessonDto.getCourseId());
         lessonEntity.setClassroomId(lessonDto.getClassroomId());
-        lessonEntity.setTeacher(teacherService.readByIdEntity(lessonDto.getTeacherId()));
+        lessonEntity.setTeacher(teacherService.readById(lessonDto.getTeacherId()));
         return lessonEntity;
     }
     
-    public List<LessonEntity> toEntityList(Iterable<LessonDto> lessonDtoList) {
+    public List<LessonEntity> toEntityList(List<LessonDto> lessonDtoList) {
     	if (lessonDtoList == null) {
     		throw new IllegalArgumentException("Cannot convert null!");
     	}
@@ -69,7 +66,7 @@ public class LessonConverter {
         return lessonDto;
     }
     
-    public List<LessonDto> toDtoList(Iterable<LessonEntity> lessonEntityList) {
+    public List<LessonDto> toDtoList(List<LessonEntity> lessonEntityList) {
         if (lessonEntityList == null) {
             throw new IllegalArgumentException("Cannot convert null!");
         }

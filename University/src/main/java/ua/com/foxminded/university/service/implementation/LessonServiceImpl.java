@@ -1,44 +1,35 @@
 package ua.com.foxminded.university.service.implementation;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ua.com.foxminded.university.converter.LessonConverter;
 import ua.com.foxminded.university.dao.LessonDao;
-import ua.com.foxminded.university.dto.LessonDto;
+import ua.com.foxminded.university.entity.LessonEntity;
 import ua.com.foxminded.university.exception.LessonNotFoundException;
 import ua.com.foxminded.university.service.LessonService;
 
 @Service
 public class LessonServiceImpl implements LessonService {
 
-	private LessonConverter lessonConverter;    
     private LessonDao lessonDao;
     
     @Autowired
-    public LessonServiceImpl(LessonDao lessonDao, LessonConverter lessonConverter) {
+    public LessonServiceImpl(LessonDao lessonDao) {
         this.lessonDao = lessonDao;
-        this.lessonConverter = lessonConverter;
     }
 
     @Override
-    public List<LessonDto> readAll() throws LessonNotFoundException {
-        return lessonConverter.toDtoList(lessonDao.findAll());
+    public List<LessonEntity> readAll() throws LessonNotFoundException {
+        return StreamSupport.stream(lessonDao.findAll().spliterator(), false).collect(Collectors.toList());
     }
 
     @Override
-    public LessonDto readById(int id) throws LessonNotFoundException {
-        return lessonConverter.toDto(lessonDao.findById(id).get());
-    }
-
-    public LessonConverter getLessonConverter() {
-        return lessonConverter;
-    }
-
-    public void setLessonConverter(LessonConverter lessonConverter) {
-        this.lessonConverter = lessonConverter;
+    public LessonEntity readById(int id) throws LessonNotFoundException {
+        return lessonDao.findById(id).get();
     }
 
     public LessonDao getLessonDao() {

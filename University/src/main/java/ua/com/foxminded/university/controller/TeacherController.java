@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import ua.com.foxminded.university.converter.LessonConverter;
+import ua.com.foxminded.university.converter.TeacherConverter;
 import ua.com.foxminded.university.dto.LessonDto;
 import ua.com.foxminded.university.dto.TeacherDto;
 import ua.com.foxminded.university.exception.LessonNotFoundException;
@@ -30,28 +32,38 @@ import ua.com.foxminded.university.service.TeacherService;
 public class TeacherController {
     
     private final TeacherService teacherService;
+    private final TeacherConverter teacherConverter;
+    private final LessonConverter lessonConverter;
     private final Logger logger = LoggerFactory.getLogger(TeacherController.class);
     
     @Autowired
-    public TeacherController(TeacherService teacherService) {
+    public TeacherController(
+    		TeacherService teacherService, 
+    		TeacherConverter teacherConverter,
+    		LessonConverter lessonConverter) {
+    	
         this.teacherService = teacherService;
+        this.teacherConverter = teacherConverter;
+        this.lessonConverter = lessonConverter;
     }
     
     @GetMapping()
     public String index(Model model) {
-        model.addAttribute("teachers", teacherService.readAll());
+        List<TeacherDto> teachers = teacherConverter.toDtoList(teacherService.readAll());
+    	model.addAttribute("teachers", teachers);
         return "teachers/index";
     }
     
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-    	model.addAttribute("teacher", teacherService.readById(id));
+    	TeacherDto teacherDto = teacherConverter.toDto(teacherService.readById(id));
+    	model.addAttribute("teacher", teacherDto);
         
         LocalDate startDate = LocalDate.now().plusMonths(-2).withDayOfMonth(1);
         LocalDate endDate = LocalDate.now().plusMonths(1).withDayOfMonth(1).minusDays(1);        
         List<LessonDto> lessons = new ArrayList<LessonDto>();
         try {
-            lessons = teacherService.getTeacherLessons(id, startDate, endDate);
+            lessons = lessonConverter.toDtoList(teacherService.getTeacherLessons(id, startDate, endDate));
         } catch (LessonNotFoundException e) {
             logger.error(e.getMessage());
         }
@@ -72,13 +84,14 @@ public class TeacherController {
     		return "teachers/new";
     	}
         
-    	teacherService.create(teacherDto);
+    	teacherService.create(teacherConverter.toEntity(teacherDto));
         return "redirect:/teachers";
     }
     
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
-        model.addAttribute("teacher", teacherService.readById(id));
+        TeacherDto teacherDto = teacherConverter.toDto(teacherService.readById(id));
+    	model.addAttribute("teacher", teacherDto);
         return "teachers/edit";
     }
     
@@ -90,7 +103,7 @@ public class TeacherController {
     		return "teachers/edit";
     	}
     	
-    	teacherService.update(teacherDto);
+    	teacherService.update(teacherConverter.toEntity(teacherDto));
         return "redirect:/teachers";
     }
     

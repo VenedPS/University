@@ -22,7 +22,7 @@ public class GroupConverter {
         return groupEntity;
     }
 
-    public List<GroupEntity> toEntityList(Iterable<GroupDto> groupDtoList) {
+    public List<GroupEntity> toEntityList(List<GroupDto> groupDtoList) {
         if (groupDtoList == null) {
             throw new IllegalArgumentException("Cannot convert null!");
         }
@@ -45,7 +45,7 @@ public class GroupConverter {
         return groupDto;
     }
 
-    public List<GroupDto> toDtoList(Iterable<GroupEntity> groupEntityList) {
+    public List<GroupDto> toDtoList(List<GroupEntity> groupEntityList) {
         if (groupEntityList == null) {
             throw new IllegalArgumentException("Cannot convert null!");
         }

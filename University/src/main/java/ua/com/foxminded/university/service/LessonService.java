@@ -2,9 +2,9 @@ package ua.com.foxminded.university.service;
 
 import java.util.List;
 
-import ua.com.foxminded.university.dto.LessonDto;
+import ua.com.foxminded.university.entity.LessonEntity;
 
 public interface LessonService {
-    public List<LessonDto> readAll();
-    public LessonDto readById(int id);
+    public List<LessonEntity> readAll();
+    public LessonEntity readById(int id);
 }

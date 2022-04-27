@@ -13,12 +13,8 @@ import ua.com.foxminded.university.service.GroupService;
 @Service
 public class StudentConverter {
     
-    private GroupService groupService;
-    
-    @Autowired
-    public StudentConverter(GroupService groupService) {
-        this.groupService = groupService;
-    }
+	@Autowired
+	private GroupService groupService;
     
     public StudentEntity toEntity(StudentDto studentDto) {
         if (studentDto == null) {
@@ -27,7 +23,7 @@ public class StudentConverter {
 
         StudentEntity studentEntity = new StudentEntity();
         studentEntity.setId(studentDto.getId());
-        studentEntity.setGroup(groupService.readByIdEntity(studentDto.getGroupId()));
+        studentEntity.setGroup(groupService.readById(studentDto.getGroupId()));
         studentEntity.setFirstName(studentDto.getFirstName());
         studentEntity.setSecondName(studentDto.getSecondName());
         studentEntity.setBirthDate(studentDto.getBirthDate());
@@ -37,7 +33,7 @@ public class StudentConverter {
         return studentEntity;
     }
     
-    public List<StudentEntity> toEntityList(Iterable<StudentDto> studentDtoList) {
+    public List<StudentEntity> toEntityList(List<StudentDto> studentDtoList) {
         if (studentDtoList == null) {
             throw new IllegalArgumentException("Cannot convert null!");
         }
@@ -66,7 +62,7 @@ public class StudentConverter {
         return studentDto;
     }
     
-    public List<StudentDto> toDtoList(Iterable<StudentEntity> studentEntityList) {
+    public List<StudentDto> toDtoList(List<StudentEntity> studentEntityList) {
         if (studentEntityList == null) {
             throw new IllegalArgumentException("Cannot convert null!");
         }

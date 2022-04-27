@@ -1,85 +1,59 @@
 package ua.com.foxminded.university.service.implementation;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ua.com.foxminded.university.converter.LessonConverter;
-import ua.com.foxminded.university.converter.StudentConverter;
 import ua.com.foxminded.university.dao.StudentDao;
-import ua.com.foxminded.university.exception.LessonNotFoundException;
-import ua.com.foxminded.university.exception.StudentNotChangedException;
-import ua.com.foxminded.university.exception.StudentNotFoundException;
-import ua.com.foxminded.university.dto.LessonDto;
-import ua.com.foxminded.university.dto.StudentDto;
+import ua.com.foxminded.university.entity.LessonEntity;
 import ua.com.foxminded.university.entity.StudentEntity;
 import ua.com.foxminded.university.service.StudentService;
 
 @Service
 public class StudentServiceImpl implements StudentService {
 
-	private StudentConverter studentConverter;    
-    private LessonConverter lessonConverter;    
     private StudentDao studentDao;
 
     @Autowired
-    public StudentServiceImpl(
-    		StudentDao studentDao, 
-    		StudentConverter studentConverter, 
-    		LessonConverter lessonConverter) {
-    	
+    public StudentServiceImpl(StudentDao studentDao) {
         this.studentDao = studentDao;
-        this.studentConverter = studentConverter;
-        this.lessonConverter = lessonConverter;
     }
     
     @Override
-    public List<StudentDto> readAll() throws StudentNotFoundException {
-        Iterable<StudentEntity> studentsEntity = new ArrayList<>();
-        studentsEntity = studentDao.findAll();
-        List<StudentDto> studentsDto = studentConverter.toDtoList(studentsEntity);
-        return studentsDto;
+    public List<StudentEntity> readAll() {
+        return StreamSupport.stream(studentDao.findAll().spliterator(), false).collect(Collectors.toList());
     }
 
     @Override
-    public StudentDto readById(int id) throws StudentNotFoundException {
-        StudentDto studentDto = new StudentDto();
-        studentDto = studentConverter.toDto(studentDao.findById(id).get());
-        return studentDto;
+    public StudentEntity readById(int id) {
+        return studentDao.findById(id).get();
     }
 
     @Override
-    public void create(StudentDto studentDto) throws StudentNotChangedException {
-        studentDao.save(studentConverter.toEntity(studentDto));
+    public void create(StudentEntity studentEntity) {
+        studentDao.save(studentEntity);
     }
 
     @Override
-    public void update(StudentDto studentDto) throws StudentNotChangedException {
-        studentDao.save(studentConverter.toEntity(studentDto));
+    public void update(StudentEntity studentEntity) {
+        studentDao.save(studentEntity);
     }
 
     @Override
-    public void delete(int id) throws StudentNotChangedException {
+    public void delete(int id) {
         studentDao.deleteById(id);
     }
 
     @Override
-    public List<LessonDto> getStudentLessons(StudentDto studentDto, LocalDate startDate, LocalDate endDate) throws LessonNotFoundException {
-    	return lessonConverter.toDtoList(studentDao.getStudentLessons(studentDto.getGroupId(), startDate, endDate));
+    public List<LessonEntity> getStudentLessons(StudentEntity studentEntity, LocalDate startDate, LocalDate endDate) {
+    	return studentDao.getStudentLessons(studentEntity.getGroup().getId(), startDate, endDate);
     	
     }
     
-    public StudentConverter getStudentConverter() {
-        return studentConverter;
-    }
-
-    public void setStudentConverter(StudentConverter studentConverter) {
-        this.studentConverter = studentConverter;
-    }
-
     public StudentDao getStudentDao() {
         return studentDao;
     }
