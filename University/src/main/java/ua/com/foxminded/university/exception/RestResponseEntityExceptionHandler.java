@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+//import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -17,14 +18,8 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	
 	private final Logger logger = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);
 	
-	@ExceptionHandler(value = {
-			NoSuchElementException.class,
-			StudentNotFoundException.class,
-			TeacherNotFoundException.class,
-			LessonNotFoundException.class,
-			GroupNotFoundException.class,
-			CourseNotFoundException.class})
-    public ResponseEntity<Object> handleStudentNotFoundException(RuntimeException exception, WebRequest request) {
+	@ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<Object> handleNoSuchElementException(RuntimeException exception, WebRequest request) {
 		logger.error("Failed to find the requested element", exception);
 		String bodyOfResponse = exception.getMessage();
 		return handleExceptionInternal(
@@ -34,6 +29,24 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 				HttpStatus.NOT_FOUND, 
 				request);
     }
+	
+//	@ExceptionHandler(MethodArgumentNotValidException.class)
+//	public ResponseEntity<Object> handleMethodArgumentNotValidException(Exception exception, WebRequest request) {
+////	public ResponseEntity<Object> handleMethodArgumentNotValidException(
+////			MethodArgumentNotValidException exception,
+////			HttpHeaders headers, 
+////			HttpStatus status, 
+////			WebRequest request) {
+//		
+////		logger.error("Failed to find the requested element", exception);
+////		String bodyOfResponse = exception.getMessage();
+//		return handleExceptionInternal(
+//				exception, 
+//				"", 
+//				new HttpHeaders(), 
+//				HttpStatus.BAD_REQUEST, 
+//				request);
+//	}
 
 //	private ResponseEntity<Object> buildErrorResponse(
 //			Exception exception, 

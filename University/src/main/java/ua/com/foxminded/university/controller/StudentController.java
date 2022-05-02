@@ -3,6 +3,7 @@ package ua.com.foxminded.university.controller;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import javax.validation.Valid;
 
@@ -22,10 +23,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import ua.com.foxminded.university.dto.LessonDto;
 import ua.com.foxminded.university.dto.StudentDto;
-import ua.com.foxminded.university.exception.LessonNotFoundException;
 import ua.com.foxminded.university.service.StudentService;
 
-//@Controller
+@Controller
 @RequestMapping("/students")
 public class StudentController {
 
@@ -53,7 +53,7 @@ public class StudentController {
         List<LessonDto> lessons = new ArrayList<LessonDto>();
         try {
             lessons = studentService.getStudentLessons(studentDto, startDate, endDate);
-        } catch (LessonNotFoundException e) {
+        } catch (NoSuchElementException e) {
             logger.error(e.getMessage());
         }
         model.addAttribute("lessons", lessons);

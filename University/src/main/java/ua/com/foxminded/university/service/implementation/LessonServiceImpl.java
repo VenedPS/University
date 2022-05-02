@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import ua.com.foxminded.university.converter.LessonConverter;
 import ua.com.foxminded.university.dao.LessonDao;
 import ua.com.foxminded.university.dto.LessonDto;
-import ua.com.foxminded.university.exception.LessonNotFoundException;
 import ua.com.foxminded.university.service.LessonService;
 
 @Service
@@ -24,12 +23,12 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public List<LessonDto> readAll() throws LessonNotFoundException {
+    public List<LessonDto> readAll() {
         return lessonConverter.toDtoList(lessonDao.findAll());
     }
 
     @Override
-    public LessonDto readById(int id) throws LessonNotFoundException {
+    public LessonDto readById(int id) {
         return lessonConverter.toDto(lessonDao.findById(id).get());
     }
 

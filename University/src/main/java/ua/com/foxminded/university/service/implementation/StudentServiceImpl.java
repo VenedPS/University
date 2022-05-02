@@ -10,9 +10,6 @@ import org.springframework.stereotype.Service;
 import ua.com.foxminded.university.converter.LessonConverter;
 import ua.com.foxminded.university.converter.StudentConverter;
 import ua.com.foxminded.university.dao.StudentDao;
-import ua.com.foxminded.university.exception.LessonNotFoundException;
-import ua.com.foxminded.university.exception.StudentNotChangedException;
-import ua.com.foxminded.university.exception.StudentNotFoundException;
 import ua.com.foxminded.university.dto.LessonDto;
 import ua.com.foxminded.university.dto.StudentDto;
 import ua.com.foxminded.university.entity.StudentEntity;
@@ -37,7 +34,7 @@ public class StudentServiceImpl implements StudentService {
     }
     
     @Override
-    public List<StudentDto> readAll() throws StudentNotFoundException {
+    public List<StudentDto> readAll() {
         Iterable<StudentEntity> studentsEntity = new ArrayList<>();
         studentsEntity = studentDao.findAll();
         List<StudentDto> studentsDto = studentConverter.toDtoList(studentsEntity);
@@ -45,29 +42,29 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentDto readById(int id) throws StudentNotFoundException {
+    public StudentDto readById(int id) {
         StudentDto studentDto = new StudentDto();
         studentDto = studentConverter.toDto(studentDao.findById(id).get());
         return studentDto;
     }
 
     @Override
-    public void create(StudentDto studentDto) throws StudentNotChangedException {
+    public void create(StudentDto studentDto) {
         studentDao.save(studentConverter.toEntity(studentDto));
     }
 
     @Override
-    public void update(StudentDto studentDto) throws StudentNotChangedException {
+    public void update(StudentDto studentDto) {
         studentDao.save(studentConverter.toEntity(studentDto));
     }
 
     @Override
-    public void delete(int id) throws StudentNotChangedException {
+    public void delete(int id) {
         studentDao.deleteById(id);
     }
 
     @Override
-    public List<LessonDto> getStudentLessons(StudentDto studentDto, LocalDate startDate, LocalDate endDate) throws LessonNotFoundException {
+    public List<LessonDto> getStudentLessons(StudentDto studentDto, LocalDate startDate, LocalDate endDate) {
     	return lessonConverter.toDtoList(studentDao.getStudentLessons(studentDto.getGroupId(), startDate, endDate));
     	
     }

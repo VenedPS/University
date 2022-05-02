@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import javax.validation.Valid;
 
@@ -13,10 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -25,24 +24,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ua.com.foxminded.university.controller.StudentController;
 import ua.com.foxminded.university.dto.LessonDto;
 import ua.com.foxminded.university.dto.StudentDto;
-import ua.com.foxminded.university.exception.LessonNotFoundException;
 import ua.com.foxminded.university.service.StudentService;
-import ua.com.foxminded.university.service.GroupService;
 
 @RestController
 @RequestMapping("/students")
 public class StudentRestController {
 
-    private final StudentService studentService;
-    private final GroupService groupService;
-    private final Logger logger = LoggerFactory.getLogger(StudentRestController.class);
+	private final StudentService studentService;
+    private final Logger logger = LoggerFactory.getLogger(StudentController.class);
 
     @Autowired
-    public StudentRestController(StudentService studentService, GroupService groupService) {
+    public StudentRestController(StudentService studentService) {
         this.studentService = studentService;
-        this.groupService = groupService;
     }
 
     @GetMapping()
@@ -58,41 +54,19 @@ public class StudentRestController {
     @GetMapping("/{id}")
     public ResponseEntity<StudentDto> show(@PathVariable("id") int id) {
     	final StudentDto studentDto = studentService.readById(id);
-    	
-//    	if(studentDto != null) {
-        	return new ResponseEntity<>(studentDto, HttpStatus.OK);
-//        }        
-//        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+       	return new ResponseEntity<>(studentDto, HttpStatus.OK);
     }
 
     @PostMapping()
-    public ResponseEntity<?> create(@RequestBody @Valid StudentDto studentDto,
-    		BindingResult bindingResult) {
-    	
-    	if(bindingResult.hasErrors()) {
-    		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-    	}
-    	studentDto.setGroupId(1);
+    public ResponseEntity<?> create(@RequestBody @Valid StudentDto studentDto) {
         studentService.create(studentDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") int id, 
-    		@RequestBody @Valid StudentDto receivedStudentDto,
-    		BindingResult bindingResult) {
+    public ResponseEntity<?> update(@PathVariable("id") int id, @RequestBody @Valid StudentDto studentDto) {
     	
-    	StudentDto studentDto = studentService.readById(id);
-    	studentDto.setFirstName(receivedStudentDto.getFirstName());
-    	studentDto.setSecondName(receivedStudentDto.getSecondName());
-    	studentDto.setBirthDate(receivedStudentDto.getBirthDate());
-    	studentDto.setAddress(receivedStudentDto.getAddress());
-    	studentDto.setPhone(receivedStudentDto.getPhone());
-    	studentDto.setEmail(receivedStudentDto.getEmail());
-    	
-//    	if(bindingResult.hasErrors()) {
-//    		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-//    	}
+    	studentDto.setId(id);    	
     	studentService.update(studentDto);
 
     	return new ResponseEntity<>(HttpStatus.OK);
@@ -101,7 +75,6 @@ public class StudentRestController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") int id) {
     	   studentService.delete(id);
-
     	   return new ResponseEntity<>(HttpStatus.OK);
     	}
     
@@ -120,7 +93,7 @@ public class StudentRestController {
         List<LessonDto> lessons = new ArrayList<LessonDto>();
         try {
             lessons = studentService.getStudentLessons(studentDto, startDate, endDate);
-        } catch (LessonNotFoundException e) {
+        } catch (NoSuchElementException e) {
             logger.error(e.getMessage());
         }
         

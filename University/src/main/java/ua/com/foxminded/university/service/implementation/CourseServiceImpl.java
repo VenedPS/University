@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 
 import ua.com.foxminded.university.converter.CourseConverter;
 import ua.com.foxminded.university.dao.CourseDao;
-import ua.com.foxminded.university.exception.CourseNotChangedException;
-import ua.com.foxminded.university.exception.CourseNotFoundException;
 import ua.com.foxminded.university.dto.CourseDto;
 import ua.com.foxminded.university.service.CourseService;
 
@@ -25,20 +23,20 @@ public class CourseServiceImpl implements CourseService {
     }
     
     @Override
-    public List<CourseDto> readAll() throws CourseNotFoundException {
+    public List<CourseDto> readAll() {
         List<CourseDto> courseDto = courseConverter.toDtoList(courseDao.findAll());
         return courseDto;
     }
 
     @Override
-    public CourseDto readById(int id) throws CourseNotFoundException {
+    public CourseDto readById(int id) {
         CourseDto courseDto = new CourseDto();
         courseDto = courseConverter.toDto(courseDao.findById(id).get());
         return courseDto;
     }
 
     @Override
-    public void create(CourseDto courseDto) throws CourseNotChangedException {
+    public void create(CourseDto courseDto) {
         courseDao.save(courseConverter.toEntity(courseDto));
     }
 

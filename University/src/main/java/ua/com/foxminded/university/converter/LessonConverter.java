@@ -6,21 +6,21 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ua.com.foxminded.university.dao.GroupDao;
+import ua.com.foxminded.university.dao.TeacherDao;
 import ua.com.foxminded.university.dto.LessonDto;
 import ua.com.foxminded.university.entity.LessonEntity;
-import ua.com.foxminded.university.service.GroupService;
-import ua.com.foxminded.university.service.TeacherService;
 
 @Service
 public class LessonConverter {
     
-    private TeacherService teacherService;
-	private GroupService groupService;
+    private TeacherDao teacherDao;
+	private GroupDao groupDao;
 	
 	@Autowired
-    public LessonConverter(TeacherService teacherService, GroupService groupService) {
-        this.teacherService = teacherService;
-        this.groupService = groupService;
+    public LessonConverter(TeacherDao teacherDao, GroupDao groupDao) {
+        this.teacherDao = teacherDao;
+        this.groupDao = groupDao;
     }
     
     public LessonEntity toEntity(LessonDto lessonDto) {
@@ -33,10 +33,10 @@ public class LessonConverter {
         lessonEntity.setTimetableId(lessonDto.getTimetableId());
         lessonEntity.setDate(lessonDto.getDate());
         lessonEntity.setLessonNumber(lessonDto.getLessonNumber());
-        lessonEntity.setGroup(groupService.readByIdEntity(lessonDto.getGroupId()));
+        lessonEntity.setGroup(groupDao.findById(lessonDto.getGroupId()).get());
         lessonEntity.setCourseId(lessonDto.getCourseId());
         lessonEntity.setClassroomId(lessonDto.getClassroomId());
-        lessonEntity.setTeacher(teacherService.readByIdEntity(lessonDto.getTeacherId()));
+        lessonEntity.setTeacher(teacherDao.findById(lessonDto.getTeacherId()).get());
         return lessonEntity;
     }
     

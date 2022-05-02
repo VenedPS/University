@@ -6,18 +6,18 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ua.com.foxminded.university.dao.TeacherDao;
 import ua.com.foxminded.university.dto.CourseDto;
 import ua.com.foxminded.university.entity.CourseEntity;
-import ua.com.foxminded.university.service.TeacherService;
 
 @Service
 public class CourseConverter {
     
-    private TeacherService teacherService;
+    private TeacherDao teacherDao;
     
     @Autowired
-    public CourseConverter(TeacherService teacherService) {
-        this.teacherService = teacherService;
+    public CourseConverter(TeacherDao teacherDao) {
+        this.teacherDao = teacherDao;
     }
     
     public  CourseEntity toEntity(CourseDto courseDto) {
@@ -28,7 +28,7 @@ public class CourseConverter {
         CourseEntity courseEntity = new CourseEntity();
         courseEntity.setId(courseDto.getId());
         courseEntity.setName(courseDto.getName());
-        courseEntity.setTeacher(teacherService.readByIdEntity(courseDto.getTeacherId()));
+        courseEntity.setTeacher(teacherDao.findById(courseDto.getTeacherId()).get());
         return courseEntity;
     }
 
