@@ -20,51 +20,39 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import ua.com.foxminded.university.converter.LessonConverter;
-import ua.com.foxminded.university.converter.StudentConverter;
 import ua.com.foxminded.university.dto.LessonDto;
 import ua.com.foxminded.university.dto.StudentDto;
-import ua.com.foxminded.university.entity.StudentEntity;
 import ua.com.foxminded.university.exception.LessonNotFoundException;
 import ua.com.foxminded.university.service.StudentService;
 
-@Controller
+//@Controller
 @RequestMapping("/students")
 public class StudentController {
 
     private final StudentService studentService;
-    private final StudentConverter studentConverter;
-    private final LessonConverter lessonConverter;
     private final Logger logger = LoggerFactory.getLogger(StudentController.class);
 
     @Autowired
-    public StudentController(
-    		StudentService studentService,
-    		StudentConverter studentConverter,
-    		LessonConverter lessonConverter) {
-    	
+    public StudentController(StudentService studentService) {
         this.studentService = studentService;
-        this.studentConverter = studentConverter;
-        this.lessonConverter = lessonConverter;
     }
 
     @GetMapping()
     public String index(Model model) {
-    	List<StudentDto> students = studentConverter.toDtoList(studentService.readAll());
-    	model.addAttribute("students", students);
+        model.addAttribute("students", studentService.readAll());
         return "students/index";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-        StudentEntity studentEntity = studentService.readById(id);
-    	model.addAttribute("student", studentConverter.toDto(studentEntity));
+        StudentDto studentDto = studentService.readById(id);
+    	model.addAttribute("student", studentDto);
         
         LocalDate startDate = LocalDate.now().plusMonths(-2).withDayOfMonth(1);
         LocalDate endDate = LocalDate.now().plusMonths(1).withDayOfMonth(1).minusDays(1);        
         List<LessonDto> lessons = new ArrayList<LessonDto>();
         try {
-            lessons = lessonConverter.toDtoList(studentService.getStudentLessons(studentEntity, startDate, endDate));
+            lessons = studentService.getStudentLessons(studentDto, startDate, endDate);
         } catch (LessonNotFoundException e) {
             logger.error(e.getMessage());
         }
@@ -85,14 +73,13 @@ public class StudentController {
     		return "students/new";
     	}
         studentDto.setGroupId(1);
-        studentService.create(studentConverter.toEntity(studentDto));
+        studentService.create(studentDto);
         return "redirect:/students";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
-    	StudentDto studentDto = studentConverter.toDto(studentService.readById(id));
-    	model.addAttribute("student", studentDto);
+    	model.addAttribute("student", studentService.readById(id));
         return "students/edit";
     }
 
@@ -104,7 +91,7 @@ public class StudentController {
     		return "students/edit";
     	}
     	studentDto.setGroupId(1);
-    	studentService.update(studentConverter.toEntity(studentDto));
+    	studentService.update(studentDto);
         return "redirect:/students";
     }
 

@@ -3,14 +3,16 @@ package ua.com.foxminded.university.service;
 import java.time.LocalDate;
 import java.util.List;
 
-import ua.com.foxminded.university.entity.LessonEntity;
+import ua.com.foxminded.university.dto.LessonDto;
+import ua.com.foxminded.university.dto.TeacherDto;
 import ua.com.foxminded.university.entity.TeacherEntity;
 
 public interface TeacherService {
-    public List<TeacherEntity> readAll();
-    public TeacherEntity readById(int id);
-    public void create(TeacherEntity teacherEntity);
-    public void update(TeacherEntity teacherEntity);
+    public List<TeacherDto> readAll();
+    public TeacherDto readById(int id);
+    public TeacherEntity readByIdEntity(int id);
+    public void create(TeacherDto teacherDto);
+    public void update(TeacherDto teacherDto);
     public void delete(int id);
-    public List<LessonEntity> getTeacherLessons(int teacherId, LocalDate startDate, LocalDate endDate);
+    public List<LessonDto> getTeacherLessons(int teacherId, LocalDate startDate, LocalDate endDate);
 }

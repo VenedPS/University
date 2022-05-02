@@ -2,54 +2,79 @@ package ua.com.foxminded.university.service.implementation;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ua.com.foxminded.university.converter.LessonConverter;
+import ua.com.foxminded.university.converter.TeacherConverter;
 import ua.com.foxminded.university.dao.TeacherDao;
-import ua.com.foxminded.university.entity.LessonEntity;
+import ua.com.foxminded.university.dto.LessonDto;
+import ua.com.foxminded.university.dto.TeacherDto;
 import ua.com.foxminded.university.entity.TeacherEntity;
+import ua.com.foxminded.university.exception.LessonNotFoundException;
+import ua.com.foxminded.university.exception.TeacherNotChangedException;
+import ua.com.foxminded.university.exception.TeacherNotFoundException;
 import ua.com.foxminded.university.service.TeacherService;
 
 @Service
 public class TeacherServiceImpl implements TeacherService {
 
+	private TeacherConverter teacherConverter;    
+    private LessonConverter lessonConverter;
     private TeacherDao teacherDao;
     
     @Autowired
-    public TeacherServiceImpl(TeacherDao teacherDao) {
+    public TeacherServiceImpl(
+    		TeacherDao teacherDao,
+    		TeacherConverter teacherConverter,
+    		LessonConverter lessonConverter) {
+    	
         this.teacherDao = teacherDao;
+        this.teacherConverter = teacherConverter;
+        this.lessonConverter = lessonConverter;
     }
 
     @Override
-    public List<TeacherEntity> readAll() {
-        return StreamSupport.stream(teacherDao.findAll().spliterator(), false).collect(Collectors.toList());
+    public List<TeacherDto> readAll() throws TeacherNotFoundException {
+        return teacherConverter.toDtoList(teacherDao.findAll());
     }
 
     @Override
-    public TeacherEntity readById(int id) {
-    	return teacherDao.findById(id).get();
+    public TeacherDto readById(int id) throws TeacherNotFoundException {
+    	return teacherConverter.toDto(teacherDao.findById(id).get());
     }
     
     @Override
-    public void create(TeacherEntity teacherEntity) {
-        teacherDao.save(teacherEntity);
+    public TeacherEntity readByIdEntity(int id) throws TeacherNotFoundException {
+    	return teacherDao.findById(id).get();
     }
 
     @Override
-    public void update(TeacherEntity teacherEntity) {
-        teacherDao.save(teacherEntity);
+    public void create(TeacherDto teacherDto) throws TeacherNotChangedException {
+        teacherDao.save(teacherConverter.toEntity(teacherDto));
     }
 
     @Override
-    public void delete(int id) {
+    public void update(TeacherDto teacherDto) throws TeacherNotChangedException {
+        teacherDao.save(teacherConverter.toEntity(teacherDto));
+    }
+
+    @Override
+    public void delete(int id) throws TeacherNotChangedException {
         teacherDao.deleteById(id);
     }
     
-    public List<LessonEntity> getTeacherLessons(int teacherId, LocalDate startDate, LocalDate endDate) {
-        return teacherDao.getTeacherLessons(teacherId, startDate, endDate);
+    public List<LessonDto> getTeacherLessons(int teacherId, LocalDate startDate, LocalDate endDate) throws LessonNotFoundException  {
+        return lessonConverter.toDtoList(teacherDao.getTeacherLessons(teacherId, startDate, endDate));
+    }
+
+    public TeacherConverter getTeacherConverter() {
+        return teacherConverter;
+    }
+
+    public void setTeacherConverter(TeacherConverter teacherConverter) {
+        this.teacherConverter = teacherConverter;
     }
 
     public TeacherDao getTeacherDao() {

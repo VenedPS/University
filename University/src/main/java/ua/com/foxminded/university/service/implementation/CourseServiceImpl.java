@@ -1,39 +1,53 @@
 package ua.com.foxminded.university.service.implementation;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ua.com.foxminded.university.converter.CourseConverter;
 import ua.com.foxminded.university.dao.CourseDao;
-import ua.com.foxminded.university.entity.CourseEntity;
+import ua.com.foxminded.university.exception.CourseNotChangedException;
+import ua.com.foxminded.university.exception.CourseNotFoundException;
+import ua.com.foxminded.university.dto.CourseDto;
 import ua.com.foxminded.university.service.CourseService;
 
 @Service
 public class CourseServiceImpl implements CourseService {
 
+    private CourseConverter courseConverter;    
     private CourseDao courseDao;
 
     @Autowired
-    public CourseServiceImpl(CourseDao courseDao) {
+    public CourseServiceImpl(CourseDao courseDao, CourseConverter courseConverter) {
         this.courseDao = courseDao;
+        this.courseConverter = courseConverter;
     }
     
     @Override
-    public List<CourseEntity> readAll() {
-        return StreamSupport.stream(courseDao.findAll().spliterator(), false).collect(Collectors.toList());
+    public List<CourseDto> readAll() throws CourseNotFoundException {
+        List<CourseDto> courseDto = courseConverter.toDtoList(courseDao.findAll());
+        return courseDto;
     }
 
     @Override
-    public CourseEntity readById(int id) {
-        return courseDao.findById(id).get();
+    public CourseDto readById(int id) throws CourseNotFoundException {
+        CourseDto courseDto = new CourseDto();
+        courseDto = courseConverter.toDto(courseDao.findById(id).get());
+        return courseDto;
     }
 
     @Override
-    public void create(CourseEntity courseEntity) {
-        courseDao.save(courseEntity);
+    public void create(CourseDto courseDto) throws CourseNotChangedException {
+        courseDao.save(courseConverter.toEntity(courseDto));
+    }
+
+    public CourseConverter getStudentConverter() {
+        return courseConverter;
+    }
+
+    public void setCourseConverter(CourseConverter courseConverter) {
+        this.courseConverter = courseConverter;
     }
 
     public CourseDao getCourseDao() {

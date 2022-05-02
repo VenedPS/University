@@ -13,8 +13,12 @@ import ua.com.foxminded.university.service.TeacherService;
 @Service
 public class CourseConverter {
     
-	@Autowired
-	private TeacherService teacherService;
+    private TeacherService teacherService;
+    
+    @Autowired
+    public CourseConverter(TeacherService teacherService) {
+        this.teacherService = teacherService;
+    }
     
     public  CourseEntity toEntity(CourseDto courseDto) {
         if (courseDto == null) {
@@ -24,11 +28,11 @@ public class CourseConverter {
         CourseEntity courseEntity = new CourseEntity();
         courseEntity.setId(courseDto.getId());
         courseEntity.setName(courseDto.getName());
-        courseEntity.setTeacher(teacherService.readById(courseDto.getTeacherId()));
+        courseEntity.setTeacher(teacherService.readByIdEntity(courseDto.getTeacherId()));
         return courseEntity;
     }
 
-    public List<CourseEntity> toEntityList(List<CourseDto> courseDtoList) {
+    public List<CourseEntity> toEntityList(Iterable<CourseDto> courseDtoList) {
         if (courseDtoList == null) {
             throw new IllegalArgumentException("Cannot convert null!");
         }
@@ -52,7 +56,7 @@ public class CourseConverter {
         return courseDto;
     }
 
-    public List<CourseDto> toDtoList(List<CourseEntity> courseEntityList) {
+    public List<CourseDto> toDtoList(Iterable<CourseEntity> courseEntityList) {
         if (courseEntityList == null) {
             throw new IllegalArgumentException("Cannot convert null!");
         }
