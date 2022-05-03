@@ -15,6 +15,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -24,7 +25,8 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	private final Logger logger = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);
 	
 	@ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<Object> handleNoSuchElementException(RuntimeException exception, WebRequest request) {
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ResponseEntity<Object> handleNoSuchElementException(RuntimeException exception, WebRequest request) {
 		logger.error("Failed to find the requested element", exception);
 		return handleExceptionInternal(
 				exception, 
@@ -35,6 +37,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     }
 	
 	@ExceptionHandler(IncorrectResultSizeDataAccessException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<Object> handleIncorrectResultSizeDataAccessException(RuntimeException exception, WebRequest request) {
 		logger.error("Database connection error", exception);
 		return handleExceptionInternal(
@@ -46,6 +49,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	}
 
 	@Override
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		
@@ -63,6 +67,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	}
 	
 	@ExceptionHandler(SQLException.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public ResponseEntity<Object> handlePSQLException(Exception exception, WebRequest request) {
 		logger.error("Database connection error", exception);
 		return handleExceptionInternal(
