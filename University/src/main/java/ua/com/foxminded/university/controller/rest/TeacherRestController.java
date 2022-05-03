@@ -22,54 +22,54 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ua.com.foxminded.university.dto.LessonDto;
-import ua.com.foxminded.university.dto.StudentDto;
-import ua.com.foxminded.university.service.StudentService;
+import ua.com.foxminded.university.dto.TeacherDto;
+import ua.com.foxminded.university.service.TeacherService;
 
 @RestController
-@RequestMapping("/students")
-public class StudentRestController {
-
-	private final StudentService studentService;
-
+@RequestMapping("/teachers")
+public class TeacherRestController {
+    
+    private final TeacherService teacherService;
+    
     @Autowired
-    public StudentRestController(StudentService studentService) {
-        this.studentService = studentService;
+    public TeacherRestController(TeacherService teacherService) {
+        this.teacherService = teacherService;
     }
-
+    
     @GetMapping()
-    public ResponseEntity<List<StudentDto>> index(Model model) {
-        final List<StudentDto> students = studentService.readAll();
+    public ResponseEntity<List<TeacherDto>> index(Model model) {
+        final List<TeacherDto> teachers =  teacherService.readAll();
 
-        if(students != null && !students.isEmpty()) {
-        	return new ResponseEntity<>(students, HttpStatus.OK);
+        if(teachers != null && !teachers.isEmpty()) {
+        	return new ResponseEntity<>(teachers, HttpStatus.OK);
         }        
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
+    
     @GetMapping("/{id}")
-    public ResponseEntity<StudentDto> show(@PathVariable("id") int id) {
-    	final StudentDto studentDto = studentService.readById(id);
-       	return new ResponseEntity<>(studentDto, HttpStatus.OK);
+    public ResponseEntity<TeacherDto> show(@PathVariable("id") int id) {
+    	final TeacherDto teacherDto = teacherService.readById(id);
+       	return new ResponseEntity<>(teacherDto, HttpStatus.OK);
     }
-
+    
     @PostMapping()
-    public ResponseEntity<?> create(@RequestBody @Valid StudentDto studentDto) {
-        studentService.create(studentDto);
+    public ResponseEntity<?> create(@RequestBody @Valid TeacherDto teacherDto) {
+    	teacherService.create(teacherDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
+    
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") int id, @RequestBody @Valid StudentDto studentDto) {
+    public ResponseEntity<?> update(@PathVariable("id") int id, @RequestBody @Valid TeacherDto teacherDto) {
     	
-    	studentDto.setId(id);    	
-    	studentService.update(studentDto);
+    	teacherDto.setId(id);    	
+    	teacherService.update(teacherDto);
 
     	return new ResponseEntity<>(HttpStatus.OK);
     }
-
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") int id) {
-    	   studentService.delete(id);
+    	teacherService.delete(id);
     	   return new ResponseEntity<>(HttpStatus.OK);
     	}
     
@@ -79,17 +79,16 @@ public class StudentRestController {
     		@RequestParam("startDate") String startDateLine, 
     		@RequestParam("endDate") String endDateLine) {
     	
-    	StudentDto studentDto = studentService.readById(id);
-    	
     	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); 
     	LocalDate startDate = LocalDate.parse(startDateLine, formatter);
         LocalDate endDate =  LocalDate.parse(endDateLine, formatter);        
         List<LessonDto> lessons = new ArrayList<LessonDto>();
-        lessons = studentService.getStudentLessons(studentDto, startDate, endDate);
+        lessons = teacherService.getTeacherLessons(id, startDate, endDate);
         
         if(lessons != null && !lessons.isEmpty()) {
         	return new ResponseEntity<>(lessons, HttpStatus.OK);
         }        
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
 }

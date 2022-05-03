@@ -13,12 +13,8 @@ import ua.com.foxminded.university.entity.CourseEntity;
 @Service
 public class CourseConverter {
     
+	@Autowired
     private TeacherDao teacherDao;
-    
-    @Autowired
-    public CourseConverter(TeacherDao teacherDao) {
-        this.teacherDao = teacherDao;
-    }
     
     public  CourseEntity toEntity(CourseDto courseDto) {
         if (courseDto == null) {

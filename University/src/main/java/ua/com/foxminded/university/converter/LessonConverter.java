@@ -14,15 +14,12 @@ import ua.com.foxminded.university.entity.LessonEntity;
 @Service
 public class LessonConverter {
     
+	@Autowired
     private TeacherDao teacherDao;
-	private GroupDao groupDao;
 	
 	@Autowired
-    public LessonConverter(TeacherDao teacherDao, GroupDao groupDao) {
-        this.teacherDao = teacherDao;
-        this.groupDao = groupDao;
-    }
-    
+    private GroupDao groupDao;
+	
     public LessonEntity toEntity(LessonDto lessonDto) {
         if (lessonDto == null) {
             throw new IllegalArgumentException("Cannot convert null!");

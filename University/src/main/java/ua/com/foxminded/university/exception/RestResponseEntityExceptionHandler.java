@@ -1,13 +1,18 @@
 package ua.com.foxminded.university.exception;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -21,43 +26,51 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	@ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<Object> handleNoSuchElementException(RuntimeException exception, WebRequest request) {
 		logger.error("Failed to find the requested element", exception);
-		String bodyOfResponse = exception.getMessage();
 		return handleExceptionInternal(
 				exception, 
-				bodyOfResponse, 
+				exception.getMessage(), 
 				new HttpHeaders(), 
 				HttpStatus.NOT_FOUND, 
 				request);
     }
 	
-//	@ExceptionHandler(MethodArgumentNotValidException.class)
-//	public ResponseEntity<Object> handleMethodArgumentNotValidException(Exception exception, WebRequest request) {
-////	public ResponseEntity<Object> handleMethodArgumentNotValidException(
-////			MethodArgumentNotValidException exception,
-////			HttpHeaders headers, 
-////			HttpStatus status, 
-////			WebRequest request) {
-//		
-////		logger.error("Failed to find the requested element", exception);
-////		String bodyOfResponse = exception.getMessage();
-//		return handleExceptionInternal(
-//				exception, 
-//				"", 
-//				new HttpHeaders(), 
-//				HttpStatus.BAD_REQUEST, 
-//				request);
-//	}
+	@ExceptionHandler(IncorrectResultSizeDataAccessException.class)
+	public ResponseEntity<Object> handleIncorrectResultSizeDataAccessException(RuntimeException exception, WebRequest request) {
+		logger.error("Database connection error", exception);
+		return handleExceptionInternal(
+				exception, 
+				exception.getMessage(), 
+				new HttpHeaders(), 
+				HttpStatus.BAD_REQUEST, 
+				request);
+	}
 
-//	private ResponseEntity<Object> buildErrorResponse(
-//			Exception exception, 
-//			String message, 
-//			HttpStatus httpStatus,
-//			WebRequest request) {
-//		
-//		ErrorResponse errorResponse = new ErrorResponse(httpStatus.value(), message);
-//		if (printStackTrace && isTraceOn(request)) {
-//			errorResponse.setStackTrace(ExceptionUtils.getStackTrace(exception));
-//		}
-//		return ResponseEntity.status(httpStatus).body(errorResponse);
-//	}
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		
+		logger.error("Validation faild", exception);
+		List<String> details = new ArrayList<>();
+		for (ObjectError error : exception.getBindingResult().getAllErrors()) {
+			details.add(error.getDefaultMessage());
+		}
+		return handleExceptionInternal(
+				exception, 
+				details, 
+				new HttpHeaders(), 
+				HttpStatus.BAD_REQUEST, 
+				request);
+	}
+	
+	@ExceptionHandler(SQLException.class)
+	public ResponseEntity<Object> handlePSQLException(Exception exception, WebRequest request) {
+		logger.error("Database connection error", exception);
+		return handleExceptionInternal(
+				exception, 
+				"Database connection error!", 
+				new HttpHeaders(), 
+				HttpStatus.INTERNAL_SERVER_ERROR, 
+				request);
+	}
+	
 }

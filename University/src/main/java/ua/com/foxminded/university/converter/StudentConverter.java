@@ -13,12 +13,8 @@ import ua.com.foxminded.university.entity.StudentEntity;
 @Service
 public class StudentConverter {
     
+	@Autowired
     private GroupDao groupDao;
-    
-    @Autowired
-    public StudentConverter(GroupDao groupDao) {
-        this.groupDao = groupDao;
-    }
     
     public StudentEntity toEntity(StudentDto studentDto) {
         if (studentDto == null) {
