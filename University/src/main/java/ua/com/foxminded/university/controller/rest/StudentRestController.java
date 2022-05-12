@@ -31,7 +31,7 @@ import ua.com.foxminded.university.dto.StudentDto;
 import ua.com.foxminded.university.service.StudentService;
 
 @RestController
-@RequestMapping("/students")
+@RequestMapping("/api/students")
 public class StudentRestController {
 
 	private final StudentService studentService;
@@ -67,6 +67,9 @@ public class StudentRestController {
 	@GetMapping("/{id}")
 	public ResponseEntity<StudentDto> show(@PathVariable("id") int id) {
 		final StudentDto studentDto = studentService.readById(id);
+		if(studentDto == null) {
+			return new ResponseEntity<>(studentDto, HttpStatus.NOT_FOUND);
+		}
 		return new ResponseEntity<>(studentDto, HttpStatus.OK);
 	}
 
