@@ -1,7 +1,12 @@
 package ua.com.foxminded.university.controller.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -9,71 +14,62 @@ import java.time.LocalDate;
 
 import javax.sql.DataSource;
 
-import org.json.JSONException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.datasource.init.ScriptUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import ua.com.foxminded.university.Main;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.MediaType;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
+
 import ua.com.foxminded.university.dto.StudentDto;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = Main.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureTestDatabase
+@SpringBootTest
+@AutoConfigureMockMvc
+@TestPropertySource(locations = "classpath:application-integrationtest.properties")
 public class StudentRestControllerIntegrationTest {
 
-	@LocalServerPort
-	private int port;
-
-	TestRestTemplate restTemplate = new TestRestTemplate();
-	HttpHeaders headers = new HttpHeaders();
+	@Autowired
+	private MockMvc mockMvc;
 
 	@BeforeAll
-    static void setup(@Autowired DataSource dataSource) {
-        try (Connection connection = dataSource.getConnection()) {
-            ScriptUtils.executeSqlScript(connection, new ClassPathResource("/test-data.sql"));
-        } catch (SQLException e) {
+	static void setup(@Autowired DataSource dataSource) {
+		try (Connection connection = dataSource.getConnection()) {
+			ScriptUtils.executeSqlScript(connection, new ClassPathResource("/testInteg-data.sql"));
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}	
-	
-	@Test
-	public void index_shouldReturnStudents_whenGetStudents() {
-		String expectedPart = "{\"firstName\":\"Ivanov\",\"secondName\":\"Ivan";
-		
-		assertThat(this.restTemplate.getForObject(createURLWithPort("/api/students"),
-				String.class)).contains(expectedPart);
-	}
-	
-	@Test
-	public void show_shouldReturnStudent_whenGetStudentById() throws JSONException {
-		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-
-		ResponseEntity<String> response = restTemplate.exchange(
-				createURLWithPort("/api/students/11"),
-				HttpMethod.GET, entity, String.class);
-
-		String expected = "{id:11,firstName:Ivanov,secondName:Ivan,birthDate:2000-10-06,address:\"Country: Ukraine, City: Kyiv, Street: Drahomanova\",phone:\"380999999999\",email:email@mail.xyz,groupId:1}";
-	    
-		JSONAssert.assertEquals(expected, response.getBody(), true);
 	}
 
 	@Test
-	public void create_shouldReturnResponseStatusCreated_whenCreateStudent() {
+	public void index_shoulReturnStudents_whenGetStudents() throws Exception {
+		this.mockMvc.perform(
+				get("/api/students")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", hasSize(3)))
+				.andExpect(jsonPath("$[0].firstName", is("Ivanov")));
+	}
+	
+	@Test
+	public void show_shoulReturnStudent_whenGetStudentById() throws Exception {
+		this.mockMvc.perform(
+				get("/api/students/11")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.firstName", is("Ivanov")));
+	}
+	
+	@Test
+	public void create_shoulReturnResponseStatusCreated_whenCreateStudent () throws Exception {
 		StudentDto studentDto = new StudentDto();
 		studentDto.setFirstName("Test");
 		studentDto.setSecondName("Test");
@@ -83,57 +79,58 @@ public class StudentRestControllerIntegrationTest {
 		studentDto.setEmail("email@mail.xyz");
 		studentDto.setGroupId(1);
 		
-		HttpEntity<StudentDto> entity = new HttpEntity<StudentDto>(studentDto, headers);
-
-		ResponseEntity<String> response = restTemplate.exchange(
-				createURLWithPort("/api/students"),
-				HttpMethod.POST, entity, String.class);
-
-		assertEquals(response.getStatusCode(),HttpStatus.CREATED);
+		mockMvc.perform(post("/api/students")
+				.content(asJsonString(studentDto))
+			    .contentType(MediaType.APPLICATION_JSON)
+			    .accept(MediaType.APPLICATION_JSON))
+			    .andExpect(status().isCreated());
 	}
 	
 	@Test
-	public void update_shouldReturnResponseStatusOk_whenUpdateStudent() {
+	public void update_shoulReturnResponseStatusOk_whenUpdateStudent () throws Exception {
 		StudentDto studentDto = new StudentDto();
-		studentDto.setFirstName("Sidorov");
-		studentDto.setSecondName("Sidor1");
-		studentDto.setBirthDate(LocalDate.of(2000, 10, 06));
-		studentDto.setAddress("Country: Ukraine, City: Kharkiv, Street: Myru");
+		studentDto.setFirstName("Ivanov");
+		studentDto.setSecondName("Ivan2");
+		studentDto.setBirthDate(LocalDate.of(2000,10,06));
+		studentDto.setAddress("Country: Ukraine, City: Lytsk, Street: Volodymyrska");
 		studentDto.setPhone("380999999999");
 		studentDto.setEmail("email@mail.xyz");
-		studentDto.setGroupId(2);
+		studentDto.setGroupId(1);
 		
-		HttpEntity<StudentDto> entity = new HttpEntity<StudentDto>(studentDto, headers);
-		
-		ResponseEntity<String> response = restTemplate.exchange(
-				createURLWithPort("/api/students/13"),
-				HttpMethod.PUT, entity, String.class);
-		
-		assertEquals(response.getStatusCode(),HttpStatus.OK);
+		mockMvc.perform(put("/api/students/11")
+				.content(asJsonString(studentDto))
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
 	}
 	
 	@Test
-	public void delete_shouldReturnResponseStatusOk_whenDeleteStudent() {
-		StudentDto studentDto = new StudentDto();
-		HttpEntity<StudentDto> entity = new HttpEntity<StudentDto>(studentDto, headers);
-		
-		ResponseEntity<String> response = restTemplate.exchange(
-				createURLWithPort("/api/students/14"),
-				HttpMethod.DELETE, entity, String.class);
-		
-		assertEquals(response.getStatusCode(),HttpStatus.OK);
+	public void delete_shoulReturnResponseStatusOk_whenDeleteStudent () throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders
+				.delete("/api/students/{id}", "13")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
 	}
 	
 	@Test
-	public void showLessons_shouldReturnStudentLessons_whenGetStudentLessons() {
-		String expectedPart = "{\"id\":1,\"timetableId\":1,\"date\":\"2022-04-19\",\"lessonNumber\":1,\"groupId\":1,\"courseId\":1,\"classroomId\":1,\"teacherId\":11}";
-
-		assertThat(this.restTemplate.getForObject(createURLWithPort("/api/students/11/lessons?startDate=2022-04-01&endDate=2022-06-01"),
-				String.class)).contains(expectedPart);
-	}
-	
-	private String createURLWithPort(String uri) {
-		return "http://localhost:" + port + uri;
+	public void showLessons_shoulReturnStudentLessons_whenGetStudentLessons() throws Exception {
+		this.mockMvc.perform(
+				get("/api/students/11/lessons?startDate=2022-04-01&endDate=2022-06-01")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", hasSize(3)))
+				.andExpect(jsonPath("$[0].id", is(1)));
 	}
 
+	public static String asJsonString(final Object object) {
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			objectMapper.registerModule(new JavaTimeModule());
+			return objectMapper.writeValueAsString(object);
+	    } catch (Exception e) {
+	        throw new RuntimeException(e);
+	    }
+	} 
 }
+

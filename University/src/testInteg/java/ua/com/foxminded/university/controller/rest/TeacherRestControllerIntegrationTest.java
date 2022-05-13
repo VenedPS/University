@@ -4,8 +4,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.hamcrest.CoreMatchers.containsString;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -42,7 +43,7 @@ public class TeacherRestControllerIntegrationTest {
 	@BeforeAll
 	static void setup(@Autowired DataSource dataSource) {
 		try (Connection connection = dataSource.getConnection()) {
-			ScriptUtils.executeSqlScript(connection, new ClassPathResource("/test-data.sql"));
+			ScriptUtils.executeSqlScript(connection, new ClassPathResource("/testInteg-data.sql"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -50,24 +51,21 @@ public class TeacherRestControllerIntegrationTest {
 
 	@Test
 	public void index_shoulReturnTeachers_whenGetTeachers() throws Exception {
-		String expectedPart = "{\"firstName\":\"Volodymyrov\",\"secondName\":\"Volodymyr";
-
 		this.mockMvc.perform(
 				get("/api/teachers")
 				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isOk())
-			.andExpect(content().string(containsString(expectedPart)));
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", hasSize(2)))
+				.andExpect(jsonPath("$[0].firstName", is("Volodymyrov")));
 	}
 	
 	@Test
 	public void show_shoulReturnTeacher_whenGetTeacherById() throws Exception {
-		String expectedPart = "{\"firstName\":\"Volodymyrov\",\"secondName\":\"Volodymyr";
-		
 		this.mockMvc.perform(
 				get("/api/teachers/11")
 				.contentType(MediaType.APPLICATION_JSON))
-		.andExpect(status().isOk())
-		.andExpect(content().string(containsString(expectedPart)));
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.firstName", is("Volodymyrov")));
 	}
 	
 	@Test
@@ -115,13 +113,11 @@ public class TeacherRestControllerIntegrationTest {
 	
 	@Test
 	public void showLessons_shoulReturnTeacherLessons_whenGetTeacherLessons() throws Exception {
-		String expectedPart = "{\"id\":1,\"timetableId\":1,\"date\":\"2022-04-19\",\"lessonNumber\":1,\"groupId\":1,\"courseId\":1,\"classroomId\":1,\"teacherId\":11}";
-
 		this.mockMvc.perform(
 				get("/api/teachers/11/lessons?startDate=2022-04-01&endDate=2022-06-01")
 				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isOk())
-			.andExpect(content().string(containsString(expectedPart)));
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].id", is(1)));
 	}
 
 	public static String asJsonString(final Object object) {
